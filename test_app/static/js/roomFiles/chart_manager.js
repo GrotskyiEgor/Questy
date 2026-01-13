@@ -1,4 +1,4 @@
-function chartManager(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, userName= null){
+function renderAnalyticsChart(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, userName= null){
     const selectElement = document.getElementById("choice");
 
     if (userName){
@@ -16,24 +16,24 @@ function chartManager(resultData, accuracyAquestionsArray, accurancyArray, total
         `
 
         selectUserName= userName
-        createChart1('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, userName)
+        renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, userName)
     }
 
     switch (Number(selectElement.value)){
         case 1:
-            createChart1('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, selectUserName)
+            renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, selectUserName)
             break;
         case 2:
-            createChart2('authorAccuracyChart', resultData, totalQuestion, selectUserName)
+            renderCorrectWrongBarChart('authorAccuracyChart', resultData, totalQuestion, selectUserName)
             break;
         case 3:
-            createChart3('authorAccuracyChart', resultData, totalQuestion, selectUserName)
+            renderUserResultPieChart('authorAccuracyChart', resultData, totalQuestion, selectUserName)
             break; 
         case 4:
-            createChart4('authorAccuracyChart', resultData, totalQuestion, selectUserName, "time")
+            renderQuestionValuesLineChart('authorAccuracyChart', resultData, totalQuestion, selectUserName, "time")
             break; 
         case 5:
-            createChart4('authorAccuracyChart', resultData, totalQuestion, selectUserName, "token")
+            renderQuestionValuesLineChart('authorAccuracyChart', resultData, totalQuestion, selectUserName, "token")
             break; 
     }
 
@@ -41,7 +41,7 @@ function chartManager(resultData, accuracyAquestionsArray, accurancyArray, total
 }
 
 
-function accuracyAquestions(resultData, totalQuestion){
+function questionAccuracy(resultData, totalQuestion){
     let accurancyArray= []
     let accuracyAquestionsArray= []
     let allAnswersArray= Object.values(resultData)
@@ -69,7 +69,7 @@ function accuracyAquestions(resultData, totalQuestion){
     return {accuracyAquestionsArray, accurancyArray}
 }
 
-function createChart1(canvasId, resultData, accuracyAquestionsArray, accurancyArray, userName= null){
+function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, userName= null){
     let accurancyNumbers= []
     let labels= []
 
@@ -137,7 +137,7 @@ function createChart1(canvasId, resultData, accuracyAquestionsArray, accurancyAr
     });
 }
 
-function createChart2(canvasId, resultData, totalQuestion, userName= null){
+function renderCorrectWrongBarChart(canvasId, resultData, totalQuestion, userName= null){
     const ctx= document.getElementById(canvasId).getContext('2d');
     if (charts[canvasId]) {
         charts[canvasId].destroy();
@@ -182,15 +182,15 @@ function createChart2(canvasId, resultData, totalQuestion, userName= null){
                 {
                     label: "Правильно",
                     data: correctCounts,
-                    backgroundColor: 'green',
-                    borderColor: 'green',
+                    backgroundColor: '#43a047',
+                    borderColor: '#43a047',
                     borderWidth: 1
                 },
                 {
                     label: 'Неправильно / пропущено',
                     data: newWrongCounts,
-                    backgroundColor: 'red',
-                    borderColor: 'red',
+                    backgroundColor: '#e53935',
+                    borderColor: '#e53935',
                     borderWidth: 1
                 }
             ]
@@ -231,12 +231,10 @@ function createChart2(canvasId, resultData, totalQuestion, userName= null){
     })
 }
 
-function createChart3(canvasId, resultData, totalQuestion, userName= null){
-    const colors = [
-        '#1f77b4','#ff7f0e','#2ca02c','#9467bd','#8c564b',
-        '#e377c2','#7f7f7f','#bcbd22','#17becf','#393b79',
-        '#637939','#8c6d31','#843c39','#7b4173','#5254a3',
-        '#6b6ecf','#9c9ede','#ce6dbd','#de9ed6','#31a354'
+function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName= null){
+    const CHART_COLORS = [
+        '#1E88E5', '#43A047', '#F4511E', '#8E24AA', '#3949AB', '#00ACC1', '#FB8C00', '#6D4C41', '#546E7A', 
+        '#5E35B1','#039BE5','#00897B','#7CB342','#C0CA33','#FDD835','#FF7043','#8D6E63','#78909C','#EC407A'
     ];
 
     const ctx= document.getElementById(canvasId).getContext('2d');
@@ -261,13 +259,13 @@ function createChart3(canvasId, resultData, totalQuestion, userName= null){
         correctTotal += correctCount
 
         dataValues.push(correctCount)
-        dataColors.push(colors[index])
+        dataColors.push(CHART_COLORS[index])
     })
 
     let remaining= totalSlices- correctTotal
     if (remaining > 0){
         dataValues.push(remaining)
-        dataColors.push('rgba(255,0,0,0.6)')
+        dataColors.push('#e53935')
     }
 
     const labels= [...users]
@@ -282,12 +280,13 @@ function createChart3(canvasId, resultData, totalQuestion, userName= null){
             datasets: [{
                 data: dataValues,
                 backgroundColor: dataColors,
-                borderColor: 'green',
+                borderColor: 'black',
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'right'
@@ -307,7 +306,7 @@ function createChart3(canvasId, resultData, totalQuestion, userName= null){
     })
 }
 
-function createChart4(canvasId, resultData, totalQuestion, userName= null, type){
+function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, userName= null, type){
     const ctx= document.getElementById(canvasId).getContext('2d');
     if (charts[canvasId]) {
         charts[canvasId].destroy();

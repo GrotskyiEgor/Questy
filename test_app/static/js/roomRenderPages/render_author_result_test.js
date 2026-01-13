@@ -53,7 +53,7 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
     resultTable.appendChild(resultRow);
 
     resultRow.addEventListener('click', function(){
-        chartManager(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4))
+        renderAnalyticsChart(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4))
     })
 }
 
@@ -79,7 +79,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         const resultData= data.room_get_result_data
         const best_score_data= data.best_score_data
         const averega_score= data.averega_score
-        const {accuracyAquestionsArray, accurancyArray}= accuracyAquestions(resultData, totalQuestion)
+        const {accuracyAquestionsArray, accurancyArray}= questionAccuracy(resultData, totalQuestion)
 
         const header = document.createElement('div');
         header.className = 'results-header-block';
@@ -131,7 +131,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
                 <option value="5">Зароблено монет за питання</option>
             `
             selectBlock= true
-            createChart1('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
+            renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
         });
 
         const exelButton= document.createElement('button');
@@ -272,11 +272,11 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         document.getElementById('choice').addEventListener('change', function() {
             if (selectBlock){
-                chartManager(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
+                renderAnalyticsChart(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
             }
         })
 
-        createChart1('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
+        renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
     });
 }
 
