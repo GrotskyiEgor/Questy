@@ -5,19 +5,26 @@
 {% endblock %}
 
 {% block links %}
-    
+    <link rel = "stylesheet" href = "{{ url_for('home_app.static', filename='css/edit_avatar.css') }}">
 {% endblock %}
 
 {% block content %}
     <form action="" method="POST" class="form">
         {% for index_cloth in range(5) %}
-        <div class="{{name_classes[index_cloth]}}">
+            <div class="{{name_classes[index_cloth]}}">
+            <p>Текст</p>
             {% for index in range(3) %}
                 {% if index + 1 == list_clothes[index_cloth] %}
-                    <input type="radio" name="{{name_classes[index_cloth]}}" checked value="{{index + 1}}">
+                    <label>
+                        <input type="radio" name="{{name_classes[index_cloth]}}" checked value="{{index + 1}}">
+                        <img src="{{ url_for('home_app.static', filename='images/media/test.png') }}" alt="">
+                    </label>
                 {% else %}
-                    <input type="radio" name="{{name_classes[index_cloth]}}" value="{{index + 1}}">
-                {% endif %}
+                    <label>
+                        <input type="radio" name="{{name_classes[index_cloth]}}" value="{{index + 1}}">
+                        <img src="{{ url_for('home_app.static', filename='images/media/test.png') }}" alt="">
+                    </label>
+                    {% endif %}
             {% endfor %}
             </div> 
         {% endfor %}

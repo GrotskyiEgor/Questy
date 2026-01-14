@@ -1,0 +1,38 @@
+.form {
+    display: flex;
+    gap: 2vw;
+}
+
+.skin-color, .haircut, .outwear, .pants, .boots {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5vh
+}
+
+
+input[type="radio"] {
+  display: none;
+}
+
+
+label {
+  display: inline-block;
+  cursor: pointer;
+}
+
+
+label img {
+  width: 15vw;
+  height: 20vh;
+  border: 0.5vh solid transparent;
+  border-radius: 8px;
+  transition: 0.2s;
+  border-radius: 5%;
+}
+
+
+input[type="radio"]:checked + img {
+  border-color: #4CAF50;
+}
+
