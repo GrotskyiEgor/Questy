@@ -1,5 +1,6 @@
 import flask, random
 import Project
+from ...Project.token_manage import RegisterForm
 
 from ..models import User, UnconfirmedUser
 from ..send_email import send_code
@@ -8,8 +9,8 @@ from Project.render_page import render_page
 
 @render_page(template_name= 'sign_up.html')
 def render_sign_up(): 
-       
-    if flask.request.method == 'POST':
+    form = RegisterForm()
+    if flask.request.method == 'POST' and form.validate_on_submit():
         try:   
             name = flask.request.form['name'].strip()
             password= flask.request.form['password'] 

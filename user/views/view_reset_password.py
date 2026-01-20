@@ -4,23 +4,35 @@ from flask_login import current_user, login_user
 from werkzeug.security import generate_password_hash
 from ..models import User, UnconfirmedUser
 
+from ...Project.token_manage import ResetPasswordRequestForm, ResetPasswordForm
+
 from Project.render_page import render_page
 from Project.database import db
 
-@render_page(template_name= 'reset_password.html')
+@render_page(template_name='reset_password.html')
 def render_reset_app():
+    form = ResetPasswordRequestForm()
 
-    if flask.request.method == "POST":
-        password_code= flask.session.get("password_code", " ")
-        code = int(flask.request.form['code'])
-        if code == password_code:
-            return flask.redirect(location = '/../new_password')
-    
-    return { }
+    if flask.request.method == "POST" and form.validate_on_submit():
+        password_code = flask.session.get("password_code")
+        if not password_code:
+            return flask.redirect('/login')
+
+        try:
+            code = int(form.code.data)
+        except (TypeError, ValueError):
+            return {}
+
+        if code == int(password_code):
+            return flask.redirect('/new_password')
+
+    return {"form": form}
+
 
 @render_page(template_name= 'confirm_password.html')
 def render_confirm_account():
-    if flask.request.method == "POST":
+    form = ResetPasswordForm()
+    if flask.request.method == "POST" and form.validate_on_submit():
         sign_up_email= flask.session.get("sign_up_email", " ")
         code = int(flask.request.form['code'])
 
