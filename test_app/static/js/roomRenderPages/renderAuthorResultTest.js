@@ -68,14 +68,14 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
     container.className= 'wrapper-author-results-container';
 
     setTimeout(function() {
-        socket.emit("room_get_result", {
+        socket.emit(SOKET_ROOM_GET_RESULT, {
             room: room,
             username: username,
             author_name: authorName
         });
     }, 100); 
     
-    socket.once('room_get_result_data', function(data) {  
+    socket.once(SOKET_ROOM_GET_RESULT_DATA, function(data) {  
         const resultData= data.room_get_result_data
         const best_score_data= data.best_score_data
         const averega_score= data.averega_score
@@ -116,7 +116,6 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         allInfoButton.textContent = 'Загальна успішність'
         allInfoButton.addEventListener("click", () => {
             chartBoxLable= document.querySelector('.chart-box-label')
-            console.log(chartBoxLable)
             chartBoxLable.textContent= 'Загальна успішність'
             
             selectUserName= null
@@ -137,7 +136,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         const exelButton= document.createElement('button');
         exelButton.className= 'exel-btn';
         exelButton.textContent = 'Завантажити Exel таблицю';
-        exelButton.addEventListener("click", () => exel_table(username, authorName, resultData, best_score_data));
+        exelButton.addEventListener("click", () => excelTable(username, authorName, resultData, best_score_data));
 
         leftButtonBox.appendChild(allInfoButton)
         // rigthButtonBox.appendChild(exelButton)

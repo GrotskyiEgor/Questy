@@ -34,20 +34,18 @@ function addUserAnswer(username, answer, authorname, quiz) {
         </div>
     `
 
-    socket.emit("get_usernames", {
+    socket.emit(SOKET_GET_USERNAMES, {
         room: room,
         author_name: authorname
     });
 
-    socket.once('get_usernames', function(data){
+    socket.once(SOKEN_GET_USERNAMES, function(data){
         let userArrey= data;
         lengthArrey= userArrey.length
 
         countUsersAnswer= getCookie("countUsersAnswer")
         correctAnswerChart= getCookie("countCorrectAnswer")
         
-        console.log("Create render DOUGHNUTCHART")
-        console.log(countUsersAnswer, correctAnswerChart)
         if (lengthArrey === Number(countUsersAnswer)){
             renderDoughnutChart("donat-chart", lengthArrey, correctAnswerChart)
         }
@@ -55,10 +53,10 @@ function addUserAnswer(username, answer, authorname, quiz) {
 }
 
 function renderAuthorStart(quiz, room, authorname, number_of_question, totalQuestion, questionNumber) {
-    const waiteContent = document.getElementById("room-content");
-    waiteContent.innerHTML = ""; 
-    waiteContent.id = 'container-question'
-    waiteContent.className = 'container-question'
+    const waitContent = document.getElementById("room-content");
+    waitContent.innerHTML = ""; 
+    waitContent.id = 'container-question'
+    waitContent.className = 'container-question'
 
     const headerBar = document.createElement('div')
     headerBar.className = 'header-bar'
@@ -121,7 +119,7 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
     questionTable.appendChild(infoRow)
     headerBar.appendChild(questionTable)
     
-    waiteContent.appendChild(headerBar)
+    waitContent.appendChild(headerBar)
 
     const userBlock = document.createElement('div')
     userBlock.id = 'user-block'
@@ -156,16 +154,16 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
 
     userBlock.appendChild(userInfo)
 
-    waiteContent.appendChild(userBlock)
+    waitContent.appendChild(userBlock)
 
-    socket.emit("get_usernames", {
+    socket.emit(SOKET_GET_USERNAMES, {
         room: room,
         author_name: authorname
     });
 
     let quizTime= getCookie("time");
 
-    socket.once('get_usernames', function(data){
+    socket.once(SOKEN_GET_USERNAMES, function(data){
         let userArrey = data;
         let nextButton= '';
         lengthArrey = userArrey.length

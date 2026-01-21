@@ -46,10 +46,8 @@ def render_sign_up():
                 return flask.redirect(location = '/confirmation_account')
 
             else:
-                print('Not same password', password, password_confirmation, db_user_email
-                      , password == password_confirmation)
-
-                
+                print('Not same password')
+                           
         except Exception as error:
             print(error)
     

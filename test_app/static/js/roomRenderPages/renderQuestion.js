@@ -8,29 +8,29 @@ function tokenTimePrecent(userTimer, allTime){
     return token
 }
 
-function renderWaiteQuestion(type) {
+function renderWaitQuestion(type) {
     const roomContent = document.getElementById("room-content");
 
     roomContent.innerHTML = ""; 
-    roomContent.className = 'waite-next-question'
+    roomContent.className = 'wait-next-question'
 
     let leaveButton= ""
-    let textWaiteQuestion= "Будь ласка, зачекайте, поки інші учасники відповідають..."
-    if (type === "waite"){
+    let textWaitQuestion= "Будь ласка, зачекайте, поки інші учасники відповідають..."
+    if (type === "wait"){
         leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
     } else if (type === "start"){
-        textWaiteQuestion= "Зачекайте, поки організатор прийме вас до тесту"
+        textWaitQuestion= "Зачекайте, поки організатор прийме вас до тесту"
         leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
-    } else if (type === "recconect"){
-        setCookie("recconect", "1")
-        textWaiteQuestion= 'Тест завершено, ваш результат не буде зараховано'
+    } else if (type === "reconnect"){
+        setCookie("reconnect", "1")
+        textWaitQuestion= 'Тест завершено, ваш результат не буде зараховано'
         leaveButton= `<button class='leave-test' onclick="userLeaveTest()">Відключитися від тесту</button>`
     }
     roomContent.innerHTML = `
         <div class="blur-overlay">
             <div class="wait-content">
                 <div class="waiting-message">
-                    ${textWaiteQuestion}
+                    ${textWaitQuestion}
                     ${leaveButton}
                 </div>
             </div>
@@ -47,7 +47,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
     const roomContent= document.getElementById("room-content");
 
     if (isNaN(quizTime) || quizTime < 0){
-        renderWaiteQuestion("test")
+        renderWaitQuestion("test")
     }
 
     if (roomContent != null) {
@@ -109,10 +109,10 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             roomContent.appendChild(answersDiv);
         }
 
-        const arreyButton = document.querySelectorAll(".passing-answer")
+        const buttonsArrey = document.querySelectorAll(".passing-answer")
 
-        for (let count = 0; count < arreyButton.length; count++ ) {
-            let button= arreyButton[count];
+        for (let count = 0; count < buttonsArrey.length; count++ ) {
+            let button= buttonsArrey[count];
             button.addEventListener(
                 type= "click" ,
                 listener= function (event) {
@@ -121,12 +121,11 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                     let userTokens= getCookie("userTokens")
 
                     curTime= getCookie("time");
-                    allTime= plusAnswerTime+ listQuiz[Number(state.replace(/\D/g, ""))].time
+                    allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
                     userTimer= allTime- curTime
                     token= tokenTimePrecent(userTimer, allTime)
-                    console.log(token)
 
-                    setCookie("state", `waite${state.replace(/\D/g, "")}`)
+                    setCookie("state", `wait${state.replace(/\D/g, "")}`)
                     
                     if (typeof cookie === "undefined"){
                         setCookie("userAnswers", `|${button.id}|`)
@@ -142,9 +141,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                         setCookie("userTokens", newUserTokens)
                     }   
 
-                    renderWaiteQuestion("test");
+                    renderWaitQuestion("test");
                     
-                    socket.emit("user_answer", {
+                    socket.emit(SOKET_USER_ANSWERS, {
                         room: room,
                         author_name: author_name,
                         username: username,
@@ -179,12 +178,11 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             let answerValue= document.querySelector(".input-with-answer").value.trim()
 
             curTime= getCookie("time");
-            allTime= plusAnswerTime+ listQuiz[Number(state.replace(/\D/g, ""))].time
+            allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
             userTimer= allTime- curTime
             token= tokenTimePrecent(userTimer, allTime)
-            console.log(token)
 
-            setCookie("state", `waite${state.replace(/\D/g, "")}`)
+            setCookie("state", `wait${state.replace(/\D/g, "")}`)
             newUserTokens= userTokens+ `|${token}`
             newUserTimers= userTimers+ `|${userTimer}`
 
@@ -211,9 +209,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 setCookie("userTimers", newUserTimers)
             }       
 
-            renderWaiteQuestion("test");
+            renderWaitQuestion("test");
                     
-            socket.emit("user_answer", {
+            socket.emit(SOKET_USER_ANSWERS, {
                 room: room,
                 author_name: author_name,
                 username: username,
@@ -254,10 +252,10 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         }
 
         const multipleChoiceButton = document.querySelector(".multiple-choice-answer")
-        const arreyMultipleChoiceButton = document.querySelectorAll(".multiple-answer")
+        const multipleChoiceButtons = document.querySelectorAll(".multiple-answer")
 
-        for (let count = 0; count < arreyMultipleChoiceButton.length; count++ ) {
-            let button= arreyMultipleChoiceButton[count];
+        for (let count = 0; count < multipleChoiceButtons .length; count++ ) {
+            let button= multipleChoiceButtons [count];
             
             button.addEventListener(
                 type= "click" ,
@@ -280,10 +278,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             let userTokens= getCookie("userTokens")                  
             let answerValue= ""
             let arreyUserMultipleChoice= document.querySelectorAll(".active-multiple-answer")
-            allTime= plusAnswerTime+ listQuiz[Number(state.replace(/\D/g, ""))].time
+            allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
             userTimer= allTime- curTime
             token= tokenTimePrecent(userTimer, allTime)
-            console.log(token)
 
             newUserTokens= userTokens+ `|${token}`
             newUserTimers= userTimers+ `|${userTimer}`
@@ -297,7 +294,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 }
             }
 
-            setCookie("state", `waite${state.replace(/\D/g, "")}`)
+            setCookie("state", `wait${state.replace(/\D/g, "")}`)
 
             if (typeof answerValue === "undefined"){
                 answerValue= "not_answer"
@@ -323,9 +320,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 setCookie("userTimers", newUserTimers)
             }       
 
-            renderWaiteQuestion("test");
+            renderWaitQuestion("test");
                     
-            socket.emit("user_answer", {
+            socket.emit(SOKET_USER_ANSWERS, {
                 room: room,
                 author_name: author_name,
                 username: username,

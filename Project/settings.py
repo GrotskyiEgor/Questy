@@ -15,8 +15,6 @@ project = flask.Flask(
     instance_path= os.path.abspath(os.path.join(__file__, '..', 'instance'))
 )
 
-# instance_path= os.path.abspath(os.path.join(__file__, '..', '..', 'instance'))
-
 project.config.update(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,

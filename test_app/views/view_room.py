@@ -22,9 +22,6 @@ def room_get_result(room, author_name, username):
     
     ROOM= Room.query.filter_by(test_code= room).first()
     QUIZ_LIST = Quiz.query.filter_by(test_id= ROOM.test_id).all()
-
-    # user_name= data["username"]
-    # TEST = Test.query.filter_by(id= ROOM.test_id).first()
      
     users_list= ROOM.all_members.strip('|').split('||')
     USER_LIST= []
@@ -42,8 +39,7 @@ def room_get_result(room, author_name, username):
                     UNREG_USER_LIST.append(user)
 
     SCORE_LIST= Score.query.filter_by(test_code= room).all()
-    print("all lists")
-    print(SCORE_LIST, UNREG_USER_LIST, USER_LIST, QUIZ_LIST)
+
     if (USER_LIST):
         for user in USER_LIST:
             answers_list= []
@@ -161,8 +157,6 @@ def room_get_result(room, author_name, username):
             "accuracy": SCORE_LIST[0].accuracy,
         }
 
-    print("room_get_result_data, best_score_data, averega_score")
-    print(room_get_result_data, best_score_data, averega_score)
     return room_get_result_data, best_score_data, averega_score
 
 @Project.settings.socketio.on('join')
@@ -237,7 +231,7 @@ def handle_new_state(data):
     new_state= data["new_state"]
     username= data["username"]
     user_sid= get_sid(username)
-    print(new_state)
+
     emit("new_state", {"room": data["room"], "username": username, "new_state": new_state, "new_time": data["new_time"]}, room= user_sid)
 
 @Project.settings.socketio.on('test_end')
@@ -259,7 +253,6 @@ def handle_kick_user(data):
     username = data['user']
     room = data['room']
     
-    # kick_sid = get_sid(username)
     device_id= user_devices.get(username)
     kick_sid= devices.get(device_id)
 
@@ -320,7 +313,6 @@ def handle_user_answers(data):
     number_of_correct_answers = 0
     user_tokens= user_tokens.split("|")
 
-    print(user_tokens, user_answers_list, data["user_timers"])
     for index in range(len(QUIZ_LIST)):
         user= user_answers_list[index].split("$$$")
         quiz= QUIZ_LIST[index].correct_answer.split("%$№")
@@ -352,7 +344,6 @@ def handle_user_answers(data):
         test_code= room
     )
 
-    # print(data["user_answers"], "\n", data["user_timers"], "\n", new_token_list, "\n", accuracy, "\n", TEST.id, "\n", USER.id, "\n", user_name, "\n", room)
     if (USER):
         if USER.tokens:
             USER.tokens = int(USER.tokens) + tokens
@@ -430,10 +421,10 @@ def handle_new_user(data):
 @Project.settings.socketio.on('new_user_admin')
 def handle_new_user_admin(data):
     author_name= data["author_name"]
-    compound= data.get("compound", 0)
+    connected= data.get("connected", 0)
 
     author_sid = get_sid(author_name)
-    emit("new_user_admin", {"username": data["username"], "ip": data["ip"], "compound": compound}, to= author_sid)
+    emit("new_user_admin", {"username": data["username"], "ip": data["ip"], "connected": connected}, to= author_sid)
 
 @Project.settings.socketio.on('next_question')
 def handle_next_question(data):

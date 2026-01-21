@@ -29,9 +29,6 @@ def profile_sorte():
         if test and test not in list_tests_sort:
             list_tests_sort.append(test.dict())
 
-    # for score in scores:
-    #     scores.append(score.dict())
-
     if sorte_type == "accuracy":
         for score in scores:
             accuracy_sort.append([score.accuracy, score.id, score.test_id, score.date_complete, score.time_complete])
@@ -77,7 +74,6 @@ def render_profile():
         tests_count = len(Test.query.filter_by(author_name= current_user.username).all())
         scores_count= len(scores)
 
-        print(tests_count, scores_count)
         for score in scores:
             accuracy.append(score.accuracy)
             date_complete.append(score.date_complete)
@@ -92,15 +88,12 @@ def render_profile():
     
         dates_complete.sort()
 
-        print(selected_option)
         if selected_option[0] == 'graph_active1':
                 
                 count_cmpl_quiz.extend([2,3,4,5,6,7,3,24,5])
                 time_complete.append('11:11:11')
                 time_complete.append('13:11:11') # ДЛЯ НАГЛЯДНОСТИ !
                 time_complete.append('14:11:11')
-                print(f'----------------{time_complete}')
-                print(f'++++++++++++++++{count_cmpl_quiz}')
 
                 return {
                 "scores": scores,
@@ -147,9 +140,6 @@ def render_profile():
                 
             count_cmpl_quiz.extend([2,3,4,5,6,7,3,24,5])
             dates_complete = ['2025-07-20', '2025-07-21', '2025-07-22']
-
-            print(count_cmpl_quiz)
-            print(dates_complete)
 
             return {
                 "scores": scores,

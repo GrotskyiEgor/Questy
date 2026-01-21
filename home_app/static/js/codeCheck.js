@@ -24,7 +24,7 @@ $(() => {
 
     $('#connect-test-btn').on('click', () => {
         if (savedRoom){
-            setCookie("recconect", "1")
+            setCookie("reconnect", "1")
             window.location.href= `/room${savedRoom}`
         }
     })
@@ -39,7 +39,6 @@ $(() => {
         
     $('.search-btn').on('click', () => {
         const room = $('#room').val().trim();
-        console.log(room, currentCodes.includes(room), currentCodes)
         if (currentCodes.includes(room)) {
             window.location.href = `/room${room}`; 
         } 
@@ -71,8 +70,7 @@ $(() => {
         }
     })
 
-    $('.recconect-back-btn').on('click', () => {
-        console.log("GSDGGggggg")
+    $('.reconnect-back-btn').on('click', () => {
         clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "temporaryName", "timeStop", "time"])
         $('#modal-bg-connect').fadeOut(200)
     }) 

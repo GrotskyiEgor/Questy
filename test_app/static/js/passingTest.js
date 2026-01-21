@@ -1,5 +1,5 @@
-const arreyButton = document.querySelectorAll(".answer")
-const arreyMultipleChoiceButton= document.querySelectorAll(".multiple-answer")
+const buttonsArrey = document.querySelectorAll(".answer")
+const multipleChoiceButtons = document.querySelectorAll(".multiple-answer")
 
 const inputButton = document.querySelector(".input-answer")
 const multipleChoiceButton = document.querySelector(".multiple-choice-answer")
@@ -51,7 +51,6 @@ if (multipleChoiceButton){
             setCookie("userAnswers", answerValue) 
         } else{
             userAnswer = getCookie("userAnswers");
-            console.log(userAnswer, answerValue)
             document.cookie = `userAnswers=${userAnswer}|${answerValue}; path= /`
             setCookie("userAnswers", `${userAnswer}|${answerValue}`)     
         }
@@ -60,8 +59,8 @@ if (multipleChoiceButton){
     })
 }
 
-for (let count = 0; count < arreyMultipleChoiceButton.length; count++ ) {
-    let button= arreyMultipleChoiceButton[count];
+for (let count = 0; count < multipleChoiceButtons .length; count++ ) {
+    let button= multipleChoiceButtons [count];
 
     const checkmark = document.createElement("span")
     checkmark.classList.add("checkmark")
@@ -84,8 +83,8 @@ for (let count = 0; count < arreyMultipleChoiceButton.length; count++ ) {
 }
 
 
-for (let count = 0; count < arreyButton.length; count++ ) {
-    let button= arreyButton[count];
+for (let count = 0; count < buttonsArrey.length; count++ ) {
+    let button= buttonsArrey[count];
     button.addEventListener(
         type= "click" ,
         listener= function (event) {

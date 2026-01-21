@@ -27,6 +27,7 @@ def render_edit_question():
     if flask.request.method == "POST":
         updated_answers = []
 
+        # Перемещивание ответов
         # random.shuffle(updated_answers)
         if quiz.question_type == "choice":
             for count_answers in range(len(list_answers)):
@@ -34,12 +35,10 @@ def render_edit_question():
                 new_value = flask.request.form.get(field_name, "").strip()
                 if new_value:
                     updated_answers.append(new_value)
-                    print("новый ответ", new_value)
                 else:
                     new_correct = flask.request.form.get("correct_answer", "").strip()
                     updated_answers.append(new_correct)
                     quiz.correct_answer = new_correct
-                    print("новый правильный ответ", new_correct)
 
             quiz.answer_options = "%$№".join(updated_answers)
             db.session.commit()
@@ -48,7 +47,6 @@ def render_edit_question():
             new_correct = flask.request.form.get("correct_answer", "").strip()
             quiz.correct_answer = new_correct
             db.session.commit()
-            print("новый правильный ответ", new_correct)
 
         if quiz.question_type == "multiple_choice":
             new_correct_list = []
@@ -57,12 +55,10 @@ def render_edit_question():
                 new_value = flask.request.form.get(field_name, "").strip()
                 if new_value:
                     updated_answers.append(new_value)
-                    print("новый ответ", new_value)
                 else:
                     new_correct = flask.request.form.get(f"correct_answer{count_answers}", "").strip()
                     updated_answers.append(new_correct)
                     new_correct_list.append(new_correct)
-                    print("новый правильный ответ", new_correct)
 
             quiz.answer_options = "%$№".join(updated_answers)
             quiz.correct_answer ="%$№".join(new_correct_list)
@@ -74,18 +70,14 @@ def render_edit_question():
                 new_value = flask.request.form.get(field_name, "").strip()
                 if new_value:
                     updated_answers.append(new_value)
-                    print("новый ответ", new_value)
                 else:
                     new_correct = flask.request.form.get("correct_answer", "").strip()
                     updated_answers.append(new_correct)
                     quiz.correct_answer = new_correct
-                    print("новый правильный ответ", new_correct)
 
             quiz.answer_options = "%$№".join(updated_answers)
             db.session.commit()
             
-
-        print(f"Вопроссы: {quiz.answer_options}")
         return flask.redirect(f"/test_app?test_id={test.id}")
 
     return {

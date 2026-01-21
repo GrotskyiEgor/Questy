@@ -1,5 +1,5 @@
 function testStop(){    
-    socket.emit("stop_test", {
+    socket.emit(SOKET_STOP_TEST, {
         room: room,
         author_name: authorName
     });
@@ -11,7 +11,7 @@ function testStop(){
 function authorStartTest() {
     let userList= getCookie("userList")
     if (userList){
-        socket.emit("author_start_test", {
+        socket.emit("SOKET_AUTHOR_START_TEST", {
             room: room,
         });
     }
@@ -22,7 +22,6 @@ function nextQuestion(){
 
     state = getCookie("state");
     let numberOfQuestion= Number(state.replace(/\D/g, "")) + 1;
-    // let countUsersAnswer= getCookie("countUsersAnswer");
     
     setCookie("timeStop", "false") 
 
@@ -32,7 +31,7 @@ function nextQuestion(){
     const countAnswer = document.getElementById("count-answer-span");
     countAnswer.textContent= 0;
     
-    setCookie("state", `authorStart${numberOfQuestion}`)
+    setCookie("state", `${COOKIE_AUTHOR_START}${numberOfQuestion}`)
     setCookie("countCorrectAnswer", 0)
 
     if (numberOfQuestion === totalQuestion- 1) {
@@ -45,7 +44,7 @@ function nextQuestion(){
         donatChart.destroy()
     }
 
-    if (!listQuiz[numberOfQuestion]){
+    if (!quizList[numberOfQuestion]){
         return
     }
 
@@ -55,27 +54,27 @@ function nextQuestion(){
     questionTitle.textContent = `Питання: ${numberOfQuestion + 1} з ${totalQuestion}`
     
     const questionText = document.getElementById("author-question")
-    questionText.textContent = `${listQuiz[numberOfQuestion].question_text}`
+    questionText.textContent = `${quizList[numberOfQuestion].question_text}`
 
     const correctAnswer = document.getElementById("author-correct-answer")
 
-    if (listQuiz[numberOfQuestion].question_type === "multiple_choice"){
-        correctAnswer.textContent= `${listQuiz[numberOfQuestion].correct_answer.replaceAll("%$№", " та ")}`
+    if (quizList[numberOfQuestion].question_type === "multiple_choice"){
+        correctAnswer.textContent= `${quizList[numberOfQuestion].correct_answer.replaceAll("%$№", " та ")}`
     }
     else{
-        correctAnswer.textContent= `${listQuiz[numberOfQuestion].correct_answer}`
+        correctAnswer.textContent= `${quizList[numberOfQuestion].correct_answer}`
     }
 
-    setCookie("time", Number(listQuiz[numberOfQuestion].time))
-    resetTimer(Number(listQuiz[numberOfQuestion].time))
+    setCookie("time", Number(quizList[numberOfQuestion].time))
+    resetTimer(Number(quizList[numberOfQuestion].time))
 
     const newTime = document.getElementById("timer")
-    newTime.textContent =`${listQuiz[numberOfQuestion].time}`
+    newTime.textContent =`${quizList[numberOfQuestion].time}`
 
     timerPaused= false
     plusAnswerTime= 0
     
-    socket.emit("next_question", {
+    socket.emit(SOKET_NEXT_QUESTION, {
         room: room,
         author_name: authorName
     });
@@ -91,23 +90,18 @@ function checkAnswers(type){
     let userTokens= getCookie("userTokens") || ""
 
     const curTime= Number(getCookie("time")) || 0
-    const allTime= plusAnswerTime+ listQuiz[Number(state.replace(/\D/g, ""))].time
+    const allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
     const userTimer= allTime -curTime
     
     let answerList= answers.split("|")
     answerList= answerList.filter(answer => answer && answer !== " ")
-
     let missingCount= 1+ questionIndex- answerList.length
-    // console.log(missingCount, questionIndex, answerList.length)
 
     if (missingCount < 0){
         return
     } else if (missingCount === 0 && answerList.length === 0){
         missingCount= 1
     }
-
-    console.log("CHECK ANSWERS")
-    console.log(userTokens, userTimers)
 
     if (type === "test"){
         for (let miss = 0; miss < missingCount; miss++) {
@@ -120,8 +114,7 @@ function checkAnswers(type){
                 userTokens += `|${token}`;
             }
         }
-    } else if (type === "recconect"){
-        console.log("RECONNECT")
+    } else if (type === "reconnect"){
         for (let miss = 0; miss < missingCount- 1; miss++) {
             answers += "|not_answer|";
             if (userTimers === "" && userTokens === ""){
@@ -134,12 +127,9 @@ function checkAnswers(type){
         }
     }
 
-    // console.log(missingCount, answers, userTimers, userTokens)
-    // console.log("Before setCookie", userTimers, userTokens);
     setCookie("userAnswers", answers)
     setCookie("userTimers", userTimers)
     setCookie("userTokens", userTokens)
-    // console.log("After setCookie", document.cookie);
 }
 
 function sendMessage() {
@@ -159,7 +149,7 @@ function sendMessage() {
             }
         }
 
-        socket.emit("message_to_chat", {
+        socket.emit(SOKET_MESSAGE_TO_CHAT, {
             message: message,
             room: room,         
             username: username  

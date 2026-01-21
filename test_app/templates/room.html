@@ -15,30 +15,38 @@
     
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
-    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/add_user_block.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/chart_manager.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/timer_manager.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/exel_table.js') }}"></script>
+    <script></script>
 
-    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/test_states.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/addUserBlock.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/chartManager.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/timerManager.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/excelTable.js') }}"></script>
 
-    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/render_waite_page.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/render_author_start.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/render_question.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/render_result_test.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/render_author_result_test.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/testStates.js') }}"></script>
+
+    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/renderWaitPage.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/renderAuthorStart.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/renderQuestion.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/renderResultTest.js') }}"></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/renderAuthorResultTest.js') }}"></script>
     
-    <script>
+    <script>    
         let username = "{{ username }}"; 
         const room = "{{ test.test_code }}"; 
-        const recconect= getCookie("recconect")
+        const testId = Number("{{ test.id }}");
+        const reconnect= getCookie("reconnect")
+        const authorName= "{{ test.author_name }}";
+        const totalQuestion = Number("{{ test.total_questions }}");
+
+        const quizList = {{ list_quiz | tojson }};
+        const anwersList = {{ list_answers | tojson }};
         
         if (!username) {
-            username= getCookie("temporaryName")
+            username= getCookie("temporaryName");
             if (!username) {
                 window.location.href = `/temporary_name${room}`;
-            }
-        }
+            };
+        };
         
         const socket= io("/", 
             {
@@ -47,20 +55,13 @@
                 reconnectionDelay: 1000
             }
         );
-
-        const testId = Number("{{ test.id }}");
-        const totalQuestion = Number("{{ test.total_questions }}");
-        const authorName= "{{ test.author_name }}";
-
-        const listQuiz = {{ list_quiz | tojson }};
-        const listAnswers = {{ list_answers | tojson }};
         
         let state = getCookie("state");
-        let compound= getCookie("compound")
+        let connected= getCookie("connected")
         let timerPaused= getCookie("timeStop");
         let plusAnswerTime= 0;
         let timerInterval= null;
-        let plusTimeCount= 15
+        let extraTimeSeconds= 15
 
         if (timerPaused === NaN){
             setCookie("timeStop", "false")
@@ -71,18 +72,18 @@
             timerPaused= false
         } 
 
-        if (state && state.includes("authorStart")) {
+        if (state && state.includes("STATE_AUTHOR_START")) {
             state= getCookie("state")
             let time= getCookie("time")
-            renderAuthorStart(listQuiz[Number(state.replace(/\D/g, ""))], room, authorName, Number(state.replace(/\D/g, "")), totalQuestion, Number(state.replace(/\D/g, "")));
+            renderAuthorStart(quizList[Number(state.replace(/\D/g, ""))], room, authorName, Number(state.replace(/\D/g, "")), totalQuestion, Number(state.replace(/\D/g, "")));
         } 
         else if (state === "authorResultTest") {
             renderAuthorResultTest(username, authorName, totalQuestion);
         } 
         else if (state === "resultTest") {
-            renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId);
-        } else if (recconect){
-            clearCookie(["recconect"])
+            renderResultTest(username, totalQuestion, quizList, listAnswers, testId);
+        } else if (reconnect){
+            clearCookie(["reconnect"])
 
             socket.emit("reconnect_user", {
                 room: room,
@@ -90,19 +91,19 @@
                 author_name: authorName
             });
 
-            renderWaiteQuestion("recconect")
+            renderWaitQuestion("reconnect")
         }
         else if (state && state.includes("question")) {
             let time= getCookie("time")
-            renderQuestion(Number("{{ test.id }}"), listQuiz[Number(state.replace(/\D/g, ""))], listAnswers[Number(state.replace(/\D/g, ""))], room, authorName);
+            renderQuestion(Number("{{ test.id }}"), quizList[Number(state.replace(/\D/g, ""))], listAnswers[Number(state.replace(/\D/g, ""))], room, authorName);
         } 
-        else if (state && state.includes("waite")) {
-            renderWaiteQuestion("test");
+        else if (state && state.includes("wait")) {
+            renderWaitQuestion("test");
         }
         else {
-            if (authorName === username || compound){
+            if (authorName === username || connected){
                 let userList= getCookie("userList")
-                renderRoomMain(room, authorName, username, listQuiz, userList);
+                renderRoomMain(room, authorName, username, quizList, userList);
                 setCookie("room", room)
     
                 let messages= document.getElementById("messages");
@@ -114,7 +115,7 @@
                     }
                 }
             } else{
-                renderWaiteQuestion("start");
+                renderWaitQuestion("start");
             }
         }
 
@@ -133,7 +134,7 @@
                             room: room,
                             username: username,
                             author_name: authorName,
-                            compound:  compound,
+                            connected:  connected,
                             ip: ip
                         });
                     })
@@ -178,7 +179,7 @@
         });
 
         socket.on('kicked', function(data) {
-            clearCookie(["room", "state", "userAnswers", "compound", "countUsersAnswer", "temporaryName", "timeStop", "time"])
+            clearCookie(["room", "state", "userAnswers", "connected", "countUsersAnswer", "temporaryName", "timeStop", "time"])
             window.location.href = '/'; 
         });    
         
@@ -189,7 +190,7 @@
             setCookie("countUsersAnswer", countUsersAnswer)
 
             state = getCookie("state");    
-            addUserAnswer(data["username"], answer, authorName, listQuiz[Number(state.replace(/\D/g, ""))]);
+            addUserAnswer(data["username"], answer, authorName, quizList[Number(state.replace(/\D/g, ""))]);
             
             socket.emit("get_room_size", {
                 room: room,
@@ -199,7 +200,6 @@
         });
 
         socket.on("recieve_count_users", function(data) {  
-            const COUNTUSERS= data['countUsers']
             let countUsersAnswer= getCookie("countUsersAnswer");
             
             state = getCookie("state");
@@ -207,54 +207,47 @@
 
         socket.on("reconnect_ping", function(data) {          
             state = getCookie("state");        
-            let new_state= -2
-            let new_time= getCookie("time")      
+            let newState= -2
+            let newTime= getCookie("time")      
             if (username === authorName){  
                 if (state === "authorResultTest"){
-                    new_state= -1
-                    renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId);
+                    newState= -1
+                    renderResultTest(username, totalQuestion, quizList, listAnswers, testId);
                 } else{
-                    new_state= Number(state.replace(/\D/g, ""))
+                    newState= Number(state.replace(/\D/g, ""))
                 }
-                console.log("AUTHOER DONE", Number(state.replace(/\D/g, "")))
             }
 
             socket.emit("new_state", {
                 room: room,
                 username: data.username,
                 author_name: authorName,
-                new_state: new_state,
-                new_time: new_time
+                new_state: newState,
+                new_time: newTime
             });
         });
 
         socket.on("new_state", function(data) {  
-            console.log(data["new_state"], "NEWNWE STATE")
-            let new_state= Number(data["new_state"])
-            console.log("resultTest end", new_state)
+            let newState= Number(data["new_state"])
 
-            if (new_state === -1){
-                console.log("resultTest end", new_state)
-            } else if (new_state === -2){ 
+            if (newState === -1){
+                console.log("resultTest end", newState)
+            } else if (newState === -2){ 
                 userLeaveTest()
-            }else if (new_state >= 0){
-                console.log("test", new_state)
-                if (Number(data["new_time"]) > 1){
-                    setCookie("state", `question${new_state}`)
-                    console.log(new_state, "question reccconte")
-                    renderQuestion(Number("{{ test.id }}"), listQuiz[Number(new_state)], listAnswers[Number(new_state)], room, authorName);
+            }else if (newState >= 0){
+                if (Number(data["newTime"]) > 1){
+                    setCookie("state", `question${newState}`)
+                    renderQuestion(Number("{{ test.id }}"), quizList[Number(newState)], listAnswers[Number(newState)], room, authorName);
                 } else{
-                    setCookie("state", `waite${new_state}`)
-                    console.log(new_state, "waite recconect")
-                    renderWaiteQuestion("test");
+                    setCookie("state", `wait${newState}`)
+                    renderWaitQuestion("test");
                 }
 
-                checkAnswers("recconect")
+                checkAnswers("reconnect")
             } else{
                 console.log("BAD REQUEST NEW STATE")
             }
 
-            console.log("resultTest end", new_state)
         });
 
         socket.on("next_question", function(data) {  
@@ -266,10 +259,10 @@
             plusAnswerTime= 0
             if (state != "authorResultTest") {
                 let numberOfQuestion= Number(state.replace(/\D/g, ""));
-                setCookie("time", Number(listQuiz[numberOfQuestion + 1].time))
+                setCookie("time", Number(quizList[numberOfQuestion + 1].time))
                 if (numberOfQuestion != totalQuestion - 1) {
                     setCookie("state", `question${numberOfQuestion + 1}`)
-                    renderQuestion(Number("{{ test.id }}"), listQuiz[numberOfQuestion + 1], listAnswers[numberOfQuestion + 1], room, authorName);
+                    renderQuestion(Number("{{ test.id }}"), quizList[numberOfQuestion + 1], listAnswers[numberOfQuestion + 1], room, authorName);
                 }
                 else {
                     socket.emit("stop_test", {
@@ -286,14 +279,11 @@
         socket.on("result_test", function(data) {      
             checkAnswers("test");
 
-            renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId)
+            renderResultTest(username, totalQuestion, quizList, listAnswers, testId)
 
             userAnswers= getCookie("userAnswers")
             userTimers= getCookie("userTimers")
             userTokens= getCookie("userTokens")
-
-            console.log("result_test result_test result_test")
-            console.log(userAnswers, userTimers, userTokens)
 
             socket.emit("user_answers", {
                 room: room,
@@ -310,9 +300,9 @@
         socket.on("create_user_block", function(data) {  
             if (!state){    
                 if (username === data["username"]){
-                    setCookie("compound", "1")
+                    setCookie("connected", "1")
                     setCookie("room", room)
-                    renderRoomMain(room, authorName, username, listQuiz);
+                    renderRoomMain(room, authorName, username, quizList);
                 }  
                 createUserBlock(username, authorName, data['username'], data['user_ip'], "not");
             }
@@ -322,7 +312,7 @@
             let addUser= true
             let userList= getCookie("userList")
             let blockedUsers= getCookie("blockedUsers")
-            let waiteUserIp= document.querySelectorAll(".user-ip")
+            let waitUserIp= document.querySelectorAll(".user-ip")
             if (blockedUsers){
                 blockedUsers= blockedUsers.split("$%^")
                 
@@ -336,26 +326,24 @@
             //if (userList){
             //    userList= userList.split("</>")
             //    userList= userList.map(user => user.split("()"))
-//
+            //
             //    userList.forEach(user =>{
-            //        console.log(user, data.ip)
             //        if (user === data.ip){
             //            addUser= false
             //        }
             //    })
             //}
-//
-            //if (waiteUserIp){
-            //    waiteUserIp.forEach(userIp =>{
-            //        console.log(userIp, data.ip)
+            //
+            //if (waitUserIp){
+            //    waitUserIp.forEach(userIp =>{
             //        if (userIp.textContent === data.ip){
             //            addUser= false
             //        }
             //    })
             //}
 
-            if (addUser && !state && !data.compound){
-                createUserBlock(username, authorName, data['username'], data['ip'], "waite");
+            if (addUser && !state && !data.connected){
+                createUserBlock(username, authorName, data['username'], data['ip'], "wait");
             }
         });
 
@@ -366,8 +354,8 @@
             const timerCount= getCookie("time")
             plusAnswerTime += 15
             if (timerCount && timer.textContent != "Час закінчений"){
-                timer.textContent = parseInt(timerCount) + plusTimeCount
-                setCookie("time", parseInt(timerCount) + plusTimeCount)
+                timer.textContent = parseInt(timerCount) + extraTimeSeconds
+                setCookie("time", parseInt(timerCount) + extraTimeSeconds)
             }
         });
 
@@ -394,19 +382,19 @@
                 messages.innerHTML += `<p>Start ${data["room"]}</p>`;
             }     
             
-            setCookie("time", listQuiz[0].time)
-            let compoundStart= getCookie("compound")
-            clearCookie(["compound"])
+            setCookie("time", quizList[0].time)
+            let connectedStart= getCookie("connected")
+            clearCookie(["connected"])
 
             if (username === data["author_name"]) {        
-                setCookie("state", "authorStart0")  
+                setCookie("state", `${COOKIE_AUTHOR_START}0`)  
                 setCookie("countUsersAnswer", 0)  
                 setCookie("countCorrectAnswer", 0)  
-                renderAuthorStart(listQuiz[0], room, authorName, state, totalQuestion, state);
+                renderAuthorStart(quizList[0], room, authorName, state, totalQuestion, state);
             }
-            else if(compoundStart) {
+            else if(connectedStart) {
                 setCookie("state", "question0")  
-                renderQuestion(Number("{{ test.id }}"), listQuiz[state], listAnswers[state], room, authorName);
+                renderQuestion(Number("{{ test.id }}"), quizList[state], listAnswers[state], room, authorName);
             } else{
                 window.location.href = '/'; 
             }
