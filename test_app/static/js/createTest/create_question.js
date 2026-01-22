@@ -15,7 +15,8 @@ createQuestionButtonDiv.addEventListener('click', function(event) {
                 <div class="answer-input">
                     <input type="text" class="answer-text" placeholder="Відповідь 1">
                     <input type="radio" class="question-radio" name="correct-answer-q${countQuestion}"> 
-                    <span>Правильна</span>     
+                    <span>Правильна</span>    
+                    <button type="button" class="delete-answer">✖</button> 
                 </div>
             </div>
             <button type="button" class="add-answer">Додати відповідь</button>
@@ -35,6 +36,7 @@ createQuestionButtonDiv.addEventListener('click', function(event) {
                     <input type="text" class="answer-text" placeholder="Відповідь 1">
                     <input type="checkbox" class="checkbox" name="correct-answer-q${countQuestion}"> 
                     <span>Правильна</span>
+                    <button type="button" class="delete-answer">✖</button>
                 </div>
             </div>
             <button type="button" class="add-mutlti add-mutlti-answer">Додати відповідь</button>
@@ -49,7 +51,8 @@ createQuestionButtonDiv.addEventListener('click', function(event) {
             <div class="answer-input">
                 <input type="text" class="answer-text" placeholder="Відповідь 1">
                 <input type="radio" class="question-radio" name="correct-answer-q${countQuestion}"> 
-                <span>Правильна</span>     
+                <span>Правильна</span>    
+                <button type="button" class="delete-answer">✖</button> 
             </div>
         </div>
         <button type="button" class="add-answer">Додати відповідь</button>
@@ -88,9 +91,43 @@ createQuestionButtonDiv.addEventListener('click', function(event) {
 });
 
 testQuestionDiv.addEventListener("click", function(event){
-    if (event.target.classList.contains("delete-question")){
-        event.target.closest(".question-block").remove(); 
+    if (event.target.classList.contains("delete-question")) {
+    const questionBlock = event.target.closest(".question-block");
+    questionBlock.remove();
+
+    const allQuestions = document.querySelectorAll(".question-block");
+
+    allQuestions.forEach((question, index) => {
+        const newNumber = index + 1;
+        question.id = `q${newNumber}`;
+        const titleSpan = question.querySelector(".question-header span");
+        if (titleSpan) {
+            titleSpan.textContent = `Питання ${newNumber}`;
+        }
+
+        const inputs = question.querySelectorAll(
+            'input[type="radio"], input[type="checkbox"]'
+        );
+
+        inputs.forEach(input => {
+            input.name = `correct-answer-q${newNumber}`;
+        });
+    });
+    countQuestion = allQuestions.length;
     }
+    
+    if (event.target.classList.contains("delete-answer")) {
+    const answerInput = event.target.closest(".answer-input");
+    const answersBlock = answerInput.parentElement;
+
+    answerInput.remove();
+
+    const answers = answersBlock.querySelectorAll(".answer-text");
+    answers.forEach((input, index) => {
+        input.placeholder = `Відповідь ${index + 1}`;
+    });
+    }
+
 
     if (event.target.classList.contains("add-answer")){
         const questionBlock= event.target.closest(".question-block")
@@ -103,7 +140,8 @@ testQuestionDiv.addEventListener("click", function(event){
         newAnswer.innerHTML= `
                             <input type="text" class="answer-text" placeholder="Відповідь ${answerCount}">
                             <input type="radio" class="question-radio" name="correct-answer-${blockId}"> 
-                            <span>Правильна</span>`
+                            <span>Правильна</span>
+                            <button type="button" class="delete-answer">✖</button>`
 
         answersBlock.appendChild(newAnswer)
     }
@@ -118,7 +156,8 @@ testQuestionDiv.addEventListener("click", function(event){
         newAnswer.innerHTML= `
                             <input type="text" class="answer-text" placeholder="Відповідь ${answerCountMulti}">
                             <input type="checkbox" class="checkbox" name="correct-answer-${blockId}"> 
-                            <span>Правильна</span>`
+                            <span>Правильна</span>
+                            <button type="button" class="delete-answer">✖</button>`
 
         answersBlock.appendChild(newAnswer)
     }
