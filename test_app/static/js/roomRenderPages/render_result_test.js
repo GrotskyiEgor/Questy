@@ -22,19 +22,13 @@ function renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId
         let arrayCorrectAnswers= []
         let arrayUserAnswers= []
         console.log(listQuiz[count].correct_answer, answersArrey[count], listQuiz[count].correct_answer === answersArrey[count])
+
         if (listQuiz[count].question_type === "multiple_choice"){
             arrayCorrectAnswers= listQuiz[count].correct_answer.split("%$№")
             arrayUserAnswers= answersArrey[count].split("$$$")
             let correctAnswerAccept= true
             console.log(arrayCorrectAnswers.length === arrayUserAnswers.length, arrayCorrectAnswers, arrayUserAnswers)
-            //if (arrayCorrectAnswers.length === arrayUserAnswers.length){
-            //    arrayCorrectAnswers.sort();
-            //    arrayUserAnswers.sort();
-//
-            //    let correctAnswerAccept =
-            //        arrayCorrectAnswers.length === arrayUserAnswers.length &&
-            //        arrayCorrectAnswers.every((val, i) => val === arrayUserAnswers[i]);
-            //}
+
             if (arrayCorrectAnswers.length === arrayUserAnswers.length){
                 arrayCorrectAnswers.sort();
                 arrayUserAnswers.sort();
@@ -113,38 +107,12 @@ function renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId
     chartWrapper.className = 'chart-wrapper';
 
     const chartCanvas = document.createElement('canvas');
-    chartCanvas.id = 'myChart';
+    chartCanvas.id = 'userChart';
     chartCanvas.width = 400;
     chartCanvas.height = 200;
 
     chartWrapper.appendChild(chartCanvas);
     resultContainer.appendChild(chartWrapper);
-
-    const ctx = chartCanvas.getContext('2d');
-    new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['Правильні відповіді', 'Усього питань'],
-        datasets: [{
-        label: 'Результат',
-        data: [correctAnswer, totalQuestion - correctAnswer],
-        backgroundColor: [
-            'rgba(75, 192, 192, 0.5)',
-            'rgba(255, 99, 132, 0.5)'
-        ],
-        borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(255, 99, 132, 1)'
-        ],
-        borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-        y: { beginAtZero: true }
-        }
-    }
-    });
 
     for (let quiz_number = 0; quiz_number < totalQuestion; quiz_number++) {
         let quiz= listQuiz[quiz_number]
@@ -299,6 +267,54 @@ function renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId
 
         resultContainer.appendChild(questionBlock);
     }
+
+    const ctx = chartCanvas.getContext('2d');
+    setTimeout(function() {
+        socket.emit("room_get_result", {
+            room: room,
+            username: username,
+            author_name: authorName
+        });
+    }, 100); 
+
+
+    socket.once('room_get_result_data', function(data) {  
+        const resultData= data.room_get_result_data
+        const best_score_data= data.best_score_data
+        const averega_score= data.averega_score
+        const {accuracyAquestionsArray, accurancyArray}= questionAccuracy(resultData, totalQuestion)
+
+        const allInfoButton= document.createElement('button');
+        allInfoButton.className= 'all-info-btn';
+        allInfoButton.textContent = 'Загальна успішність'
+        allInfoButton.addEventListener("click", () => {
+            chartBoxLable= document.querySelector('.chart-box-label')
+            console.log(chartBoxLable)
+            chartBoxLable.textContent= 'Загальна успішність'
+            
+            selectUserName= null
+            choiceSelector= document.getElementById('choice')
+
+            selectBlock= false
+            choiceSelector.innerHTML= `
+                <option value="1">Загальна успішність</option>
+                <option value="2">Кількість правильних/неправильних відповідей</option>
+                <option value="3">Відсоткове співвідношення правильних відповідей</option>
+                <option value="4">Витрачено часу на запитання</option>
+                <option value="5">Зароблено монет за питання</option>
+            `
+            selectBlock= true
+            renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
+        });
+
+        document.getElementById('choice').addEventListener('change', function() {
+            if (selectBlock){
+                renderAnalyticsChart('userChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
+            }
+        })
+    
+        renderRightWorstBar('userChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
+    });
 }
 
 

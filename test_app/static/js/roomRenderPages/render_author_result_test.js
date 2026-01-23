@@ -53,7 +53,7 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
     resultTable.appendChild(resultRow);
 
     resultRow.addEventListener('click', function(){
-        renderAnalyticsChart(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4))
+        renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4))
     })
 }
 
@@ -272,7 +272,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         document.getElementById('choice').addEventListener('change', function() {
             if (selectBlock){
-                renderAnalyticsChart(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
+                renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
             }
         })
 

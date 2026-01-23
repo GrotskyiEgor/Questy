@@ -1,4 +1,4 @@
-function renderAnalyticsChart(resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, userName= null){
+function renderAnalyticsChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, userName= null){
     const selectElement = document.getElementById("choice");
 
     if (userName){
@@ -16,25 +16,28 @@ function renderAnalyticsChart(resultData, accuracyAquestionsArray, accurancyArra
         `
 
         selectUserName= userName
-        renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, userName)
+        renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, userName)
     }
 
     switch (Number(selectElement.value)){
         case 1:
-            renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, selectUserName)
+            renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, selectUserName)
             break;
         case 2:
-            renderCorrectWrongBarChart('authorAccuracyChart', resultData, totalQuestion, selectUserName)
+            renderCorrectWrongBarChart(canvasId, resultData, totalQuestion, selectUserName)
             break;
         case 3:
-            renderUserResultPieChart('authorAccuracyChart', resultData, totalQuestion, selectUserName)
+            renderUserResultPieChart(canvasId, resultData, totalQuestion, selectUserName)
             break; 
         case 4:
-            renderQuestionValuesLineChart('authorAccuracyChart', resultData, totalQuestion, selectUserName, "time")
+            renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, selectUserName, "time")
             break; 
         case 5:
-            renderQuestionValuesLineChart('authorAccuracyChart', resultData, totalQuestion, selectUserName, "token")
+            renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, selectUserName, "token")
             break; 
+        case 6:
+            renderRightWorstBar(canvasId, resultData, totalQuestion, selectUserName)
+            break;
     }
 
     selectBlock= true
@@ -67,6 +70,49 @@ function questionAccuracy(resultData, totalQuestion){
     }
 
     return {accuracyAquestionsArray, accurancyArray}
+}
+
+
+function renderRightWorstBar(canvasId, resultData, totalQuestion, user){
+    const ctx= document.getElementById(canvasId).getContext('2d');
+
+    if (charts[canvasId]) {
+        charts[canvasId].destroy();
+    }
+
+    correctAnswer= 0;
+    let answers= resultData[user].correct_answers_list;
+    for (let number=0; number < totalQuestion; number++){
+        let answer= answers[number]
+        if (answer === 1){
+            correctAnswer++;
+        }
+    }
+
+    charts[canvasId]= new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Правильні відповіді', 'Усього питань'],
+            datasets: [{
+                label: 'Результат',
+                data: [correctAnswer, totalQuestion - correctAnswer],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(255, 99, 132, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
 }
 
 function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, userName= null){
@@ -136,6 +182,7 @@ function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, 
         }
     });
 }
+
 
 function renderCorrectWrongBarChart(canvasId, resultData, totalQuestion, userName= null){
     const ctx= document.getElementById(canvasId).getContext('2d');
@@ -231,6 +278,7 @@ function renderCorrectWrongBarChart(canvasId, resultData, totalQuestion, userNam
     })
 }
 
+
 function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName= null){
     const CHART_COLORS = [
         '#1E88E5', '#43A047', '#F4511E', '#8E24AA', '#3949AB', '#00ACC1', '#FB8C00', '#6D4C41', '#546E7A', 
@@ -306,6 +354,7 @@ function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName=
     })
 }
 
+
 function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, userName= null, type){
     const ctx= document.getElementById(canvasId).getContext('2d');
     if (charts[canvasId]) {
@@ -379,6 +428,7 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
         }
     });
 }
+
 
 function renderDoughnutChart(canvasId, totalAnswer, correctCount){
     let correctPercent= (correctCount/totalAnswer) * 100;

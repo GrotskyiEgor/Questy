@@ -17,7 +17,7 @@ def get_sid(username):
     
     return None
 
-def room_get_result(room, author_name, username):
+def room_get_result(room, author_name):
     room_get_result_data= {}
     
     ROOM= Room.query.filter_by(test_code= room).first()
@@ -451,7 +451,7 @@ def handle_end_test(data):
 @Project.settings.socketio.on('room_get_result')
 def handle_room_get_result(data):
     user_sid= get_sid(data["username"])
-    room_get_result_data, best_score_data, averega_score= room_get_result(data["room"], data["author_name"], data["username"])
+    room_get_result_data, best_score_data, averega_score= room_get_result(data["room"], data["author_name"])
    
     emit("room_get_result_data", {"room_get_result_data": room_get_result_data,
                                   "best_score_data": best_score_data,
