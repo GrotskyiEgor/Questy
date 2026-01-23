@@ -1,11 +1,12 @@
 import flask
-
 from flask_login import login_user, current_user
-from ..models import User
 from werkzeug.security import check_password_hash
-from Project.render_page import render_page
 
-from Project.csrf_token_manager import LoginForm
+from ..models import User
+from Project.render_page import render_page
+from Project.token_manage import LoginForm
+
+from Project.token_manage import LoginForm
 
 @render_page(template_name= 'login.html')
 def render_login_app():
@@ -25,5 +26,3 @@ def render_login_app():
         return {"form": form}
     else:
         return flask.redirect('/')
-
-
