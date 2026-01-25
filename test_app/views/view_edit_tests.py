@@ -1,16 +1,17 @@
 import flask
-from ..models import Test, Quiz
-
-from Project.database import db
 
 from flask_login import current_user
+
+from ..models import Test, Quiz
+from Project.database import db
 from Project.render_page import render_page
+
 
 @render_page(template_name = 'edit_test.html')
 def render_test_app():
     
     list_quiz = []
-    list_answers= []
+    list_answers = []
     list_answers_multiple_choice = []
 
     test_id = flask.request.args.get('test_id')

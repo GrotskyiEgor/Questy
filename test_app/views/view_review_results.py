@@ -1,9 +1,9 @@
 import flask
 
+from user.models import Score
+from ..models import Test, Quiz
 from Project.render_page import render_page
 
-from ..models import Test, Quiz
-from user.models import Score
 
 @render_page(template_name = 'review_results.html')
 def render_review_results(id):

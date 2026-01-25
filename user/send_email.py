@@ -1,5 +1,7 @@
 from flask_mail import Message
+
 from Project.settings import mail  
+
 
 def send_code(user_email: str, code: int, type: str):
     text= "Код для підтвердження паролю"

@@ -1,16 +1,18 @@
-import flask, random, datetime, os, json
+import flask
+import random
+import datetime
+import os
+import json
 
 from flask_login import current_user
+
 from Project.database import db
 from ..models import Test, Quiz
-from ..generat_test import generate_test
-
 from Project.render_page import render_page
 
 
-@render_page(template_name = 'create_test.html')
+@render_page(template_name='create_test.html')
 def render_create_test():
-
     return {}
 
 
@@ -22,21 +24,21 @@ def create_test():
         title = data.get("topic")
         description = data.get("description")
         total_questions = data.get('total_questions')
-        answers_per_question= data.get('answers_per_question')
+        # answers_per_question = data.get('answers_per_question')
         time= data.get('time')
         image_form = data.get("image")
 
         total_questions = total_questions or len(data["questions"])
-        time= time or 20
+        time = time or 20
         
         test = Test(
-            title= title,
-            description= description,
+            title = title,
+            description = description,
             total_questions = total_questions,
-            test_code= 0,
+            test_code = 0,
             author_name = current_user.username,
-            image=  1 if image_form else 0,
-            created_date= datetime.date.today()
+            image = 1 if image_form else 0,
+            created_date = datetime.date.today()
         )
 
         db.session.add(test)
@@ -49,16 +51,16 @@ def create_test():
             image_name= quizzes.get('image_name')
 
             answers_list = quizzes["options"].copy()
-            image_name= quizzes.get("image_name")
+            image_name = quizzes.get("image_name")
             random.shuffle(answers_list)
             quiz = Quiz(
-                question_type = quizzes["question_type"],
-                question_text = quizzes["question_text"],
-                image_name= image_name if image_name else None,
-                answer_options = "%$№".join(answers_list),
-                correct_answer = quizzes["correct_answer"],
-                time= quizzes["time"],
-                test_id = test.id             
+                question_type=quizzes["question_type"],
+                question_text=quizzes["question_text"],
+                image_name=image_name if image_name else None,
+                answer_options="%$№".join(answers_list),
+                correct_answer=quizzes["correct_answer"],
+                time=quizzes["time"],
+                test_id=test.id             
             )
             db.session.add(quiz)
 

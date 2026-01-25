@@ -1,5 +1,4 @@
 import flask
-import random
 
 from Project.database import db
 from ..models import Test, Quiz
@@ -34,12 +33,12 @@ def render_edit_question():
                 new_value = flask.request.form.get(field_name, "").strip()
                 if new_value:
                     updated_answers.append(new_value)
-                    print("новый ответ", new_value)
+                    # print("новый ответ", new_value)
                 else:
                     new_correct = flask.request.form.get("correct_answer", "").strip()
                     updated_answers.append(new_correct)
                     quiz.correct_answer = new_correct
-                    print("новый правильный ответ", new_correct)
+                    # print("новый правильный ответ", new_correct)
 
             quiz.answer_options = "%$№".join(updated_answers)
             db.session.commit()
@@ -48,7 +47,7 @@ def render_edit_question():
             new_correct = flask.request.form.get("correct_answer", "").strip()
             quiz.correct_answer = new_correct
             db.session.commit()
-            print("новый правильный ответ", new_correct)
+            # print("новый правильный ответ", new_correct)
 
         if quiz.question_type == "multiple_choice":
             new_correct_list = []
@@ -57,15 +56,15 @@ def render_edit_question():
                 new_value = flask.request.form.get(field_name, "").strip()
                 if new_value:
                     updated_answers.append(new_value)
-                    print("новый ответ", new_value)
+                    # print("новый ответ", new_value)
                 else:
                     new_correct = flask.request.form.get(f"correct_answer{count_answers}", "").strip()
                     updated_answers.append(new_correct)
                     new_correct_list.append(new_correct)
-                    print("новый правильный ответ", new_correct)
+                    # print("новый правильный ответ", new_correct)
 
             quiz.answer_options = "%$№".join(updated_answers)
-            quiz.correct_answer ="%$№".join(new_correct_list)
+            quiz.correct_answer = "%$№".join(new_correct_list)
             db.session.commit()
         
         if quiz.question_type == "image":

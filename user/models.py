@@ -1,13 +1,16 @@
 from datetime import datetime, timedelta
 from flask_login import UserMixin
+
 from Project.database import db
+
 
 class_user= db.Table(
     "class_user",
     db.Column("class_id", db.Integer, db.ForeignKey("classes.id")),
     db.Column("user_id", db.Integer, db.ForeignKey("user.id"))
 )
-    
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key= True)
 
@@ -21,9 +24,11 @@ class User(db.Model, UserMixin):
 
     classes= db.relationship('Classes', secondary= class_user, back_populates='users')
 
+
     def __repr__(self):
         return f'User: {self.username}'
     
+
     def dict(self):
         return {
             "id": self.id,
@@ -43,11 +48,13 @@ class UnconfirmedUser(db.Model):
     code= db.Column(db.Integer, nullable= False)
     create_time= db.Column(db.DateTime, default= datetime.utcnow)
 
+
     def time_registration(self):
         if datetime.utcnow() - self.create_time > timedelta(minutes= 15):
             return False
         else:
             return True
+
 
 class Classes(db.Model):
     id = db.Column(db.Integer, primary_key= True)
@@ -70,6 +77,7 @@ class Classes(db.Model):
 
     users= db.relationship('User', secondary= class_user, back_populates= "classes")
 
+
     def dict(self):
         return {
             "id": self.id,
@@ -80,6 +88,7 @@ class Classes(db.Model):
             "class_color1": self.class_color1,
             "class_color2": self.class_color2
         }
+
 
 class Score(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -101,8 +110,10 @@ class Score(db.Model):
 
     test_code= db.Column(db.Integer, nullable= True)
 
+
     def __repr__(self):
         return f"{self.user_answer}\n{self.user_timers}\n{self.user_tokens}"
+
 
     def dict(self):
         return {
@@ -112,6 +123,7 @@ class Score(db.Model):
             "date_complete": self.date_complete,
             "time_complete": self.time_complete
         }
+
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key= True)
@@ -129,6 +141,7 @@ class Task(db.Model):
     image= db.Column(db.Boolean, default= False)
 
     test= db.relationship("Test", backref="tasks")
+    
     
     def dict(self):
         return {

@@ -1,4 +1,6 @@
-import openai, dotenv, os
+import openai
+import dotenv
+import os
 
 dotenv.load_dotenv()
 OPENAI_SECRET_KEY = os.getenv("OPENAI_SECRET_KEY")

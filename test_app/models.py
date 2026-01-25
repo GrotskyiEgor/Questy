@@ -1,5 +1,6 @@
 from Project.database import db
 
+
 class Test(db.Model):
     id = db.Column(db.Integer, primary_key= True)
 
@@ -15,6 +16,7 @@ class Test(db.Model):
 
     quizes= db.relationship('Quiz', backref= 'test', cascade= "all, delete-orphan")
 
+
     def dict(self):
         return {
             "id": self.id,
@@ -23,6 +25,7 @@ class Test(db.Model):
             "author_name": self.author_name,
             "test_code": self.test_code,
         }
+
 
 
 class Quiz(db.Model):
@@ -37,6 +40,7 @@ class Quiz(db.Model):
     
     test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
 
+
     def dict(self):
         return {
             "id": self.id,
@@ -48,6 +52,7 @@ class Quiz(db.Model):
             "time": self.time,
             "test_id": self.test_id
         }
+
 
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -63,5 +68,6 @@ class Room(db.Model):
 
     all_members = db.Column(db.String(300), nullable = False)
 
+    
     def __str__(self):
         return f"{self.user_list} and {self.all_members}"
