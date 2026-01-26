@@ -34,12 +34,12 @@ function addUserAnswer(username, answer, authorname, quiz) {
         </div>
     `
 
-    socket.emit(SOKET_GET_USERNAMES, {
+    socket.emit('get_usernames', {
         room: room,
         author_name: authorname
     });
 
-    socket.once(SOKEN_GET_USERNAMES, function(data){
+    socket.once('get_usernames', function(data){
         let userArrey= data;
         lengthArrey= userArrey.length
 
@@ -156,14 +156,14 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
 
     waitContent.appendChild(userBlock)
 
-    socket.emit(SOKET_GET_USERNAMES, {
+    socket.emit('get_usernames', {
         room: room,
         author_name: authorname
     });
 
     let quizTime= getCookie("time");
 
-    socket.once(SOKEN_GET_USERNAMES, function(data){
+    socket.once('get_usernames', function(data){
         let userArrey = data;
         let nextButton= '';
         lengthArrey = userArrey.length

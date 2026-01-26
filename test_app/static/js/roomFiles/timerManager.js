@@ -1,12 +1,12 @@
 function plusTime(){
-    socket.emit(SOKET_PLUS_TIME, {
+    socket.emit("plus_time", {
         room: room,
         author_name: authorName
     });
 }
 
 function stopTime(){
-    socket.emit(SOKET_CHANGE_TIME, {
+    socket.emit("change_time", {
         room: room,
         author_name: authorName
     });

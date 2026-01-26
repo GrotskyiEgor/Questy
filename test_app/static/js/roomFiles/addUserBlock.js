@@ -19,13 +19,13 @@ function authorLeaveTest(type){
     roomCode= roomCode.split("?")[0]
    
     if (type === "wait"){
-        socket.emit(SOKET_TEST_END, {
+        socket.emit("test_end", {
             room: room,         
             username: username  
         });
     }
      
-    socket.emit(SOKET_TEST_END, {
+    socket.emit("test_end", {
         room: roomCode
     });
     
@@ -48,7 +48,7 @@ function kickUser(kick_user, ip, type) {
     const newUserList = users.join("</>")
 
     setCookie("userList", newUserList)
-    socket.emit(SOKET_KICK_USER, {
+    socket.emit("kick_user", {
         room: room,
         user: kick_user
     });
@@ -85,7 +85,7 @@ function addUesrBlock(username, button){
         userBlock.remove()
     }
     
-    socket.emit(SOKET_NEW_USER, {
+    socket.emit("new_user", {
         room: room,
         username: username,
         author_name: authorName,

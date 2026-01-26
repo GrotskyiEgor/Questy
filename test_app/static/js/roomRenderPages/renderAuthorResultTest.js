@@ -68,14 +68,14 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
     container.className= 'wrapper-author-results-container';
 
     setTimeout(function() {
-        socket.emit(SOKET_ROOM_GET_RESULT, {
+        socket.emit("room_get_result", {
             room: room,
             username: username,
             author_name: authorName
         });
     }, 100); 
     
-    socket.once(SOKET_ROOM_GET_RESULT_DATA, function(data) {  
+    socket.once("room_get_result_data", function(data) {  
         const resultData= data.room_get_result_data
         const best_score_data= data.best_score_data
         const averega_score= data.averega_score
