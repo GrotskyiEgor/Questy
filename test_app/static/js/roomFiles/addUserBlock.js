@@ -4,12 +4,12 @@ function leaveTest(){
 }
 
 function leaveTestBlock(kick_user, ip, type){
-    clearCookie(["temporaryName", "compound", "time", "room"])
+    clearCookie(["temporaryName", "isReconnected", "time", "room"])
     window.location.href = `/`;
 }
 
 function userLeaveTest() {
-    clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "recconect"])
+    clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "reconnect"])
     window.location.href = '/';
 }
 
@@ -18,14 +18,14 @@ function authorLeaveTest(type){
     let roomCode = currentURL.split('room')[1];
     roomCode= roomCode.split("?")[0]
    
-    if (type === "waite"){
-        socket.emit("end_test", {
+    if (type === "wait"){
+        socket.emit(SOKET_TEST_END, {
             room: room,         
             username: username  
         });
     }
      
-    socket.emit("test_end", {
+    socket.emit(SOKET_TEST_END, {
         room: roomCode
     });
     
@@ -48,7 +48,7 @@ function kickUser(kick_user, ip, type) {
     const newUserList = users.join("</>")
 
     setCookie("userList", newUserList)
-    socket.emit("kick_user", {
+    socket.emit(SOKET_KICK_USER, {
         room: room,
         user: kick_user
     });
@@ -85,7 +85,7 @@ function addUesrBlock(username, button){
         userBlock.remove()
     }
     
-    socket.emit("new_user", {
+    socket.emit(SOKET_NEW_USER, {
         room: room,
         username: username,
         author_name: authorName,
@@ -110,7 +110,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
             return
         }
     } else {
-        userListDiv= document.getElementById("waite-users") 
+        userListDiv= document.getElementById("wait-users") 
         checkingUserBlock= document.getElementById(`${blockUsername}`)
         
         if (checkingUserBlock) {
@@ -147,7 +147,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
         const btnRemove= document.createElement("button");
         btnRemove.className= "btn-remove";
         btnRemove.type= "button";
-        if (type === "waite"){
+        if (type === "wait"){
             btnRemove.textContent= "Заблокувати"
             kickType= "block"
 
@@ -169,7 +169,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
             kickUser(blockUsername, ip, kickType);
         };
 
-        if (type === "waite"){
+        if (type === "wait"){
             const btnAccept= document.createElement("button");
             btnAccept.className= "btn-accept";
             btnAccept.type= "button";

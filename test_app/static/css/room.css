@@ -41,7 +41,7 @@ main {
     box-sizing: border-box;
 } */
 
-.waite-side {
+.wait-side {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -55,7 +55,7 @@ main {
     box-shadow: 0 4px 1.2vh var(--shadow);
 }
 
-.waite-side-bottom {
+.wait-side-bottom {
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -105,7 +105,7 @@ main {
 }
 
 
-.waite-side-top{
+.wait-side-top{
     height: 80vh;
 }
 
@@ -132,7 +132,7 @@ main {
     overflow-y: auto;
 }
 
-.waite-users {
+.wait-users {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -254,7 +254,7 @@ main {
     color: #444;
 }
 
-.waite-title{
+.wait-title{
     margin: 0;
     text-align: center;
     font-size: 3.7vh;

@@ -21,8 +21,6 @@ project.config['SECRET_KEY']= 'nothing'
 csrf= CSRFProtect()
 csrf.init_app(project)
 
-# instance_path= os.path.abspath(os.path.join(__file__, '..', '..', 'instance'))
-
 project.config.update(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,

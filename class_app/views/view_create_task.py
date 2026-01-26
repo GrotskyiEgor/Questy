@@ -13,6 +13,7 @@ def render_create_task(id):
 
     test_list= Test.query.filter_by(author_name= current_user.username).all()
     back_course = flask.request.args.get("back_course")
+    # Проверка что в этом классе нет задания с этим же тестом 
     # filter_test_list= []
     # for test in test_list:
     #     task_in_class= Task.query.filter_by(test_id= test.id, class_id= id).first()
@@ -29,8 +30,6 @@ def render_create_task(id):
             due_time= flask.request.form['due-time']
             done_after_due_time= flask.request.form.get('done-after-due-time')
             online_test= flask.request.form.get('online-test')
-
-            print(online_test)
             
             TASK = Task(
                 title= title,

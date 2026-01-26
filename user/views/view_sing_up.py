@@ -11,12 +11,11 @@ from Project.render_page import render_page
 def render_sign_up(): 
     form = RegisterForm()
 
-    print("0")
     if form.validate_on_submit():
         name = form.username.data 
         password= form.password.data
         password_confirmation= form.confirm_password.data
-        email= form.email.data
+        email = form.email.data
         user_role = True if form.is_teacher.data == 'True' else False
 
         if password != password_confirmation:

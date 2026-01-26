@@ -1,12 +1,12 @@
 function plusTime(){
-    socket.emit("plus_time", {
+    socket.emit(SOKET_PLUS_TIME, {
         room: room,
         author_name: authorName
     });
 }
 
 function stopTime(){
-    socket.emit("change_time", {
+    socket.emit(SOKET_CHANGE_TIME, {
         room: room,
         author_name: authorName
     });
@@ -31,7 +31,7 @@ function startTimer() {
         timerText.textContent= time;
 
         if (isNaN(cookieTime) && username != authorName){
-            renderWaiteQuestion("test");
+            renderWaitQuestion("test");
         }
 
         if (!timerPaused){
@@ -46,7 +46,7 @@ function startTimer() {
         
                 setTimeout(() => {
                     if (username != authorName){
-                        renderWaiteQuestion("test");
+                        renderWaitQuestion("test");
                     }
             }, 2000)}
     }, 1000);
