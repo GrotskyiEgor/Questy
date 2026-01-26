@@ -245,3 +245,22 @@ input[type="file" i] {
     transform: scale(0.95);
     box-shadow: 0 0.2vh 0.6vh rgba(0, 0, 0, 0.2);
 }
+
+.delete-answer {
+    background-color: #e53935;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 1.1vw;
+    height: 2.2vh;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 2.2vh;
+    text-align: center;
+    margin-left: 0.8vh;
+    transition: background-color 0.2s ease;
+}
+
+.delete-answer:hover {
+    background-color: #c62828;
+}

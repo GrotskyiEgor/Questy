@@ -68,9 +68,7 @@ def new_task():
         for task in CLASS.tasks:
             test= Test.query.filter_by(id= task.test_id).first()
             if task.online and test.test_code:
-            # if task.online:
                 online_task.append(task)
-                print(task)
 
         class_online_task.append((CLASS.class_code , len(online_task)))
 

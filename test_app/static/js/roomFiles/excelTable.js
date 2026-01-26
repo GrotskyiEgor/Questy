@@ -1,4 +1,4 @@
-function exel_table(username, authorName, resultData, best_score_data){
+function excelTable(username, authorName, resultData, best_score_data){
     const firstUser = Object.keys(resultData)[0];
     const totalQuestions = resultData[firstUser].length;
 
@@ -34,7 +34,6 @@ function exel_table(username, authorName, resultData, best_score_data){
         table.push(row);
     }
     const averageAccuracy = ((totalAccuracy / usersCount) * 100).toFixed(1) + "%";
-    console.log(totalAccuracy)
     table.push([]);
     table.push(["Найкращий результат", best_score_data.user_name,`${best_score_data.accuracy}%`]);
     table.push(["Середній результат", averageAccuracy]);

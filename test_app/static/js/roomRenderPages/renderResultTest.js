@@ -1,4 +1,4 @@
-function renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId) {
+function renderResultTest(username, totalQuestion, quizList, listAnswers, testId) {
     let answersStr = getCookie("userAnswers");
     let answers_list= answersStr.split("|");
     let userAnswers = [];
@@ -18,13 +18,13 @@ function renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId
 
     let correctAnswer = 0;
 
-    for (let count = 0; count < listQuiz.length; count++) {
+    for (let count = 0; count < quizList.length; count++) {
         let arrayCorrectAnswers= []
         let arrayUserAnswers= []
-        console.log(listQuiz[count].correct_answer, answersArrey[count], listQuiz[count].correct_answer === answersArrey[count])
-
-        if (listQuiz[count].question_type === "multiple_choice"){
-            arrayCorrectAnswers= listQuiz[count].correct_answer.split("%$№")
+        
+        console.log(quizList[count].correct_answer, answersArrey[count], quizList[count].correct_answer === answersArrey[count])
+        if (quizList[count].question_type === "multiple_choice"){
+            arrayCorrectAnswers= quizList[count].correct_answer.split("%$№")
             arrayUserAnswers= answersArrey[count].split("$$$")
             let correctAnswerAccept= true
             console.log(arrayCorrectAnswers.length === arrayUserAnswers.length, arrayCorrectAnswers, arrayUserAnswers)
@@ -49,7 +49,7 @@ function renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId
             }
         }
         else {
-            if (listQuiz[count].correct_answer === answersArrey[count]) {     
+            if (quizList[count].correct_answer === answersArrey[count]) {     
                 correctAnswer++;
                 console.log("correctAnswer++;")
             }
@@ -115,7 +115,7 @@ function renderResultTest(username, totalQuestion, listQuiz, listAnswers, testId
     resultContainer.appendChild(chartWrapper);
 
     for (let quiz_number = 0; quiz_number < totalQuestion; quiz_number++) {
-        let quiz= listQuiz[quiz_number]
+        let quiz= quizList[quiz_number]
         const questionBlock = document.createElement('div');
         questionBlock.className = 'question-block';
 

@@ -522,7 +522,7 @@ header {
     width: 2vw;
 }
 
-.recconect-back-btn {
+.reconnect-back-btn {
     padding: 1vh;
     position: absolute;
     top: 1vh;
@@ -540,7 +540,7 @@ header {
     color: #333;
 }
 
-.recconect-back-btn:hover {
+.reconnect-back-btn:hover {
     color: #333;
 }
 

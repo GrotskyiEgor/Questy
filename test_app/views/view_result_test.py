@@ -35,10 +35,7 @@ def render_test_result():
         user_answers_list= user_answers_cookies.split("|")
 
         if len(user_answers_list) < len(quizzes_list):
-            # print(user_answers_list, quizzes_list)
             return flask.redirect("/")
-
-        # print(user_answers_list, quizzes_list)
 
         for number, quiz in enumerate(quizzes_list):
             str_user_answers += f"|{user_answers_list[number]}|"

@@ -4,6 +4,7 @@ from secrets import token_bytes
 from dotenv import load_dotenv
 from flask_mail import Mail
 from flask_socketio import SocketIO
+from flask_wtf import CSRFProtect
 
 load_dotenv()
 
@@ -16,6 +17,11 @@ project = Flask(
     template_folder="templates",
     instance_path=os.path.abspath(os.path.join(__file__, '..', 'instance'))
 )
+
+project.config['SECRET_KEY']= 'nothing'
+
+csrf= CSRFProtect()
+csrf.init_app(project)
 
 project.config.update(
     MAIL_SERVER='smtp.gmail.com',

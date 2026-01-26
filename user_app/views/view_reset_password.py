@@ -1,30 +1,41 @@
-from flask import request, session, redirect
+import flask
 from flask_login import current_user, login_user
 from werkzeug.security import generate_password_hash
 from ..models import User, UnconfirmedUser
+
+from Project.token_manage import EmailCodeConfirmForm
 
 from Project.render_page import render_page
 from Project.database import db
 
 @render_page(template_name='reset_password.html')
 def render_reset_app():
+    form = EmailCodeConfirmForm()
 
-    if request.method == "POST":
-        password_code = session.get("password_code", " ")
-        code = int(request.form['code'])
-        if code == password_code:
-            return redirect(location='/../new_password')
-    
-    return { }
+    if form.validate_on_submit():
+        password_code = flask.session.get("password_code")
+        if not password_code:
+            return flask.redirect('/login')
+
+        try:
+            code = int(form.code.data)
+        except (TypeError, ValueError):
+            return {}
+
+        if code == int(password_code):
+            return flask.redirect('/new_password')
+
+    return {"form": form}
+
 
 @render_page(template_name='confirm_password.html')
 def render_confirm_account():
+    form = EmailCodeConfirmForm()
+    if form.validate_on_submit():
+        sign_up_email= flask.session.get("sign_up_email", " ")
+        code = int(form.code.data)
 
-    if request.method == "POST":
-        sign_up_email = session.get("sign_up_email", " ")
-        code = int(request.form['code'])
-
-        ucconfirmed_user = UnconfirmedUser.query.filter_by(email=sign_up_email).first()
+        ucconfirmed_user= UnconfirmedUser.query.filter_by(email= sign_up_email).first()
         
         if ucconfirmed_user and code == int(ucconfirmed_user.code):
             user = User(
@@ -35,19 +46,17 @@ def render_confirm_account():
             )   
 
             db.session.add(user)
-
-        db.session.delete(ucconfirmed_user)
-        db.session.commit()
-
-        if ucconfirmed_user and code == int(ucconfirmed_user.code):
+            db.session.delete(ucconfirmed_user)
+            db.session.commit()
             login_user(user)
-
-        return redirect(location='/../')
+            return flask.redirect(location = '/')
+        else: 
+            return {"form": form, "message": "Невірний код"}
     
     if not current_user.is_authenticated:
         return { }
     else:
-        return redirect('/')
+        return flask.redirect('/')
 
 
 

@@ -331,7 +331,6 @@
         if os.path.exists(ENV_PATH):
             dotenv.load_dotenv(dotenv_path= ENV_PATH)
         if not os.path.exists(os.path.join(PATH, "Project", "migrations")):
-            print(os.path.join(PATH, "Project", "migrations"))
             os.system(os.environ["INIT_COMMAND"])
         
         os.system(os.environ["MIGRATE_COMMAND"])
@@ -364,11 +363,6 @@
         ROOM= Room.query.filter_by(test_code = room).first()
 
         if not ROOM:
-            print(f'Это тест айди: {test.id}')
-            print(f'Это комната: {room}')
-            print(f'Это user_list: {username}')
-            print(f'Это author_name: {test.author_name}')
-
             NEW_ROOM = Room(
                 test_id= test.id,
                 test_code= room,
@@ -391,8 +385,6 @@
         users.pop(flask.request.sid, None)
 
         if username:
-            print(f"disconected {username}")
-
             ROOM = Room.query.filter(Room.user_list.like(f"%|{username}|%")).first()
             ROOM.user_list = ROOM.user_list.replace(f"|{username}|", "")
             db.session.commit()
@@ -410,16 +402,16 @@
 </p>
 
 <pre><code class="language-python">
-    const arreyButton = document.querySelectorAll(".answer")
+    const buttonsArrey = document.querySelectorAll(".answer")
 
-    for (let count = 0; count < arreyButton.length; count++ ) {
-        let button= arreyButton[count];
+    for (let count = 0; count < buttonsArrey.length; count++ ) {
+        let button= buttonsArrey[count];
         button.addEventListener(
             type= "click" ,
             listener= function ( event ) {
                 let cookie= getCookie("user_answers")
                 let state= getCookie("state")
-                document.cookie= `state=waite${state.replace(/\D/g, "")}; path=/`;
+                document.cookie= `state=wait${state.replace(/\D/g, "")}; path=/`;
                 if (typeof cookie === "undefined"){
                     document.cookie = `user_answers= |${button.id}|; path = /`     
                 }
@@ -428,14 +420,14 @@
                     document.cookie = `user_answers = ${cookie}; path= /`
                 }      
                 
-                socket.emit("user_answer", {
+                socket.emit(SOKET_USER_ANSWERS, {
                     room: room,
                     author_name: author_name,
                     username: username,
                     answer: button.id
                 });
                 
-                renderWaiteQuestion();
+                renderWaitQuestion();
             }
         )
     }

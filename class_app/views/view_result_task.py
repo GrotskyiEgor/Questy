@@ -70,12 +70,7 @@ def render_result_task():
     # средняя точность (для первого графика)
     all_acc_values = [s.accuracy for s in scores]
     average_accuracy = int(sum(all_acc_values) / len(all_acc_values)) if all_acc_values else 0
-
-    print('==========================')
-    print(users_list)
-    print(date_complete)
-    print(accuracy)
-
+    
     return {
         "do_user_list": do_user_list,
         "users": users_list,

@@ -4,7 +4,6 @@ function renderAnalyticsChart(canvasId, resultData, accuracyAquestionsArray, acc
     if (userName){
         choiceSelector= document.getElementById('choice')
         chartBoxLable= document.querySelector('.chart-box-label')
-        console.log(chartBoxLable)
         chartBoxLable.textContent= `Успішність ${userName}`
 
         selectBlock= false

@@ -23,8 +23,10 @@
                 <h2 class="title">Реєстрація</h2>
             
                 <form action="" method="POST" onsubmit="return validatePassword(event)">
+                    {{ form.hidden_tag() }}
+
                     <div class="input-box">
-                        <input type="text" name="name" required>
+                        <input type="text" name="username" required>
                         <label for="name">Ім'я</label>
                         <i class='bx bxs-user'></i>
                     </div>
@@ -42,7 +44,7 @@
                     </div>
 
                     <div class="input-box">
-                        <input type="password" id="password-confirmation" name="password-confirmation" required>
+                        <input type="password" id="password-confirmation" name="confirm_password" required>
                         <label for="passwrod-confirmation">Підтвердження паролю</label>
                         <i class='bx bxs-lock-alt'></i>
                     </div>
@@ -51,12 +53,12 @@
 
                     <div class="radio-box">
                         <div class="radio-button-box">
-                            <input type="radio" id= True name="is_teacher" value= True checked >
+                            <input type="radio" id= teacher name="is_teacher" value="True">
                             <label for="Teacher">Викладач</label>
                         </div>
                         
                         <div class="radio-button-box">
-                            <input type="radio" id= False name="is_teacher" value= False checked >
+                            <input type="radio" id= pupil name="is_teacher" value="False" checked>
                             <label for="pupil">Користувач</label>               
                         </div>   
                     </div>

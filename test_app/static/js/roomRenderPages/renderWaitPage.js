@@ -5,17 +5,17 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     const container = document.createElement("div");
     container.className = "room-container";
     
-    const waiteSideTop = document.createElement("div");
-    waiteSideTop.className = "waite-side-top";
+    const waitSideTop = document.createElement("div");
+    waitSideTop.className = "wait-side-top";
 
-    const waiteSide = document.createElement("div");
-    waiteSide.className = "waite-side";
+    const waitSide = document.createElement("div");
+    waitSide.className = "wait-side";
 
     // Заголовок
     const roomTitle = document.createElement("h2");
-    roomTitle.className = "waite-title";
+    roomTitle.className = "wait-title";
     roomTitle.textContent = "Кімната очікування";
-    waiteSideTop.appendChild(roomTitle);
+    waitSideTop.appendChild(roomTitle);
 
     // Інформація про автора та код
     const infoBar = document.createElement("div");
@@ -31,7 +31,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
 
     infoBar.appendChild(textAuthor);
     infoBar.appendChild(textCode);
-    waiteSideTop.appendChild(infoBar);
+    waitSideTop.appendChild(infoBar);
 
     let durationSeconds= 0
     quizzes.forEach(quiz => {
@@ -51,7 +51,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
             <li>Тривалість: ${durationFix} хвилин</li>
         </ul>
     `;
-    waiteSideTop.appendChild(testInfo);
+    waitSideTop.appendChild(testInfo);
 
     // Інструкції
     const instructions = document.createElement("div");
@@ -105,49 +105,49 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
         const info2 = document.createElement("div");
         info2.className = "info-user";
 
-        const waiteUsers = document.createElement("div");
-        waiteUsers.id = "waite-users";
-        waiteUsers.className = "waite-users";
+        const waitUsers = document.createElement("div");
+        waitUsers.id = "wait-users";
+        waitUsers.className = "wait-users";
 
         
-        const waiteUsersText = document.createElement("h3");
-        waiteUsersText.className= "user-list-title"
-        waiteUsersText.textContent = "Зал очікування:";
-        info2.appendChild(waiteUsersText)
+        const waitUsersText = document.createElement("h3");
+        waitUsersText.className= "user-list-title"
+        waitUsersText.textContent = "Зал очікування:";
+        info2.appendChild(waitUsersText)
 
         allUsers.appendChild(info2);
-        allUsers.appendChild(waiteUsers);
+        allUsers.appendChild(waitUsers);
     }
 
-    waiteSideTop.appendChild(allUsers);
+    waitSideTop.appendChild(allUsers);
 
-    let waiteSideBottom;
+    let waitSideBottom;
     // Кнопка "Почати" для автора
-    waiteSideBottom = document.createElement("div");
-    waiteSideBottom.className = "waite-side-bottom";
+    waitSideBottom = document.createElement("div");
+    waitSideBottom.className = "wait-side-bottom";
     if (authorName === username) {
         const buttonStart = document.createElement("button");
         buttonStart.type = "button";
         buttonStart.className = "btn-start";
         buttonStart.textContent = "Почати тест";
         buttonStart.addEventListener("click", authorStartTest);
-        waiteSideBottom.appendChild(buttonStart);
+        waitSideBottom.appendChild(buttonStart);
 
         const buttonEnd = document.createElement("button");
         buttonEnd.type = "button";
         buttonEnd.className = "btn-end";
         buttonEnd.textContent = "Завершити тест";
         buttonEnd.addEventListener("click", () => {
-            authorLeaveTest("waite")
+            authorLeaveTest("wait")
         });
-        waiteSideBottom.appendChild(buttonEnd);
+        waitSideBottom.appendChild(buttonEnd);
     } else{
         const leaveButton = document.createElement("button");
         leaveButton.type = "button";
         leaveButton.className = "btn-end";
         leaveButton.textContent = "Залишити тест";
         leaveButton.addEventListener("click", leaveTestBlock);
-        waiteSideBottom.appendChild(leaveButton);
+        waitSideBottom.appendChild(leaveButton);
     }
 
     // Чат
@@ -165,12 +165,12 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
 
     chat.querySelector(".send-btn").addEventListener("click", sendMessage);
 
-    waiteSide.appendChild(waiteSideTop)
-    if (waiteSideBottom) {
-        waiteSide.appendChild(waiteSideBottom)
+    waitSide.appendChild(waitSideTop)
+    if (waitSideBottom) {
+        waitSide.appendChild(waitSideBottom)
     }
 
-    container.appendChild(waiteSide);
+    container.appendChild(waitSide);
     container.appendChild(chat);
     content.appendChild(container);
 
