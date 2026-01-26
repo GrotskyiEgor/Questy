@@ -420,7 +420,7 @@
                     document.cookie = `user_answers = ${cookie}; path= /`
                 }      
                 
-                socket.emit(SOKET_USER_ANSWERS, {
+                socket.emit("user_answer", {
                     room: room,
                     author_name: author_name,
                     username: username,

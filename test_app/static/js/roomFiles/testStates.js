@@ -1,5 +1,5 @@
 function testStop(){    
-    socket.emit(SOKET_STOP_TEST, {
+    socket.emit("stop_test", {
         room: room,
         author_name: authorName
     });
@@ -11,7 +11,7 @@ function testStop(){
 function authorStartTest() {
     let userList= getCookie("userList")
     if (userList){
-        socket.emit("SOKET_AUTHOR_START_TEST", {
+        socket.emit("author_start_test", {
             room: room,
         });
     }
@@ -74,7 +74,7 @@ function nextQuestion(){
     timerPaused= false
     plusAnswerTime= 0
     
-    socket.emit(SOKET_NEXT_QUESTION, {
+    socket.emit("next_question", {
         room: room,
         author_name: authorName
     });
@@ -149,7 +149,7 @@ function sendMessage() {
             }
         }
 
-        socket.emit(SOKET_MESSAGE_TO_CHAT, {
+        socket.emit("message_to_chat", {
             message: message,
             room: room,         
             username: username  

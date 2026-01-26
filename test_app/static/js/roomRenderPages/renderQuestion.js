@@ -143,7 +143,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
 
                     renderWaitQuestion("test");
                     
-                    socket.emit(SOKET_USER_ANSWERS, {
+                    socket.emit("user_answer", {
                         room: room,
                         author_name: author_name,
                         username: username,
@@ -211,7 +211,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
 
             renderWaitQuestion("test");
                     
-            socket.emit(SOKET_USER_ANSWERS, {
+            socket.emit(user_answer, {
                 room: room,
                 author_name: author_name,
                 username: username,
@@ -322,7 +322,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
 
             renderWaitQuestion("test");
                     
-            socket.emit(SOKET_USER_ANSWERS, {
+            socket.emit("user_answer", {
                 room: room,
                 author_name: author_name,
                 username: username,
