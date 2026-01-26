@@ -1,7 +1,7 @@
-import os, dotenv
+import os
+import dotenv
 
 PATH = os.path.abspath(os.path.join(__file__))
-# PATH = os.path.abspath(os.path.join(__file__))
 
 def load_env():
     ENV_PATH = os.path.abspath(os.path.join(__file__, "..", "..", ".env"))

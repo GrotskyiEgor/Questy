@@ -2,11 +2,12 @@ import flask
 
 from test_app.models import Room, Test
 from Project.render_page import render_page
-from Project.database import db
+
 
 def loguot():
     flask.session.clear()
     return flask.redirect("/")
+
 
 def get_codes():
     list_room = Room.query.all()
@@ -18,14 +19,15 @@ def get_codes():
     
     return flask.jsonify(code_list)
 
-@render_page(template_name = 'home.html')
+
+@render_page(template_name='home.html')
 def render_home():
-    list_room= []
-    list_tests= []
+    list_room = []
+    list_tests = []
 
     try:
         list_room = Room.query.all()
-        list_tests= Test.query.all()
+        list_tests = Test.query.all()
     except:
         pass
 

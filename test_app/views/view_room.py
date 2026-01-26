@@ -5,7 +5,7 @@ from flask_socketio import join_room, emit, disconnect
 
 import Project
 from Project.database import db
-from user.models import User, Score
+from user_app.models import User, Score
 from ..models import Test, Room, Quiz
 from Project.render_page import render_page
 

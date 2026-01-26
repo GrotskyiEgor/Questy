@@ -48,7 +48,7 @@
                             <div class="card with-tasks">
                                 <div class="card-header" style="background: {{ bg_color }};">
                                     <div class="h-left-info">
-                                        Назва курсу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span><span>Код: {{ class.class_code }}</span>
+                                        Назва классу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span><span>Код: {{ class.class_code }}</span>
                                     </div>
 
                                     <div class="class-actions">
@@ -56,11 +56,11 @@
                                         
                                         <div class="dropdown">
                                             <form action="/delete_class{{ class.id }}" method="post">
-                                                <button type="submit" class="dropdown-btn d">Видалити курс</button>
+                                                <button type="submit" class="dropdown-btn d">Видалити класс</button>
                                             </form>
 
                                             <a href="/class_information{{ class.id }}" class="dropdown-btn i">
-                                                Інформація про курс
+                                                Інформація про класс
                                             </a>
                                         </div>
                                     </div>
@@ -88,7 +88,7 @@
                                 <div class="card-footer">
                                     <a href="/class_courses{{ class.id }}">
                                         <button class="start-btn" style="background: {{ bg_color }};">
-                                            Перейти до курсу
+                                            Перейти до классу
                                         </button>
                                     </a>
                                     <a href="/create_task{{ class.id }}">
@@ -126,7 +126,7 @@
 
                             <div class="card with-tasks">
                                 <div class="card-header" style="background: {{ bg_color }};">
-                                    Назва курсу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span>
+                                    Назва классу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span>
                                 </div>
 
                                 <div class="card-body">
@@ -147,7 +147,7 @@
                                 <div class="card-footer">
                                     <a href="/class_courses{{ class.id }}">
                                         <button class="start-btn" style="background: {{ bg_color }};">
-                                            Перейти до курсу
+                                            Перейти до классу
                                         </button>
                                     </a>
                                 </div>
@@ -166,9 +166,9 @@
     <!-- Кнопка + -->
     <button class="add-btn">+</button>
     <ul class="menu-options">
-        <li id="join-course-button">Приєднатися до курсу</li>
+        <li id="join-course-button">Приєднатися до классу</li>
         {% if is_teacher %}
-            <li id="create-course-button">Створити курс</li>
+            <li id="create-course-button">Створити класс</li>
         {% endif %}
     </ul>
 
@@ -179,17 +179,17 @@
             <button class="back-btn">×</button>
             
             <form class="form" method="POST">
-                <h2>Приєднатися до курсу</h2>
+                <h2>Приєднатися до классу</h2>
                 <div class="form-group">
-                    <h3>Попросіть у свого викладача код курсу та введіть його тут.</h3>
-                    <label>Код курсу</label>
+                    <h3>Попросіть у свого викладача код классу та введіть його тут.</h3>
+                    <label>Код классу</label>
                     <input type="text" placeholder="Введіть код" name="code" required>
                 </div>
                 <div class="form-group">
-                    <label>Вимоги до входу за допомогою коду курсу:</label>
+                    <label>Вимоги до входу за допомогою коду классу:</label>
                         <ul>
                             <li class="join-li">Використовуйте авторизований обліковий запис</li>
-                            <li class="join-li">Код курсу має містити лише літери або цифри (5–8) і не включати пробіли й спеціальні символи</li>
+                            <li class="join-li">Код классу має містити лише літери або цифри (5–8) і не включати пробіли й спеціальні символи</li>
                         </ul>
                 </div>
     
@@ -204,17 +204,17 @@
             <button class="back-btn">×</button>
             
             <form class="test-form" method="POST">
-                <h2>Створити курс</h2>
+                <h2>Створити класс</h2>
                 <div class="form-group">
-                    <label>Назва курсу:</label>
-                    <input type="text" placeholder="Введіть назву курсу" name="title" required>
+                    <label>Назва классу:</label>
+                    <input type="text" placeholder="Введіть назву классу" name="title" required>
                 </div>
                 <div class="form-group">
                     <label>Назва уроку:</label>
                     <input type="text" placeholder="Введіть назву уроку" name="lesson" required>
                 </div>
                 <div class="form-group">
-                    <label>Колір курсу:</label>
+                    <label>Колір классу:</label>
                     <select id="color-type" name="color-type">
                         <option value="single">Монотонний</option>
                         <option value="gradient">Градієнт</option>
@@ -234,7 +234,7 @@
                     <input type="number" placeholder="Введіть число" name="max-count" required>
                 </div>
         
-                <button class="join-course-btn" type="submit">Створити курс</button>
+                <button class="join-course-btn" type="submit">Створити класс</button>
             </div>
         </form>
     </div>   

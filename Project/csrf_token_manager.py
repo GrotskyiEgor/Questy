@@ -1,9 +1,11 @@
-import flask, wtforms
-from .settings import project
+import flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf.csrf import generate_csrf
+
+
+from .settings import project
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])

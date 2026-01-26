@@ -1,26 +1,26 @@
 from datetime import datetime
 
 from Project.render_page import render_page
-
-from user.models import Classes, Score
+from user_app.models import Classes, Score
 from test_app.models import Test, Room
 from flask_login import current_user
 
+
 @render_page(template_name = 'courses.html')
 def render_class_courses(id):
-    do_task= []
-    due_time_list= []
-    can_do_task= []
+    do_task = []
+    due_time_list = []
+    can_do_task = []
 
-    CLASS= Classes.query.filter_by(id= id).first()  
-    taskes_list= CLASS.tasks
+    CLASS = Classes.query.filter_by(id= id).first()  
+    taskes_list = CLASS.tasks
 
-    online_tasks= []
-    start_button= []
+    online_tasks = []
+    start_button = []
 
     for task in taskes_list:
-        TEST= Test.query.filter_by(id= task.test_id).first()
-        ROOM = Room.query.filter_by(test_code = TEST.test_code).first()
+        TEST = Test.query.filter_by(id=task.test_id).first()
+        ROOM = Room.query.filter_by(test_code=TEST.test_code).first()
         
         if task.online:
             online_tasks.append(TEST)
@@ -37,15 +37,15 @@ def render_class_courses(id):
         else:
             due_time_list.append([None, None])
 
-    date_time_now= str(datetime.now())
-    date_now= date_time_now[0:10]
-    time_now= date_time_now[11:16]
+    date_time_now = str(datetime.now())
+    date_now = date_time_now[0:10]
+    time_now = date_time_now[11:16]
 
-    date_now_list= date_now.split("-")
-    time_now_list= time_now.split(":")
+    date_now_list = date_now.split("-")
+    time_now_list = time_now.split(":")
     
-    task_date_now_list= []
-    task_time_now_list= []
+    task_date_now_list = []
+    task_time_now_list = []
     
     for index, due in enumerate(due_time_list):
         task= taskes_list[index]
@@ -54,8 +54,8 @@ def render_class_courses(id):
             can_do_task.append(1)
             continue
 
-        task_date_now_list= due[0].split("-")
-        task_time_now_list= due[1].split(":")
+        task_date_now_list = due[0].split("-")
+        task_time_now_list = due[1].split(":")
 
 
         if task.work_after_time:
@@ -66,7 +66,7 @@ def render_class_courses(id):
             can_do_task.append(0)
 
     for task in CLASS.tasks:
-        score= Score.query.filter_by(test_id= task.test_id, class_id= CLASS.id, user_id= current_user.id).first()
+        score= Score.query.filter_by(test_id=task.test_id, class_id=CLASS.id, user_id=current_user.id).first()
         if score:
             do_task.append(1)
         else:

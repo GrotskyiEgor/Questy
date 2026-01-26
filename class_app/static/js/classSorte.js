@@ -63,7 +63,7 @@ $(() => {
                         <div class="card with-tasks">
                             <div class="card-header" style="background: ${ bg_color };">
                                 <div class="h-left-info">
-                                    Назва курсу: ${ clas.title }<br><span>Автор: ${ clas.teacher.username }</span><span>Код: ${ clas.class_code }</span>
+                                    Назва классу: ${ clas.title }<br><span>Автор: ${ clas.teacher.username }</span><span>Код: ${ clas.class_code }</span>
                                 </div>
     
                                 <div class="class-actions">
@@ -71,11 +71,11 @@ $(() => {
                                     
                                     <div class="dropdown">
                                         <form action="/delete_class${ clas.id }" method="post">
-                                            <button type="submit" class="dropdown-btn d">Видалити курс</button>
+                                            <button type="submit" class="dropdown-btn d">Видалити класс</button>
                                         </form>
     
                                         <a href="/class_information ${ clas.id }" class="dropdown-btn i">
-                                            Інформація про курс
+                                            Інформація про класс
                                         </a>
                                     </div>
                                 </div>
@@ -92,7 +92,7 @@ $(() => {
                             <div class="card-footer">
                                 <a href="/class_courses ${ clas.id }">
                                     <button class="start-btn" style="background: ${ bg_color };">
-                                        Перейти до курсу
+                                        Перейти до классу
                                     </button>
                                 </a>
                                 <a href="/create_task ${ clas.id }">
@@ -148,7 +148,7 @@ $(() => {
                    classCard=` 
                         <div class="card with-tasks">
                             <div class="card-header" style="background: ${ bg_color };">
-                                Назва курсу: ${ clas.title }<br><span>Автор: ${ clas.teacher.username }</span>
+                                Назва классу: ${ clas.title }<br><span>Автор: ${ clas.teacher.username }</span>
                             </div>
 
                             <div class="card-body">
@@ -158,7 +158,7 @@ $(() => {
                             <div class="card-footer">
                                 <a href="/class_courses${ clas.id }">
                                     <button class="start-btn" style="background: ${ bg_color };">
-                                        Перейти до курсу
+                                        Перейти до классу
                                     </button>
                                 </a>
                             </div>

@@ -1,11 +1,12 @@
-import flask, io, datetime
-import matplotlib.pyplot as plt
-
+import flask
+import io
+import datetime
 from flask_login import current_user
 
 from Project.render_page import render_page
-from user.models import Score, User
+from user_app.models import Score, User
 from test_app.models import Test
+
 
 def bubble_sort(list):
     list_length = len(list)
@@ -15,28 +16,26 @@ def bubble_sort(list):
                 list[accuracy], list[accuracy+ 1] = list[accuracy+ 1], list[accuracy]
     return list
 
-def profile_sorte():
-    data= flask.request.get_json()
-    sorte_type= data.get('sortyType')
-    scores = Score.query.filter_by(user_id= current_user.id).all()
 
-    date_sort= []
-    accuracy_sort= []
-    list_tests_sort= []
+def profile_sorte():
+    data = flask.request.get_json()
+    sorte_type = data.get('sortyType')
+    scores = Score.query.filter_by(user_id=current_user.id).all()
+
+    date_sort = []
+    accuracy_sort = []
+    list_tests_sort = []
 
     for score in scores:
-        test= Test.query.filter_by(id= score.test_id).first()
+        test= Test.query.filter_by(id=score.test_id).first()
         if test and test not in list_tests_sort:
             list_tests_sort.append(test.dict())
-
-    # for score in scores:
-    #     scores.append(score.dict())
 
     if sorte_type == "accuracy":
         for score in scores:
             accuracy_sort.append([score.accuracy, score.id, score.test_id, score.date_complete, score.time_complete])
 
-        bubble_sort(list= accuracy_sort)
+        bubble_sort(list = accuracy_sort)
 
         return flask.jsonify({
             "scores": accuracy_sort,
@@ -59,23 +58,23 @@ def render_profile():
     time_complete = []
     date_complete = []
     dates_complete = []
-    count_cmpl_quiz= []
-    scores= None
+    count_cmpl_quiz = []
+    scores = None
     list_tests = []
     list_tests_sort = []
     selected_option = ["graph_1"]
     message = ' '
-    tests_count= 0
-    scores_count= 0
-    user= None
+    tests_count = 0
+    scores_count = 0
+    user = None
 
     buffer = io.BytesIO()
     if current_user.is_authenticated:
         user = User.query.filter_by(id=current_user.id).first()
         
-        scores = Score.query.filter_by(user_id= current_user.id).all()
+        scores = Score.query.filter_by(user_id=current_user.id).all()
         tests_count = len(Test.query.filter_by(author_name= current_user.username).all())
-        scores_count= len(scores)
+        scores_count = len(scores)
 
         print(tests_count, scores_count)
         for score in scores:

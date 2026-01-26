@@ -2,6 +2,7 @@ import flask
 from functools import wraps
 from flask_login import current_user
 
+
 def render_page(template_name: str):
     def config_page(function):
         @wraps(function)

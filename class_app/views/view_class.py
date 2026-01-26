@@ -1,7 +1,7 @@
 import flask, string, random
 
 from Project.render_page import render_page
-from user.models import Classes, User, Task
+from user_app.models import Classes, User, Task
 from flask_login import current_user
 from Project.database import db
 

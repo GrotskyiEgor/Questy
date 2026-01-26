@@ -1,21 +1,21 @@
-import flask, dotenv, os, secrets
-
+import os
+from flask import Flask
+from secrets import token_bytes
+from dotenv import load_dotenv
 from flask_mail import Mail
 from flask_socketio import SocketIO
 
-dotenv.load_dotenv()
+load_dotenv()
 
 GOOGLE_APP_KEY= os.getenv("GOOGLE_APP_KEY")
 
-project = flask.Flask(
-    import_name = __name__,
+project = Flask(
+    import_name=__name__,
     static_folder="static",
     static_url_path="/Project/",
     template_folder="templates",
-    instance_path= os.path.abspath(os.path.join(__file__, '..', 'instance'))
+    instance_path=os.path.abspath(os.path.join(__file__, '..', 'instance'))
 )
-
-# instance_path= os.path.abspath(os.path.join(__file__, '..', '..', 'instance'))
 
 project.config.update(
     MAIL_SERVER='smtp.gmail.com',
@@ -23,9 +23,9 @@ project.config.update(
     MAIL_USE_TLS=True,
     MAIL_USE_SSL=False,
     MAIL_USERNAME='egor115819@gmail.com',
-    MAIL_PASSWORD= GOOGLE_APP_KEY,
+    MAIL_PASSWORD=GOOGLE_APP_KEY,
 )
-project.secret_key = secrets.token_bytes()
+project.secret_key = token_bytes()
 
 mail = Mail(project)
 socketio = SocketIO(project, cors_allowed_origins="*")

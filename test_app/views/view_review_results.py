@@ -1,6 +1,6 @@
 import flask
 
-from user.models import Score
+from user_app.models import Score
 from ..models import Test, Quiz
 from Project.render_page import render_page
 

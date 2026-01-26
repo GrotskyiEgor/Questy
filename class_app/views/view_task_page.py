@@ -1,12 +1,12 @@
-import flask, json
-
+import flask
+import json
+from datetime import datetime
+from flask_login import current_user
 from datetime import datetime, timedelta
 
 from Project.render_page import render_page
-from user.models import Classes, User
+from user_app.models import Classes, User
 from test_app.models import Test
-from datetime import datetime
-from flask_login import current_user
 
 def allCoursesData(user):
     cur_week_task_list = []
@@ -15,7 +15,7 @@ def allCoursesData(user):
     overdue_task_list = []
 
     for CLASS in user.classes:
-        day_today= datetime.now().date()
+        day_today = datetime.now().date()
 
         start_of_week = day_today - timedelta(days=day_today.weekday())     
         end_of_week = start_of_week + timedelta(days=6)             
@@ -50,7 +50,7 @@ def allCoursesData(user):
 @render_page(template_name = 'task_page.html')
 def render_task_page():
     
-    USER= User.query.filter_by(id= current_user.id).first()
+    USER = User.query.filter_by(id=current_user.id).first()
     cur_week_task_list, next_week_task_list, duetime_task_list, overdue_task_list = allCoursesData(USER)
 
     return {"classes": USER.classes,
@@ -60,11 +60,11 @@ def render_task_page():
             "overdue_task_list": overdue_task_list}
 
 def new_task():
-    USER= User.query.filter_by(id= current_user.id).first()
-    class_online_task= []
+    USER = User.query.filter_by(id= current_user.id).first()
+    class_online_task = []
 
     for CLASS in USER.classes:
-        online_task= []
+        online_task = []
         for task in CLASS.tasks:
             test= Test.query.filter_by(id= task.test_id).first()
             if task.online and test.test_code:
@@ -80,11 +80,11 @@ def new_task():
 def sorte_task():
     data = flask.request.get_json()
 
-    USER= User.query.filter_by(id= current_user.id).first()
+    USER = User.query.filter_by(id=current_user.id).first()
     cur_week_task_list, next_week_task_list, duetime_task_list, overdue_task_list = allCoursesData(USER)
 
-    tasks= []
-    classes_dict= []
+    tasks = []
+    classes_dict = []
 
     for clas in USER.classes:
         classes_dict.append(clas.dict())
@@ -97,7 +97,7 @@ def sorte_task():
                             "overdue_task_list": overdue_task_list})
     else:
         class_id = int(data['sortytype'])
-        CLASS = Classes.query.filter_by(id= class_id).first()
+        CLASS = Classes.query.filter_by(id=class_id).first()
 
         class_dict = CLASS.dict()
 

@@ -1,8 +1,7 @@
 import flask
 
 from Project.render_page import render_page
-from flask_login import current_user
-from user.models import Classes, Score, Task
+from user_app.models import Classes, Score, Task
 from test_app.models import Test
 
 @render_page(template_name='result_task.html')

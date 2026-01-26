@@ -4,7 +4,7 @@ import datetime
 from urllib.parse import unquote
 
 from ..models import Test, Quiz
-from user.models import Score, User
+from user_app.models import Score, User
 from Project.database import db
 from flask_login import current_user
 
