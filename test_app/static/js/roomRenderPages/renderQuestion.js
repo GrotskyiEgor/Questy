@@ -170,6 +170,12 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             roomContent.appendChild(answersDiv);
             roomContent.appendChild(inputButton);
         }
+
+        inputAnswer.addEventListener("keyup", function(event){
+            if (event.key === 'Enter'){
+                inputButton.click()
+            }
+        });
         
         inputButton.addEventListener("click", function(event) {
             let userAnswer= getCookie("userAnswers")
@@ -211,7 +217,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
 
             renderWaitQuestion("test");
                     
-            socket.emit(user_answer, {
+            socket.emit("user_answer", {
                 room: room,
                 author_name: author_name,
                 username: username,

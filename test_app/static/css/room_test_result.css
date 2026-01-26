@@ -18,8 +18,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2vh;
-  gap: 2vh;
+  margin-top: 0.25vh;
+  gap: 0.8vh;
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -60,7 +60,7 @@
 
 .results-header-block h1 {
   font-weight: 700;
-  font-size: 6vh;
+  font-size: 5vh;
 }
 
 .results-header-block p {
@@ -141,6 +141,31 @@
   font-size: 3vh;
 }
 
+.chart-user-box { 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: 1.5vh;
+  padding: 2vh 0.5vw;
+  border: 0.2vh solid var(--green-light);
+  box-shadow: 0 0.4vh 1vw rgba(0, 0, 0, 0.15);
+  width: 60vw;
+  height: 14vh;
+}
+
+.chart-user-box h2 {
+  margin-top: 0;
+  color: #205b24;
+  font-size: 4.5vh;
+}
+
+.chart-user-box input {
+    width: 80%;
+}
+
+
 /* .donat-chart{
   width: 100%;
 } */
@@ -178,8 +203,8 @@
   display: grid;
   border-radius: 1.5vh;
   overflow: hidden;
-  width: 90vw;
-  margin-bottom: 2vh;
+  width: 98vw;
+  margin-bottom: 1vh;
 }
 
 .results-header, .results-row {

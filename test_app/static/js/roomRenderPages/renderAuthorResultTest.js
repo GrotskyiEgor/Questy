@@ -7,6 +7,7 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
     resultRow.className = 'results-row';
     resultRow.id= `row_${username}`
 
+    resultRow.style.cursor= 'pointer';
     const studentName = document.createElement('div');
     studentName.className = 'cell student-name';
     studentName.textContent = `${username}`;
@@ -53,7 +54,7 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
     resultTable.appendChild(resultRow);
 
     resultRow.addEventListener('click', function(){
-        renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4))
+        renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4), false)
     })
 }
 
@@ -87,11 +88,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         const headerTitle = document.createElement('h1');
         headerTitle.textContent = "Результати тесту";
 
-        // const headerText = document.createElement('p');
-        // headerText.textContent = "Зведена статистика успішності всіх учасників";
-
         header.appendChild(headerTitle);
-        // header.appendChild(headerText);
         container.appendChild(header);
 
         //
@@ -213,7 +210,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         resultTable.style.setProperty(
             'grid-template-columns',
-            `10vw repeat(${totalQuestion}, ${70 /totalQuestion}vw) 9.95vw`
+            `10vw repeat(${totalQuestion}, ${77.9 /totalQuestion}vw) 9.95vw`
         )
 
         const resultHeader = document.createElement('div');
@@ -252,10 +249,11 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         const legend = document.createElement('div');
         legend.className= "legend";
         legend.innerHTML += `
-                        <span><span class="circle correct"></span> Правильно</span>
-                        <span><span class="circle wrong"></span> Неправильно</span>
-                        <span><span class="circle no-answer"></span> Немає відповіді</span>
-                        `
+                <span><span class="circle correct"></span> Правильно</span>
+                <span><span class="circle wrong"></span> Неправильно</span>
+                <span><span class="circle no-answer"></span> Немає відповіді</span>
+            `
+
         legenBox.appendChild(legenBoxTitle);
         legenBox.appendChild(legend);
         baseInfo.appendChild(legenBox); 
@@ -266,16 +264,25 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         contentBox.appendChild(infoBox)
         container.appendChild(contentBox)
+
+        const tableTitle = document.createElement('div');
+        tableTitle.className = 'results-header-block';
+
+        const userTitle = document.createElement('h1');
+        userTitle.textContent = "Натисніть на ряд таблиці щоб побачити особисту статистику";
+
+        tableTitle.appendChild(userTitle);
+        container.appendChild(tableTitle);
+
         container.appendChild(resultTable)
         
+        renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
 
         document.getElementById('choice').addEventListener('change', function() {
             if (selectBlock){
                 renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
             }
         })
-
-        renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
     });
 }
 

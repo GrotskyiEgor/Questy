@@ -1,7 +1,7 @@
-function renderAnalyticsChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, userName= null){
+function renderAnalyticsChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, userName= null, isUser= false){
     const selectElement = document.getElementById("choice");
 
-    if (userName){
+    if (userName && !isUser){
         choiceSelector= document.getElementById('choice')
         chartBoxLable= document.querySelector('.chart-box-label')
         chartBoxLable.textContent= `Успішність ${userName}`
@@ -35,7 +35,7 @@ function renderAnalyticsChart(canvasId, resultData, accuracyAquestionsArray, acc
             renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, selectUserName, "token")
             break; 
         case 6:
-            renderRightWorstBar(canvasId, resultData, totalQuestion, selectUserName)
+            renderRightWorstBar(canvasId, resultData, totalQuestion, userName)
             break;
     }
 

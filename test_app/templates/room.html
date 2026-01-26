@@ -15,7 +15,7 @@
     
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
-    <script></script>
+    <script src="{{ url_for('test_app.static', filename= 'js/constant.js') }}"></script>
 
     <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/addUserBlock.js') }}"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/chartManager.js') }}"></script>
@@ -81,7 +81,7 @@
             renderAuthorResultTest(username, authorName, totalQuestion);
         } 
         else if (state === "resultTest") {
-            renderResultTest(username, totalQuestion, quizList, listAnswers, testId);
+            renderResultTest(username, totalQuestion, quizList, anwersList, testId);
         } else if (reconnect){
             clearCookie(["reconnect"])
 
@@ -95,7 +95,7 @@
         }
         else if (state && state.includes("question")) {
             let time= getCookie("time")
-            renderQuestion(Number("{{ test.id }}"), quizList[Number(state.replace(/\D/g, ""))], listAnswers[Number(state.replace(/\D/g, ""))], room, authorName);
+            renderQuestion(Number("{{ test.id }}"), quizList[Number(state.replace(/\D/g, ""))], anwersList[Number(state.replace(/\D/g, ""))], room, authorName);
         } 
         else if (state && state.includes("wait")) {
             renderWaitQuestion("test");
@@ -212,7 +212,7 @@
             if (username === authorName){  
                 if (state === "authorResultTest"){
                     newState= -1
-                    renderResultTest(username, totalQuestion, quizList, listAnswers, testId);
+                    renderResultTest(username, totalQuestion, quizList, anwersList, testId);
                 } else{
                     newState= Number(state.replace(/\D/g, ""))
                 }
@@ -237,7 +237,7 @@
             }else if (newState >= 0){
                 if (Number(data["newTime"]) > 1){
                     setCookie("state", `question${newState}`)
-                    renderQuestion(Number("{{ test.id }}"), quizList[Number(newState)], listAnswers[Number(newState)], room, authorName);
+                    renderQuestion(Number("{{ test.id }}"), quizList[Number(newState)], anwersList[Number(newState)], room, authorName);
                 } else{
                     setCookie("state", `wait${newState}`)
                     renderWaitQuestion("test");
@@ -262,7 +262,7 @@
                 setCookie("time", Number(quizList[numberOfQuestion + 1].time))
                 if (numberOfQuestion != totalQuestion - 1) {
                     setCookie("state", `question${numberOfQuestion + 1}`)
-                    renderQuestion(Number("{{ test.id }}"), quizList[numberOfQuestion + 1], listAnswers[numberOfQuestion + 1], room, authorName);
+                    renderQuestion(Number("{{ test.id }}"), quizList[numberOfQuestion + 1], anwersList[numberOfQuestion + 1], room, authorName);
                 }
                 else {
                     socket.emit("stop_test", {
@@ -279,7 +279,7 @@
         socket.on("result_test", function(data) {      
             checkAnswers("test");
 
-            renderResultTest(username, totalQuestion, quizList, listAnswers, testId)
+            renderResultTest(username, totalQuestion, quizList, anwersList, testId)
 
             userAnswers= getCookie("userAnswers")
             userTimers= getCookie("userTimers")
@@ -394,7 +394,7 @@
             }
             else if(connectedStart) {
                 setCookie("state", "question0")  
-                renderQuestion(Number("{{ test.id }}"), quizList[state], listAnswers[state], room, authorName);
+                renderQuestion(Number("{{ test.id }}"), quizList[state], anwersList[state], room, authorName);
             } else{
                 window.location.href = '/'; 
             }

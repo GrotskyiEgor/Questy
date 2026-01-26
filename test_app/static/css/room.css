@@ -1466,6 +1466,28 @@ main {
     align-self: center;
 
     width: 50vw;
+    height: 85%;
+}
+
+.user-select-field {
+        align-self: center;
+        padding: 1.5vh 2.5vw;
+        font-size: 2.2vh;
+        border-radius: 1.5vh;
+        border: 0.09vh solid var(--green-light);
+        background-color: #fff;
+        color: var(--text-main);
+        outline: none;
+    }
+
+
+.user-chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-self: center;
+
+    width: 60vw;
     height: auto;
 }
 

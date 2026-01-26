@@ -75,7 +75,7 @@ $(() => {
         $('#modal-bg-connect').fadeOut(200)
     }) 
 
-    $('#room').on('keydown', function(event){
+    $('.input_code').on('keyup', function(event){
         if (event.key === "Enter"){
             event.preventDefault()
             $('.search-btn').click()

@@ -1,4 +1,4 @@
-function renderResultTest(username, totalQuestion, quizList, listAnswers, testId) {
+function renderResultTest(username, totalQuestion, quizList, anwersList, testId) {
     let answersStr = getCookie("userAnswers");
     let answers_list= answersStr.split("|");
     let userAnswers = [];
@@ -104,13 +104,32 @@ function renderResultTest(username, totalQuestion, quizList, listAnswers, testId
     resultContainer.appendChild(resultInfo);
 
     const chartWrapper = document.createElement('div');
-    chartWrapper.className = 'chart-wrapper';
+    chartWrapper.className = 'user-chart-wrapper';
+
+    const chartBox = document.createElement('div');
+    chartBox.className = 'chart-user-box';
+
+    const headerTitle2 = document.createElement('h2');
+    headerTitle2.className= "chart-box-label"
+    headerTitle2.textContent = "Ваша успішність";
 
     const chartCanvas = document.createElement('canvas');
     chartCanvas.id = 'userChart';
     chartCanvas.width = 400;
     chartCanvas.height = 200;
 
+    chartBox.appendChild(headerTitle2);
+
+    chartBox.innerHTML += `
+        <select name="choice" id="choice" class="user-select-field">
+            <option value="6">Кількість правильних/неправильних відповідей</option>
+            <option value="1">Ваша успішність</option>
+            <option value="4">Витрачено часу на запитання</option>
+            <option value="5">Зароблено монет за питання</option>
+        </select>
+        `
+
+    chartWrapper.appendChild(chartBox);
     chartWrapper.appendChild(chartCanvas);
     resultContainer.appendChild(chartWrapper);
 
@@ -154,8 +173,8 @@ function renderResultTest(username, totalQuestion, quizList, listAnswers, testId
                 questionBlock.appendChild(notAnswerDiv);
             }
 
-            for (let answer_number = 0; answer_number < listAnswers[quiz_number].length; answer_number++) {
-                let answerText = listAnswers[quiz_number][answer_number];
+            for (let answer_number = 0; answer_number < anwersList[quiz_number].length; answer_number++) {
+                let answerText = anwersList[quiz_number][answer_number];
                 answers= answersArrey[quiz_number]
 
                 if (answerText !== quiz.correct_answer && answerText !== answers) {
@@ -179,7 +198,7 @@ function renderResultTest(username, totalQuestion, quizList, listAnswers, testId
             }
         }
         else if (quiz.question_type === "input"){
-            let answerText = listAnswers[quiz_number];
+            let answerText = anwersList[quiz_number];
             let answers= answersArrey[quiz_number]
 
             if (answers === "not_answer"){
@@ -213,7 +232,7 @@ function renderResultTest(username, totalQuestion, quizList, listAnswers, testId
             }
         }
         else if (quiz.question_type === "multiple_choice"){
-            let answerText = listAnswers[quiz_number];
+            let answerText = anwersList[quiz_number];
             let answers= answersArrey[quiz_number].split("$$$");
             let correct_answer_list= quiz.correct_answer.split("%$№");
 
@@ -284,36 +303,13 @@ function renderResultTest(username, totalQuestion, quizList, listAnswers, testId
         const averega_score= data.averega_score
         const {accuracyAquestionsArray, accurancyArray}= questionAccuracy(resultData, totalQuestion)
 
-        const allInfoButton= document.createElement('button');
-        allInfoButton.className= 'all-info-btn';
-        allInfoButton.textContent = 'Загальна успішність'
-        allInfoButton.addEventListener("click", () => {
-            chartBoxLable= document.querySelector('.chart-box-label')
-            console.log(chartBoxLable)
-            chartBoxLable.textContent= 'Загальна успішність'
-            
-            selectUserName= null
-            choiceSelector= document.getElementById('choice')
-
-            selectBlock= false
-            choiceSelector.innerHTML= `
-                <option value="1">Загальна успішність</option>
-                <option value="2">Кількість правильних/неправильних відповідей</option>
-                <option value="3">Відсоткове співвідношення правильних відповідей</option>
-                <option value="4">Витрачено часу на запитання</option>
-                <option value="5">Зароблено монет за питання</option>
-            `
-            selectBlock= true
-            renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
-        });
+        renderRightWorstBar('userChart', resultData, totalQuestion, username);
 
         document.getElementById('choice').addEventListener('change', function() {
             if (selectBlock){
-                renderAnalyticsChart('userChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
+                renderAnalyticsChart('userChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, username, true)
             }
         })
-    
-        renderRightWorstBar('userChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
     });
 }
 

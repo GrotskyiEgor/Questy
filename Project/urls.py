@@ -39,7 +39,6 @@ test_app.add_url_rule(rule='/passing_test', view_func=render_passing_test, metho
 test_app.add_url_rule(rule='/result_test', view_func=render_test_result, methods=['GET', 'POST'])
 test_app.add_url_rule(rule='/create_test', view_func=render_create_test, methods=['GET', 'POST'])
 
-test_app.add_url_rule(rule='/delete_test<test_id>', view_func=delete_test, methods=['POST'])
 test_app.add_url_rule(rule='/delete_quiz<quiz_id>', view_func=delete_quiz_question, methods=['POST'])
 test_app.add_url_rule(rule='/delete_code<test_id>', view_func=delete_code, methods=['POST'])
 test_app.add_url_rule(rule='/create_code<test_id>', view_func=created_test, methods=['GET', 'POST'])

@@ -70,7 +70,7 @@
                                         </a>
                                     {% endif %}
 
-                                    <form action="/delete_test{{ test.id }}" >
+                                    <form action="/delete_test{{ test.id }}" method="POST">
                                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <button class="delete">
                                             Видалити тест

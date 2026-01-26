@@ -1,10 +1,17 @@
 const buttonsArrey = document.querySelectorAll(".answer")
 const multipleChoiceButtons = document.querySelectorAll(".multiple-answer")
 
+const inputField = document.querySelector(".input-with-answer")
 const inputButton = document.querySelector(".input-answer")
 const multipleChoiceButton = document.querySelector(".multiple-choice-answer")
 
 if (inputButton){
+    inputField.addEventListener("keyup", function(event){
+        if (event.key === 'Enter'){
+            inputButton.click()
+        }
+    });
+
     inputButton.addEventListener("click", function(event) {   
         let userAnswer= getCookie("userAnswers")
         let answerValue= ""
