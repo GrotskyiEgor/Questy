@@ -1,11 +1,14 @@
-import flask, string, random
+import flask
+import string
+import random
+from flask_login import current_user
+from datetime import date
 
+from Project.token_manage import DeleteClassForm
 from Project.render_page import render_page
 from user_app.models import Classes, User, Task
-from flask_login import current_user
 from Project.database import db
 
-from datetime import date
 
 def generate_code(length):
     code= ""

@@ -81,7 +81,8 @@
 
                                 {% if task.online %}       
                                     {% if test.test_code != 0 %}
-                                        <form action="/reset_test{{ test.id }}" >
+                                        <form action="/reset_test{{ test.id }}" method="POST">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                             <button>Скинути тест</button>
                                         </form>
                                         {% if test.test_code != 0 and not can_start %}

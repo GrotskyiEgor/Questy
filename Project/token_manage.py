@@ -58,3 +58,6 @@ class ChangeUsernameForm(FlaskForm):
         validators= [DataRequired(), Length(min=3)]
     )
     submit = SubmitField('Пiдтвердити')
+
+class DeleteClassForm(FlaskForm):
+    pass

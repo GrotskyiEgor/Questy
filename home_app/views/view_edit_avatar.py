@@ -30,7 +30,7 @@ def render_edit_avatar(user_id):
             user.avatar = "|".join(avatar_list)
             db.session.commit()
 
-        return 200  
+        return flask.make_response("", 200)  
     
     list_clothes = list(map(int, user.avatar.split("|")))
 

@@ -10,6 +10,7 @@
 
 {% block content %}
     <form action="" method="POST" class="form">
+        <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
         {% for index_cloth in range(5) %}
             <div class="{{name_classes[index_cloth]}}">
             <p>Текст</p>

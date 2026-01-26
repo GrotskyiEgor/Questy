@@ -38,7 +38,8 @@
             <div class="user-actions">
                 {% if is_authorization %}
                     <h2 class="username">{{ username }}</h2>
-                    <form action="/logout">
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button class="logout">Вийти</button>
                     </form>
                 {% else %}

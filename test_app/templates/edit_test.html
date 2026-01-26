@@ -31,7 +31,8 @@
                 </a>
                 </div>
                 
-                <form action="/delete_quiz{{ question.id }}">
+                <form action="/delete_quiz{{ question.id }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button class="delete_quiz">Видалити це питання?</button>
                 </form>
 

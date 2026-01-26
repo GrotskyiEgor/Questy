@@ -55,7 +55,8 @@
                                         <button class="more-class-actions">⋮</button>
                                         
                                         <div class="dropdown">
-                                            <form action="/delete_class{{ class.id }}" method="post">
+                                            <form action="/delete_class{{ class.id }}" method="POST">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                                 <button type="submit" class="dropdown-btn d">Видалити класс</button>
                                             </form>
 
@@ -179,6 +180,8 @@
             <button class="back-btn">×</button>
             
             <form class="form" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <h2>Приєднатися до классу</h2>
                 <div class="form-group">
                     <h3>Попросіть у свого викладача код классу та введіть його тут.</h3>
@@ -204,6 +207,8 @@
             <button class="back-btn">×</button>
             
             <form class="test-form" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <h2>Створити класс</h2>
                 <div class="form-group">
                     <label>Назва классу:</label>

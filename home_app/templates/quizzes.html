@@ -47,7 +47,8 @@
                             
                             <div class="actions">
                                 {% if test.test_code != 0 %}
-                                    <form action="/reset_test{{ test.id }}" >
+                                    <form action="/reset_test{{ test.id }}" method="POST">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <button class="btn" id="clear">
                                             Скинути тест
                                         </button>
@@ -70,6 +71,7 @@
                                     {% endif %}
 
                                     <form action="/delete_test{{ test.id }}" >
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <button class="delete">
                                             Видалити тест
                                         </button>

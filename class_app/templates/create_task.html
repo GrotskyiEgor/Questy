@@ -18,6 +18,8 @@
                 <h2 class="page-title">Створити нове завдання</h2>
         
                 <form class="test-form" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    
                     <div class="form-group">
                         <label for="test-title">Назва завдання</label>
                         <input type="text" id="class-title" name="title" placeholder="Введіть тему завдання" required>

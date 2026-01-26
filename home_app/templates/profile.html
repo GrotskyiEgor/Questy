@@ -16,6 +16,8 @@
                     <div class="dropdown">
                         <label for="chartType">Вибір графіка:</label>
                         <form action="" method="POST" class="score-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                             <select name="choice" id="choice" onchange="saveSelectedValueChart()">
                                 <option value="graph_active1">Точність по датам</option>
                                 <option value="graph_active2">Активність по годинам</option>

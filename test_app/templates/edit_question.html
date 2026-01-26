@@ -10,6 +10,8 @@
 
 {% block content %}
     <form action="" method="post" class="edit-question-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
         <h1>Редагувати питання</h1>
         <h2>{{ question_text }}</h2>
         {% if quiz.question_type == "choice" %}

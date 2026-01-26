@@ -70,7 +70,7 @@ $(() => {
                                     <button class="more-class-actions">⋮</button>
                                     
                                     <div class="dropdown">
-                                        <form action="/delete_class${ clas.id }" method="post">
+                                        <form action="/delete_class${ clas.id }" method="POST">
                                             <button type="submit" class="dropdown-btn d">Видалити класс</button>
                                         </form>
     
