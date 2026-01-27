@@ -43,6 +43,8 @@ function renderScores(data, type){
 }
 
 $(() => {
+    $('#choice').val('accuracy_by_date')
+
     $(".date").on('click', (event => {
         $.ajax({
             url: "/profile/sorte",

@@ -9,12 +9,8 @@ from test_app.models import Test
 
 
 def bubble_sort(list):
-    list_length = len(list)
-    for length in range(list_length):
-        for accuracy in range(0, list_length - length - 1):
-            if list[accuracy][0] <= list[accuracy+ 1][0] :
-                list[accuracy], list[accuracy+ 1] = list[accuracy+ 1], list[accuracy]
-    return list
+    accuracy_sort = sorted(list, key=lambda x: x[0], reverse=True)
+    return accuracy_sort
 
 
 def profile_sorte():
@@ -62,11 +58,12 @@ def render_profile():
     scores = None
     list_tests = []
     list_tests_sort = []
-    selected_option = ["graph_1"]
-    message = ' '
+    selected_option = ["accuracy_by_date"]
     tests_count = 0
     scores_count = 0
     user = None
+    message = ''
+    show_graph= True
 
     buffer = io.BytesIO()
     if current_user.is_authenticated:
@@ -81,41 +78,18 @@ def render_profile():
             date_complete.append(score.date_complete)
             time_complete.append(score.time_complete)
             dates_complete.append(score.date_complete)
-            if Test.query.filter_by(id= score.test_id).first() not in list_tests:
-                list_tests.append(Test.query.filter_by(id= score.test_id).first())
+
+            test = Test.query.filter_by(id=score.test_id).first()
+            if test and test not in list_tests:
+                list_tests.append(test)
 
         if flask.request.method == 'POST':
             if flask.request.form.get('choice') != None:
                 selected_option[0] = (flask.request.form.get('choice'))
     
-        dates_complete.sort()
+        dates_complete = sorted(set(dates_complete))
 
-        if selected_option[0] == 'graph_active1':
-                
-                count_cmpl_quiz.extend([2,3,4,5,6,7,3,24,5])
-                time_complete.append('11:11:11')
-                time_complete.append('13:11:11') # ДЛЯ НАГЛЯДНОСТИ !
-                time_complete.append('14:11:11')
-
-                return {
-                "scores": scores,
-                "scores_count": scores_count,
-                "tests_count": tests_count,
-                "dates_complete": dates_complete,
-                'accuracy': accuracy or [],
-                'date_complete': date_complete or [],
-                'time_complete': time_complete or [],
-                'list_tests': list_tests,
-                "selected_option": selected_option,
-                'wt_graph': '1_active',
-                'count_cmpl_quiz': count_cmpl_quiz or [],
-                'user': user,
-                "list_tests_sort": list_tests_sort
-            }
-
-        if selected_option[0] == 'graph_1':
-            dates_complete = ['2025-07-20', '2025-07-21', '2025-07-22']
-            accuracy = [13, 25, 66]
+        if selected_option[0] == 'accuracy_by_date':
 
             return {
                 "scores": scores,
@@ -127,21 +101,47 @@ def render_profile():
                 'time_complete': time_complete or [],
                 'list_tests': list_tests,
                 "selected_option": selected_option,
-                'wt_graph': '1',
+                'select_chart': '1',
                 'count_cmpl_quiz': count_cmpl_quiz or [],
                 'user': user,
-                "list_tests_sort": list_tests_sort
+                "list_tests_sort": list_tests_sort,
+                "show_graph": show_graph
             }
-        
-        
-        
-        elif selected_option[0] == 'graph_active2':  
+
+        elif selected_option[0] == 'activity_by_hour':            
+            hours_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+            for score in scores:
+                time_complete_str = score.time_complete
+
+                try:
+                    time_completed = datetime.datetime.strptime(time_complete_str, '%H:%M:%S')
+                    hour = time_completed.hour
+                    hours_count[hour] += 1
+                except ValueError:
+                    continue
+
+            return {
+                "scores": scores,
+                "scores_count": scores_count,
+                "tests_count": tests_count,
+                "dates_complete": dates_complete,
+                'accuracy': accuracy or [],
+                'date_complete': date_complete or [],
+                'time_complete': time_complete or [],
+                'list_tests': list_tests,
+                "selected_option": selected_option,
+                'select_chart': '1_active',
+                'count_cmpl_quiz': hours_count or [],
+                'user': user,
+                "list_tests_sort": list_tests_sort,
+                "show_graph": show_graph
+            }
+   
+        elif selected_option[0] == 'completed_test':  
             for date in dates_complete:
                 count = Score.query.filter_by(user_id=current_user.id, date_complete=date).count()
                 count_cmpl_quiz.append(count)
-                
-            count_cmpl_quiz.extend([2,3,4,5,6,7,3,24,5])
-            dates_complete = ['2025-07-20', '2025-07-21', '2025-07-22']
 
             return {
                 "scores": scores,
@@ -149,36 +149,36 @@ def render_profile():
                 'dates_complete': dates_complete,
                 "scores_count": scores_count,
                 "tests_count": tests_count,
-                'wt_graph': 'd_cmpl',
+                'select_chart': 'd_cmpl',
                 'count_cmpl_quiz': count_cmpl_quiz or [],
                 'accuracy': accuracy or [],
                 'date_complete': date_complete or [],
                 'time_complete': time_complete or [],
                 "selected_option": selected_option,
                 'user': user,
-                "list_tests_sort": list_tests_sort
+                "list_tests_sort": list_tests_sort,
+                "show_graph": show_graph
             }
 
-        elif selected_option[0] == 'graph_active3':
+        elif selected_option[0] == 'accuracy_week':
+            show_graph = True
+            message = ''
             
-            if dates_complete: 
-                obj_date = datetime.datetime.strptime(dates_complete[0], '%Y-%m-%d')
-                delta_week = obj_date + datetime.timedelta(days=7)
-                if delta_week <= obj_date:
-                    dates_complete = ['2025-07-20', '2025-07-21', '2025-07-22'] # ДЛЯ НАГЛЯДНОСТИ!
-                    accuracy = [13, 25, 60]
-                else:
-                    message = 'Занадто мало даних для побудови графіка'
-            else:
+            if not dates_complete: 
+                show_graph = False
                 message = 'Немає даних для побудови графіка'
-
+            else:
+                first_date = datetime.datetime.strptime(dates_complete[0], '%Y-%m-%d')
+                last_date = datetime.datetime.strptime(dates_complete[-1], '%Y-%m-%d')
+                if (last_date - first_date).days < 7:
+                    show_graph = False
+                    message = 'Занадто мало даних для побудови графіка'
 
             return {
                 "scores": scores,
                 "scores_count": scores_count,
                 "tests_count": tests_count,
                 'message': message,
-                'flag_graph': 'flag_graph',
                 'dates_complete': dates_complete,
                 'date_complete': date_complete or [],
                 'time_complete': time_complete or [],
@@ -187,30 +187,31 @@ def render_profile():
                 "selected_option": selected_option,
                 'count_cmpl_quiz': count_cmpl_quiz or [],
                 'user': user,
-                "list_tests_sort": list_tests_sort
+                "list_tests_sort": list_tests_sort,
+                "show_graph": show_graph
             }
 
             
-        elif selected_option[0] == 'graph_active4':
+        elif selected_option[0] == 'accuracy_month':
+            show_graph = True
+            message = ''
             
-            if dates_complete: 
-                obj_date = datetime.datetime.strptime(dates_complete[0], '%Y-%m-%d')
-                delta_month = obj_date + datetime.timedelta(days=31)
-
-                if delta_month <= obj_date:
-                    dates_complete = ['2025-07-20', '2025-07-21', '2025-07-22']
-                    accuracy = [13, 25, 60]
-                    message = 'Занадто мало даних для побудови графіка'
-            else:
-
+            if not dates_complete: 
+                show_graph = False
                 message = 'Немає даних для побудови графіка'
+            else:
+                first_date = datetime.datetime.strptime(dates_complete[0], '%Y-%m-%d')
+                last_date = datetime.datetime.strptime(dates_complete[-1], '%Y-%m-%d')     
+
+                if (last_date - first_date).days < 30:
+                    show_graph = False
+                    message = 'Занадто мало даних для побудови графіка'
 
             return {
                 "scores": scores,
                 "scores_count": scores_count,
                 "tests_count": tests_count,
                 'message': message,
-                'flag_graph': 'flag_graph',
                 'dates_complete': dates_complete,
                 'accuracy': accuracy or [],
                 'list_tests': list_tests,
@@ -219,12 +220,13 @@ def render_profile():
                 "selected_option": selected_option,
                 'count_cmpl_quiz': count_cmpl_quiz or [],
                 'user': user,
-                "list_tests_sort": list_tests_sort
+                "list_tests_sort": list_tests_sort,
+                "show_graph": show_graph
             }
     else:
         message = "Ви не авторизовані"
 
-    selected_option = ['0']
+    selected_option = ['accuracy_by_date']
 
     return {
         "scores": scores,
@@ -236,7 +238,6 @@ def render_profile():
         'accuracy': accuracy or [],
         'user': user,
         'list_tests': list_tests,
-        "scores": scores,
         'date_complete': date_complete or [],
         'time_complete': time_complete or [],
         "selected_option": selected_option,

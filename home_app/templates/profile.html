@@ -19,10 +19,11 @@
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                             <select name="choice" id="choice" onchange="saveSelectedValueChart()">
-                                <option value="graph_active1">Точність по датам</option>
-                                <option value="graph_active2">Активність по годинам</option>
-                                <option value="graph_active3">Кількість виконаних тестів</option>
-                                <option value="graph_active4">Точність за тиждень / місяць</option>
+                                <option value="accuracy_by_date">Точність по датам</option>
+                                <option value="activity_by_hour">Активність по годинам</option>
+                                <option value="completed_test">Кількість виконаних тестів</option>
+                                <option value="accuracy_week">Точність за тиждень</option>
+                                <option value="accuracy_month">Точність за місяць</option>
                             </select>
 
 
@@ -46,35 +47,41 @@
                         </form>
 
                         <div class="chart-container">
-
-                            {% if dates_complete and accuracy and wt_graph == '1' %}
-                                <div class="accuracy-chart-div">                          
-                                    <canvas id="accuracyChart"></canvas>
-                                </div>
-                            {% endif %}
                             
-                            {% if time_complete and count_cmpl_quiz and wt_graph == '1_active' %}
-                                <div class="accuracy-chart-div">                          
-                                    <canvas id="activeChart"></canvas>
-                                </div>
-                            {% endif %}
+                            {% if message %}
+                                <div class="accuracy-message">{{ message }}</div>
+                            {% else %}
+                                {% if show_graph %}
+                                    {% if selected_option[0] == 'accuracy_by_date' %}
+                                        <div class="accuracy-chart-div">                          
+                                            <canvas id="accuracyChart"></canvas>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if selected_option[0] == 'activity_by_hour' %}
+                                        <div class="accuracy-chart-div">                          
+                                            <canvas id="activeChart"></canvas>
+                                        </div>
+                                    {% endif %}
 
-                            {% if dates_complete and wt_graph == 'd_cmpl' %}
-                                <div class="dates_cmpl-chart-div">                          
-                                    <canvas id="datesCompleteChart"></canvas>
-                                </div>
-                            {% endif %}
+                                    {% if selected_option[0] == 'completed_test' %}
+                                        <div class="dates_cmpl-chart-div">                          
+                                            <canvas id="datesCompleteChart"></canvas>
+                                        </div>
+                                    {% endif %}
 
-                            {% if dates_complete and accuracy and flag_graph == 'flag_graph' %}
-                                <div class="accuracy-chart-div">                          
-                                    <canvas id="accuracyChartWeek"></canvas>
-                                </div>
-                            {% endif %}
+                                    {% if dates_complete and accuracy and selected_option[0] == 'accuracy_week' %}
+                                        <div class="accuracy-chart-div">                          
+                                            <canvas id="accuracyChartWeek"></canvas>
+                                        </div>
+                                    {% endif %}
 
-                            {% if dates_complete and accuracy and flag_graph == 'month' %}
-                                <div class="accuracy-chart-div">                          
-                                    <canvas id="accuracyChartMonth"></canvas>
-                                </div>
+                                    {% if dates_complete and accuracy and selected_option[0] == 'accuracy_month' %}
+                                        <div class="accuracy-chart-div">                          
+                                            <canvas id="accuracyChartMonth"></canvas>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
 
                             <script>
@@ -133,8 +140,9 @@
                                 const activeCanvas = document.getElementById('activeChart');
                                 if (activeCanvas) {
                                     const ctx2_a = activeCanvas.getContext('2d');
+                                    const hours = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
                                     
-                                    graphs(ctx2_a, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], count_cmpl_quiz, 'Дати затрату часу', 'Графік активності');   
+                                    graphs(ctx2_a, hours, count_cmpl_quiz, 'Дати затрату часу', 'Графік активності');   
                                 }
                                 const accuracyChartWeek = document.getElementById('accuracyChartWeek')
                                 if (accuracyChartWeek) {

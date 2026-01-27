@@ -24,6 +24,11 @@ body {
     height: 38vh;
 }
 
+.accuracy-message{
+    margin-top: 5vh;
+    font-size: 3.5vh;
+}
+
 /* Графік */
 .graph-section {
     flex: 2.5;

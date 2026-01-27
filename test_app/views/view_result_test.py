@@ -15,7 +15,7 @@ def render_test_result():
     user_answers_list = []
     str_user_answers = ""
     
-    test_id = flask.request.args.get("test_id")
+    test_id = int(flask.request.args.get("test_id").strip())
 
     test = Test.query.filter_by(id= test_id).first()
     quizzes_list = Quiz.query.filter_by(test_id= test_id).all()
@@ -62,7 +62,7 @@ def render_test_result():
                 accuracy=count_correct_answers/len(quizzes_list) * 100 // 1,
                 date_complete=datetime.date.today(),
                 time_complete=datetime.datetime.now().strftime("%H:%M:%S"),
-                task_test_id=task_test_id or 0, 
+                task_test_id=task_test_id, 
                 test_id=test_id,
                 class_id=class_id,
                 user_id=current_user.id,
