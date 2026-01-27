@@ -7,6 +7,9 @@ from ..send_email import send_code
 
 from Project.render_page import render_page
 
+from utils.check_email import check_email
+from utils.check_password import check_password
+
 @render_page(template_name= 'sign_up.html')
 def render_sign_up(): 
     form = RegisterForm()
@@ -19,6 +22,15 @@ def render_sign_up():
         email= form.email.data
         user_role = True if form.is_teacher.data == 'True' else False
 
+
+        email_valid = check_email(email)
+        if email_valid == False:
+            return {"form": form, "message": "Email is not valid"}
+        
+        password_valid = check_password(password)
+        if password_valid == False:
+            return {"form": form, "message": "Password is not valid"}
+        
         if password != password_confirmation:
             print("1")
             return {"form": form, "message": "Not same password"}
