@@ -317,7 +317,7 @@ main {
 
 .messages .other-msg {
     width: fit-content;
-    align-self: flex-start;
+    align-self: flex-end;
     font-size: 2.3vh;
     color: #2e2e2e;
 }

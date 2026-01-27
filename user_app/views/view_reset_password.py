@@ -1,6 +1,5 @@
 import flask
-from flask_login import current_user, login_user
-from werkzeug.security import generate_password_hash
+from flask_login import login_user
 from ..models import User, UnconfirmedUser
 
 from Project.csrf_token_manage import EmailCodeConfirmForm
@@ -31,6 +30,7 @@ def render_reset_app():
 @render_page(template_name='confirm_password.html')
 def render_confirm_account():
     form = EmailCodeConfirmForm()
+
     if form.validate_on_submit():
         sign_up_email= flask.session.get("sign_up_email", " ")
         code = int(form.code.data)
@@ -39,24 +39,22 @@ def render_confirm_account():
         
         if ucconfirmed_user and code == int(ucconfirmed_user.code):
             user = User(
-                username = ucconfirmed_user.username,
-                email = ucconfirmed_user.email,
-                password = generate_password_hash(ucconfirmed_user.password),
-                is_teacher = ucconfirmed_user.is_teacher
+                username=ucconfirmed_user.username,
+                email=ucconfirmed_user.email,
+                password=ucconfirmed_user.password,
+                is_teacher=ucconfirmed_user.is_teacher
             )   
 
             db.session.add(user)
             db.session.delete(ucconfirmed_user)
             db.session.commit()
             login_user(user)
+
             return flask.redirect(location = '/')
         else: 
             return {"form": form, "message": "Невірний код"}
     
-    if not current_user.is_authenticated:
-        return { }
-    else:
-        return flask.redirect('/')
+    return {"form": form}
 
 
 

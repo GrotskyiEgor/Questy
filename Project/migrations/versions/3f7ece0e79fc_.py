@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 88e27f62f831
+Revision ID: 3f7ece0e79fc
 Revises: 
-Create Date: 2026-01-04 18:10:07.465061
+Create Date: 2026-01-27 03:30:53.524308
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '88e27f62f831'
+revision = '3f7ece0e79fc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -71,7 +71,7 @@ def upgrade():
     sa.Column('class_color2', sa.String(length=100), nullable=True),
     sa.Column('max_user_count', sa.Integer(), nullable=True),
     sa.Column('teacher_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['teacher_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['teacher_id'], ['user.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('quiz',
@@ -83,7 +83,7 @@ def upgrade():
     sa.Column('correct_answer', sa.String(length=100), nullable=True),
     sa.Column('time', sa.Integer(), nullable=True),
     sa.Column('test_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['test_id'], ['test.id'], ),
+    sa.ForeignKeyConstraint(['test_id'], ['test.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('class_user',
@@ -102,8 +102,8 @@ def upgrade():
     sa.Column('class_id', sa.Integer(), nullable=True),
     sa.Column('test_id', sa.Integer(), nullable=True),
     sa.Column('image', sa.Boolean(), nullable=True),
-    sa.ForeignKeyConstraint(['class_id'], ['classes.id'], ),
-    sa.ForeignKeyConstraint(['test_id'], ['test.id'], ),
+    sa.ForeignKeyConstraint(['class_id'], ['classes.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['test_id'], ['test.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('score',
@@ -120,10 +120,10 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('user_name', sa.String(), nullable=False),
     sa.Column('test_code', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['class_id'], ['classes.id'], ),
-    sa.ForeignKeyConstraint(['task_test_id'], ['task.id'], ),
-    sa.ForeignKeyConstraint(['test_id'], ['test.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['class_id'], ['classes.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['task_test_id'], ['task.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['test_id'], ['test.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

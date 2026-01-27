@@ -50,12 +50,8 @@ def created_test(test_id):
 
 def delete_test(test_id):
     test = Test.query.filter_by(id=test_id).first()
-    task_list = Task.query.filter_by(test_id=test_id).all()
 
-    if current_user.username ==  test.author_name:
-        for task in task_list:
-            db.session.delete(task)
-        
+    if current_user.username == test.author_name:
         db.session.delete(test) 
         db.session.commit()
 

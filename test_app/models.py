@@ -38,7 +38,7 @@ class Quiz(db.Model):
     correct_answer = db.Column(db.String(100), nullable= True)
     time= db.Column(db.Integer, nullable= True)
     
-    test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
+    test_id = db.Column(db.Integer, db.ForeignKey('test.id', ondelete="CASCADE"))
 
 
     def dict(self):

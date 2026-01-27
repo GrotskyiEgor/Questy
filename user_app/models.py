@@ -67,7 +67,7 @@ class Classes(db.Model):
     class_color2 = db.Column(db.String(100), nullable=True)
 
     max_user_count = db.Column(db.Integer, nullable=True)
-    teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    teacher_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="SET NULL"))
     teacher = db.relationship("User", backref="classes_created")
     
     tasks = db.relationship('Task', backref='classes', cascade="all, delete-orphan")
@@ -93,15 +93,15 @@ class Score(db.Model):
     user_timers = db.Column(db.String)
     user_tokens = db.Column(db.String)
     accuracy = db.Column(db.Integer, nullable=False)
-    test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
+    test_id = db.Column(db.Integer, db.ForeignKey('test.id', ondelete="SET NULL"))
 
     date_complete = db.Column(db.String, nullable=False)
     time_complete = db.Column(db.String, nullable=False)
 
-    task_test_id = db.Column(db.Integer, db.ForeignKey("task.id"))
-    class_id = db.Column(db.Integer, db.ForeignKey("classes.id"))
+    task_test_id = db.Column(db.Integer, db.ForeignKey("task.id", ondelete="SET NULL"))
+    class_id = db.Column(db.Integer, db.ForeignKey("classes.id", ondelete="SET NULL"))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     user_name = db.Column(db.String, nullable=False)
 
     test_code = db.Column(db.Integer, nullable=True)
@@ -132,8 +132,8 @@ class Task(db.Model):
 
     online = db.Column(db.Boolean, nullable=True)
 
-    class_id = db.Column(db.Integer, db.ForeignKey("classes.id"))
-    test_id = db.Column(db.Integer, db.ForeignKey("test.id"), nullable=True)
+    class_id = db.Column(db.Integer, db.ForeignKey("classes.id", ondelete="CASCADE"))
+    test_id = db.Column(db.Integer, db.ForeignKey("test.id", ondelete="CASCADE"), nullable=True)
     image = db.Column(db.Boolean, default=False)
 
     test = db.relationship("Test", backref="tasks")
