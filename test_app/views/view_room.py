@@ -163,8 +163,6 @@ def room_get_result(room, author_name):
             "accuracy": SCORE_LIST[0].accuracy,
         }
 
-    # print("room_get_result_data, best_score_data, averega_score")
-    # print(room_get_result_data, best_score_data, averega_score)
     return room_get_result_data, best_score_data, averega_score
 
 
@@ -361,7 +359,6 @@ def handle_user_answers(data):
         test_code=room
     )
 
-    # print(data["user_answers"], "\n", data["user_timers"], "\n", new_token_list, "\n", accuracy, "\n", TEST.id, "\n", USER.id, "\n", user_name, "\n", room)
     if USER:
         if USER.tokens:
             USER.tokens = int(USER.tokens) + tokens
@@ -369,7 +366,15 @@ def handle_user_answers(data):
             USER.tokens = tokens
 
     db.session.add(SCORE)
-    db.session.commit()
+    db.session.commit() 
+
+    author_sid = get_sid(TEST.author_name)
+    if author_sid:
+        room_get_result_data, best_score_data, averega_score = room_get_result(room, TEST.author_name)
+
+        user_result = room_get_result_data.get(user_name)
+        if user_result:      
+            emit("author_receive_new_result", {"username": user_name, "user_result": user_result}, room=author_sid)
 
 
 @Project.settings.socketio.on('user_answer')
@@ -468,11 +473,14 @@ def handle_end_test(data):
 @Project.settings.socketio.on('room_get_result')
 def handle_room_get_result(data):
     user_sid = get_sid(data["username"])
+
     room_get_result_data, best_score_data, averega_score = room_get_result(data["room"], data["author_name"])
    
-    emit("room_get_result_data", {"room_get_result_data": room_get_result_data,
-                                  "best_score_data": best_score_data,
-                                  "averega_score": averega_score}, to= user_sid)
+    emit("room_get_result_data", {
+        "room_get_result_data": room_get_result_data,
+        "best_score_data": best_score_data,
+        "averega_score": averega_score
+    }, to= user_sid)
 
 
 @Project.settings.socketio.on('plus_time')

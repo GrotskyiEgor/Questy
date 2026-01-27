@@ -4,12 +4,15 @@ from werkzeug.security import generate_password_hash
 from ..models import User
 from Project.database import db
 from Project.render_page import render_page
+from Project.csrf_token_manage import ChangePasswordForm
 
 @render_page(template_name='new_password.html')
 def render_new_password():
-    if request.method == "POST":
-        new_password = request.form['new_pas']
-        conf_password = request.form['new_pas_conf']
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        new_password = form.new_password.data
+        conf_password = form.confirm_password.data
 
         email = session.get("email", " ")
 
@@ -20,4 +23,4 @@ def render_new_password():
                 
                 return redirect(location='/../login')
     
-    return { }
+    return {"form": form}

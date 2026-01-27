@@ -36,12 +36,10 @@ main {
     margin-bottom: 0vh; 
 }
  
-
 .title-section h2{
     font-weight: 80vw;
  }
  
-
 .title{
     color: black;
     font-size: 7vh;
@@ -58,16 +56,6 @@ main {
     margin-bottom: 5.4vh;
     line-height: 0.4vh;
 }
-
-/* .par-1{
-    color: #484d54ce;
-    font-size: 16px;
-    font-weight: 400;
-    text-transform: capitalize;
-    margin-bottom: 15px;
-    line-height: 1.5;
-} */
-
 
 .input-group{
     position: relative;

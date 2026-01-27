@@ -22,48 +22,48 @@ main {
 }
 
 .container{
-    width: 485px;
+    width: 65vw;
+    height: 65vh;
     background-color: rgba(255, 255, 255, 1);
-    padding: 30px;
-    border-radius: 14px;
-    background-color: rgba(0, 0, 0, 0.8) 0px 4px 12px;
+    padding: 8vh;
+    border-radius: 3.8vh;
+    background-color: rgba(0, 0, 0, 0.8) 0vh 1vh 32vh;
 }
 
 .title-section{
-   margin-bottom: 30px; 
+   margin-bottom: 8vh; 
 }
 
 .title-section-1{
-    margin-bottom: 0px; 
+    margin-bottom: 0vh; 
 }
  
 
 .title-section h2{
-    font-weight: 600;
- }
+    font-weight: 80vw;
+}
  
-
 .title{
     color: black;
-    font-size: 25px;
-    font-weight: 500;
-    margin-bottom: 10px;
+    font-size: 7vh;
+    font-weight: 67.5vh;
+    text-transform: capitalize;
+    margin-bottom: 2.7vh;
 }
 
 .par{
     color: #484d54ce;
-    font-size: 16px;
-    font-weight: 400;
-    margin-bottom: 20px;
-    line-height: 1.5;
+    font-size: 4.3vh;
+    font-weight: 54vw;
+    margin-bottom: 5.4vh;
+    line-height: 0.4vh;
 }
 
 .par-1{
     color: #484d54ce;
-    font-size: 16px;
-    font-weight: 400;
-    margin-bottom: 15px;
-    line-height: 1.5;
+    font-size: 4.3vh;
+    font-weight: 54vw;
+    margin-bottom: 5vh;
 }
 
 .input-group{
@@ -72,42 +72,43 @@ main {
 
 .input-group .label-title{
     color: #38475a;
-    margin-bottom: 11px;
-    font-size: 14px;
+    text-transform: capitalize;
+    margin-bottom: 3vh;
+    font-size: 3.8vh;
     display: block;
-    font-weight: 500;
+    font-weight: 67.5vw;
 }
 
 .input-email{
     width: 100%;
     background-color: none;
     color: #38475a;
-    font-size: 16px;
-    font-weight: 300;
-    border: 1px solid #EAECF0;
-    padding: 9px 18px 9px 52px;
+    font-size: 4.3vh;
+    font-weight: 40.5vw;
+    border: 0.27vh solid #EAECF0;
+    padding: 2.4vh 4.8vh 2.4vh 1vw;
     outline: none;
-    border-radius: 8px;
-    margin-bottom: 17px;
+    border-radius: 2.1vh;
+    margin-bottom: 4.5vh;
 }
 
 .input-name{
     width: 100%;
     background-color: none;
     color: #38475a;
-    font-size: 16px;
-    font-weight: 300;
-    border: 1px solid #EAECF0;
-    padding: 9px;
+    font-size: 4.3vh;
+    font-weight: 40.5vw;
+    border: 0.27vh solid #EAECF0;
+    padding: 2.4vh;
     outline: none;
-    border-radius: 8px;
-    margin-bottom: 17px;
+    border-radius: 2.1vh;
+    margin-bottom: 4.5vh;
 }
 
 .input-group input::placeholder{
     color: #484d54ce;
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 4.3vh;
+    font-weight: 54vw;
 }
 
 .input-group input::placeholder::before{
@@ -119,21 +120,22 @@ main {
     position: absolute;
     align-items: center;
     color: #38475a;
-    left: 13px;
-    top: calc(50% - 12px);
+    left: 3.5vh;
+    top: calc(50% - 3.2vh);
     text-align: center;
     font-size: 23px;
 }
 
 .submit-btn{
     width: 100%;
+    height: 9vh;
     background-color: rgb(29, 36, 27);
-    border: 1px solid transparent;
+    border: 0.27vh solid transparent;
     color: #fff;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 13px 24px ;
-    border-radius: 8px;
+    font-size: 4.3vh;
+    font-weight: 67.5wh;
+    padding: 3.5vh 6,4vh ;
+    border-radius: 2.1vh;
     cursor: pointer;
     text-align: center;
     text-transform: capitalize;

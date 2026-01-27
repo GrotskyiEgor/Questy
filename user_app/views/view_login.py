@@ -4,7 +4,7 @@ from flask_login import login_user, current_user
 
 from ..models import User
 from Project.render_page import render_page
-from Project.token_manage import LoginForm
+from Project.csrf_token_manage import LoginForm
 
 
 @render_page(template_name='login.html')

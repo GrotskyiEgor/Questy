@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="radio-button-box">
-                        <label for="'online-test'">Онлайн тест</label>               
+                        <label for="online-test">Онлайн тест</label>               
                         <input type="checkbox" id="online-test" name="online-test">
                     </div>
 
@@ -55,14 +55,14 @@
                         <p class="no-test-for-task">Немає тестів для завдання, перед додаванням створіть тест</p>
                     {% endif %}
                     
-                    <button type="submit" class="submit-button">Створити завдання</button>
+                    {% if test_list %}
+                        <button type="submit" class="submit-button">Створити завдання</button>
+                    {% else %}
+                        <a href="/quizzes" class="quizzes-a">
+                            <button type="button" class="quizzes-button">Створити тест</button>
+                        </a>
+                    {% endif %}
                 </form>
-
-                <!-- {% if not test_list %}
-                    <a href="/quizzes">
-                        <button class="submit-button">Створити тест</button>
-                    </a>
-                {% endif %} -->
             </section>
         </div> 
     </div>

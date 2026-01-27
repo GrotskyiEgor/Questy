@@ -19,15 +19,13 @@ function renderResultTest(username, totalQuestion, quizList, anwersList, testId)
     let correctAnswer = 0;
 
     for (let count = 0; count < quizList.length; count++) {
-        let arrayCorrectAnswers= []
-        let arrayUserAnswers= []
+        let arrayCorrectAnswers = []
+        let arrayUserAnswers = []
         
-        console.log(quizList[count].correct_answer, answersArrey[count], quizList[count].correct_answer === answersArrey[count])
         if (quizList[count].question_type === "multiple_choice"){
-            arrayCorrectAnswers= quizList[count].correct_answer.split("%$№")
-            arrayUserAnswers= answersArrey[count].split("$$$")
+            arrayCorrectAnswers = quizList[count].correct_answer.split("%$№")
+            arrayUserAnswers = answersArrey[count].split("$$$")
             let correctAnswerAccept= true
-            console.log(arrayCorrectAnswers.length === arrayUserAnswers.length, arrayCorrectAnswers, arrayUserAnswers)
 
             if (arrayCorrectAnswers.length === arrayUserAnswers.length){
                 arrayCorrectAnswers.sort();
@@ -40,18 +38,16 @@ function renderResultTest(username, totalQuestion, quizList, anwersList, testId)
                 }
             }
             else{
-                correctAnswerAccept= false;
+                correctAnswerAccept = false;
             }
 
             if (correctAnswerAccept){
                 correctAnswer++;
-                console.log("correctAnswer++;")
             }
         }
         else {
             if (quizList[count].correct_answer === answersArrey[count]) {     
                 correctAnswer++;
-                console.log("correctAnswer++;")
             }
         }
     }
@@ -297,7 +293,7 @@ function renderResultTest(username, totalQuestion, quizList, anwersList, testId)
     }, 100); 
 
 
-    socket.once('room_get_result_data', function(data) {  
+    socket.on('room_get_result_data', function(data) {  
         const resultData= data.room_get_result_data
         const best_score_data= data.best_score_data
         const averega_score= data.averega_score

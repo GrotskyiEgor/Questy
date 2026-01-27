@@ -3,7 +3,6 @@
     --primary-color1: #283928c1;
     --accent-color: #475744;
     --border-color: #ccc;
-    --font-family: 'Roboto', sans-serif;
 }
 
 .wraper{
@@ -19,35 +18,25 @@
 }
 
 h1, h3{
-    color: var(--primary-color1);
+    font-size: 4vh;
     text-align: center;
-}
-
-footer {
-    display: none;
-}
-
-.container{
-    display: flex;
-    flex-direction: column;
-    min-width: 500px;
+    color: var(--primary-color1);
 }
   
 .create-test-page {
-    width: fit-content;
-    min-width: 480px;
-    height: auto;
-    margin: 15px auto;
-    padding: 24px;
+    width: 45vw;
+    min-width: fit-content;
+    margin: 1.5vh auto;
+    padding: 2.9vh;
 
     background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-radius: 1.2vh;
+    box-shadow: 0 0.4vh 1.2vh rgba(0,0,0,0.05);
 }
   
 .page-title {
-    font-size: 24px;
-    margin-bottom: 24px;
+    font-size: 3.5vh;
+    margin-bottom: 2.4vh;
     color: var(--primary-color);
     text-align: center;
 }
@@ -55,7 +44,7 @@ footer {
 .test-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 2.1vh;
 }
 
 .form-group {
@@ -65,16 +54,17 @@ footer {
 
 .form-group label {
     font-weight: 500;
-    margin-bottom: 6px;
+    font-size: 3vh;
+    margin-bottom: 0.6vh;
     color: var(--primary-color);
 }
 
 .form-group input,
-.form-group textarea, input[type="file" i] {
-    padding: 10px 14px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 16px;
+.form-group textarea {
+    padding: 1vh 1.4vh;
+    border: 0.1vh solid var(--border-color);
+    border-radius: 0.6vh;
+    font-size: 2.7vh;
     transition:  0.3s ease;
 }
 
@@ -84,24 +74,32 @@ footer {
     outline: none;
 }
 
-.form-row {
-  display: flex;
-  gap: 16px;
-    flex-wrap: wrap;
+.quizzes-a{
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    background-color: var(--primary-color);
+    padding: 1.2vh 2vh;
+    transition: background-color 0.3s ease;
 }
 
-.form-row .form-group {
-    flex: 1;
-    min-width: 200px;
+.quizzes-button{
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 3.1vh;
+    border: none;
+    border-radius: 0.6vh;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .submit-button {
     background-color: var(--primary-color);
     color: white;
-    padding: 12px 20px;
-    font-size: 16px;
+    padding: 1.2vh 2vh;
+    font-size: 3.1vh;
     border: none;
-    border-radius: 6px;
+    border-radius: 0.6vh;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -110,17 +108,11 @@ footer {
     background-color: var(--accent-color);
 }
 
-.load-img{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
 .no-test-for-task{
+    font-size: 1.8vh;
     color: #777;
     font-style: italic;
     text-align: center;
-    /* font-size: 14px; */
 }
 
 /* radio button */
@@ -129,24 +121,24 @@ footer {
     align-items: center;
     justify-content: space-between;
     background: rgba(255, 255, 255, 0.6);
-    padding: 12px 16px;
-    border-radius: 8px;
-    /* margin: 12px 0; */
-    font-size: 16px;
+    padding: 1.2vh 2vh;
+    border-radius: 0.6vh;
+    font-size: 3.1vh;
     color: var(--dark_grey);
-    border: 1px solid var(--border-color);
+    border: 0.2vh solid var(--border-color);
 }
 
 .radio-button-box label {
+  font-size: 2.7vh;
   font-weight: 500;
 }
 
 .radio-button-box input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 48px;
-    height: 26px;
-    border-radius: 20px;
+    width: 2.6vw;
+    height: 2.7vh;
+    border-radius: 1.5vh;
     background: #ccc;
     position: relative;
     outline: none;
@@ -157,11 +149,11 @@ footer {
 .radio-button-box input[type="checkbox"]::before {
     content: "";
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 2vh;
+    height: 2vh;
     border-radius: 50%;
-    top: 3px;
-    left: 3px;
+    top: 0.4vh;
+    left: 0.4vh;
     background: white;
     transition: transform 0.3s ease;
 }
@@ -171,7 +163,7 @@ footer {
 }
 
 .radio-button-box input[type="checkbox"]:checked::before {
-    transform: translateX(22px);
+    transform: translateX(2.2vh);
 }
 
 /* color picker */
@@ -181,55 +173,51 @@ footer {
     -moz-appearance: none;
 
     width: 100%;
-    padding: 12px 16px;
-    border: 1px solid var(--border-color, #a5d6a7);
-    border-radius: 8px;
-    font-size: 16px;
+    padding: 1.2vh 2vh;
+    border: 0.2vh solid var(--border-color, #a5d6a7);
+    border-radius: 0.6vh;
+    font-size: 2.2vh;
     font-family: "Segoe UI", Arial, sans-serif;
-    background: #ffffff url("data:image/svg+xml;utf8,<svg fill='%232e7d32' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 12px center;
-    background-size: 20px;
+    background: #ffffff url("data:image/svg+xml;utf8,<svg fill='%232e7d32' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 0.5vh center;
+    background-size: 2vw;
     color: #1f5621;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 0.2vh 0.6vh rgba(0,0,0,0.05);
 }
 
 .select-test:hover {
     border-color: #43a047;
-    box-shadow: 0 4px 10px rgba(67,160,71,0.15);
+    box-shadow: 0 0.6vh 1.4vh rgba(67,160,71,0.15);
 }
 
 .select-test:focus {
     outline: none;
-    /* border-color: #2e7d32; */
-    box-shadow: 0 0 0 3px rgba(76,175,80,0.3);
+    box-shadow: 0 0 0 0.6vh rgba(76,175,80,0.3);
 }
 
 .select-test option {
-    padding: 12px;
-    font-size: 15px;
+    padding: 1.2vh;
+    font-size: 2.2vh;
     background: #ffffff;
     color: #2e2e2e;
 }
 
-
 /*  */
 .home-circle-btn {
     position: fixed;
-    bottom: 1vw;
-    right: 1vw;
+    bottom: 2vh;
+    right: 2vh;
 
-    width: 4vw;
-    height: 4vw;
-    min-width: 56px;
-    min-height: 56px;
+    width: 8vh;
+    height: 8vh;
     border-radius: 50%;
     border: none;
 
     background: #2e7d32;
     color: #fff;
-    font-size: 22px;
+    font-size: 3.4vh;
     font-weight: bold;
 
     cursor: pointer;
@@ -237,17 +225,17 @@ footer {
     justify-content: center;
     align-items: center;
 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0.4vh 1vh rgba(0, 0, 0, 0.25);
     transition: all 0.3s ease;
     z-index: 1000;
 }
 
 .home-circle-btn:hover {
     background: #388e3c;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.6vh 1.4vh rgba(0, 0, 0, 0.3);
 }
 
 .home-circle-btn:active {
     transform: scale(0.95);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0.2vh 0.6vh rgba(0, 0, 0, 0.2);
 }

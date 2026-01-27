@@ -4,10 +4,12 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, RadioField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     password = StringField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
 
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3)])
@@ -25,6 +27,7 @@ class RegisterForm(FlaskForm):
     )
     submit = SubmitField('Register')
 
+
 class ChangePasswordForm(FlaskForm):
     new_password = PasswordField('New password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField(
@@ -33,6 +36,7 @@ class ChangePasswordForm(FlaskForm):
     )
     submit = SubmitField('Change password')
 
+
 class EmailCodeConfirmForm(FlaskForm):
     code = StringField(
         'Confirmation code',
@@ -40,17 +44,11 @@ class EmailCodeConfirmForm(FlaskForm):
     )
     submit = SubmitField('Confirm')
 
+
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Send code')
 
-class ResetPasswordForm(FlaskForm):
-    new_password = PasswordField('New password', validators=[DataRequired(), Length(min=6)])
-    confirm_password = PasswordField(
-        'Confirm password',
-        validators=[DataRequired(), EqualTo('new_password')]
-    )
-    submit = SubmitField('Reset password')
 
 class ChangeUsernameForm(FlaskForm):
     username= StringField(
@@ -58,6 +56,3 @@ class ChangeUsernameForm(FlaskForm):
         validators= [DataRequired(), Length(min=3)]
     )
     submit = SubmitField('Пiдтвердити')
-
-class DeleteClassForm(FlaskForm):
-    pass

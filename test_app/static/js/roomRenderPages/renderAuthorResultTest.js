@@ -4,6 +4,7 @@ let selectBlock= true
 
 function appendResultRow(resultTable, username, answersArray, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion) {
     const resultRow = document.createElement('div');
+
     resultRow.className = 'results-row';
     resultRow.id= `row_${username}`
 
@@ -59,6 +60,16 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
 }
 
 function renderAuthorResultTest(username, authorName, totalQuestion) {
+    let userCount = 0;
+    let userArray = [];
+    let resultData = {};
+
+    let accuracyAquestionsArray = [];
+    let accurancyArray = [];
+    let resultTable = null;
+    let tableReady = false;
+    let pendingResults = [];
+
     let container = document.getElementById("container-question");
     
     if (container === null){
@@ -68,19 +79,20 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
     container.innerHTML= "";
     container.className= 'wrapper-author-results-container';
 
-    setTimeout(function() {
-        socket.emit("room_get_result", {
-            room: room,
-            username: username,
-            author_name: authorName
-        });
-    }, 100); 
+    socket.emit("room_get_result", {
+        room: room,
+        username: username,
+        author_name: authorName
+    });
     
-    socket.once("room_get_result_data", function(data) {  
-        const resultData= data.room_get_result_data
-        const best_score_data= data.best_score_data
-        const averega_score= data.averega_score
-        const {accuracyAquestionsArray, accurancyArray}= questionAccuracy(resultData, totalQuestion)
+    socket.on("room_get_result_data", function(data) {  
+        resultData = data.room_get_result_data;
+        const best_score_data = data.best_score_data;
+        const averega_score = data.averega_score;
+
+        let accuracy= questionAccuracy(resultData, totalQuestion)
+        accuracyAquestionsArray = accuracy.accuracyAquestionsArray
+        accurancyArray = accuracy.accurancyArray
 
         const header = document.createElement('div');
         header.className = 'results-header-block';
@@ -136,7 +148,6 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         exelButton.addEventListener("click", () => excelTable(username, authorName, resultData, best_score_data));
 
         leftButtonBox.appendChild(allInfoButton)
-        // rigthButtonBox.appendChild(exelButton)
         rigthButtonBox.appendChild(leaveButton)
         buttonBox.appendChild(leftButtonBox)
         buttonBox.appendChild(rigthButtonBox)
@@ -205,7 +216,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         resultsInfoBox.appendChild(resultsInfoBoxText);
         // baseInfo.appendChild(resultsInfoBox);
 
-        const resultTable = document.createElement('div');
+        resultTable = document.createElement('div');
         resultTable.className = 'results-table';
 
         resultTable.style.setProperty(
@@ -236,7 +247,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         resultTable.appendChild(resultHeader);
         
         for (const username in resultData) {
-            answersArray = resultData[username].correct_answers_list; 
+            const answersArray = resultData[username].correct_answers_list; 
             appendResultRow(resultTable, username, answersArray, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
         }  
         
@@ -260,7 +271,6 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         baseInfo.appendChild(resultsInfoBox)
         infoBox.appendChild(baseInfo)
         infoBox.appendChild(exelButton)
-        // infoBox.appendChild(resultTable);
 
         contentBox.appendChild(infoBox)
         container.appendChild(contentBox)
@@ -273,16 +283,44 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         tableTitle.appendChild(userTitle);
         container.appendChild(tableTitle);
+        container.appendChild(resultTable);
 
-        container.appendChild(resultTable)
-        
+        tableReady = true;
+
+        pendingResults.forEach(({username, result}) => {
+            if (document.getElementById(`row_${username}`)) return;
+
+            resultData[username] = result;
+            appendResultRow(resultTable, username, result.correct_answers_list, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
+        });
+
         renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
 
         document.getElementById('choice').addEventListener('change', function() {
             if (selectBlock){
                 renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
             }
-        })
+        });
+    });
+
+    socket.on("author_receive_new_result", function(data) {  
+        const username = data.username;
+        const result = data.user_result;
+
+        if (!tableReady || !resultTable){
+            pendingResults.push({username, result});
+            return;
+        };
+
+        if (document.getElementById(`row_${data.username}`)) return;
+
+        userCount++;
+        userArray.push(data.username);
+        console.log("User", userCount, userArray);
+
+        resultData[username] = result;
+
+        appendResultRow(resultTable, username, result.correct_answers_list, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
     });
 }
 

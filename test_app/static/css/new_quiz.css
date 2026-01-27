@@ -2,6 +2,7 @@
 header, .navbar,footer {
     display: none;
 }
+
 :root {
     --primary-color: #283928;
     --primary-color1: #283928c1;
@@ -82,27 +83,27 @@ h1, h3{
     transition:  0.3s ease;
 }
 
-.form-group textarea {
-    resize: vertical;
-    min-height: 10vh;
-    max-height: 30vh;
-}
-
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--accent-color);
     outline: none;
 }
 
+.form-group textarea {
+    resize: vertical;
+    min-height: 10vh;
+    max-height: 30vh;
+}
+
 .form-row {
   display: flex;
   gap: 1.6vh;
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .form-row .form-group {
-    flex: 1;
-    min-width: 20vh;
+  flex: 1;
+  min-width: 20vh;
 }
 
 .submit-button {
@@ -121,7 +122,6 @@ h1, h3{
 }
 
 /*  */
-
 .home-circle-btn {
     position: fixed;
     bottom: 2vh;

@@ -3,7 +3,7 @@ from flask_login import current_user, login_user
 from werkzeug.security import generate_password_hash
 from ..models import User, UnconfirmedUser
 
-from Project.token_manage import EmailCodeConfirmForm
+from Project.csrf_token_manage import EmailCodeConfirmForm
 
 from Project.render_page import render_page
 from Project.database import db

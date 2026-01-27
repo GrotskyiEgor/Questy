@@ -2,17 +2,19 @@ import random
 from flask import request, session, redirect
 
 from Project.settings import project
+from Project.csrf_token_manage import ResetPasswordRequestForm
 from ..send_email import send_code
-
 from Project.render_page import render_page
+
 
 @render_page(template_name='send_email.html')
 def render_send_email():
+    form = ResetPasswordRequestForm()
 
-    if request.method == 'POST':
-
-        email = request.form['email'] 
+    if form.validate_on_submit():
+        email = form.email.data 
         code = random.randint(100000, 999999)
+
         session["password_code"] = code
         session["email"] = email
 
@@ -21,4 +23,4 @@ def render_send_email():
         
         return redirect(location='/../reset_password')
     
-    return { }
+    return {"form": form}

@@ -4,7 +4,6 @@ import random
 from flask_login import current_user
 from datetime import date
 
-from Project.token_manage import DeleteClassForm
 from Project.render_page import render_page
 from user_app.models import Classes, User, Task
 from Project.database import db
