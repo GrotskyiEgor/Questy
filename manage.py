@@ -3,7 +3,7 @@ import Project
 
 def main():
     try:
-        # Project.load_env()
+        Project.load_env()
         Project.settings.socketio.run(
             Project.project, 
             host='localhost', 

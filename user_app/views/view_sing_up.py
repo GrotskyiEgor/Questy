@@ -9,7 +9,6 @@ from Project.settings import project
 from Project.render_page import render_page
 from Project.csrf_token_manage import RegisterForm
 
-
 @render_page(template_name='sign_up.html')
 def render_sign_up(): 
     form = RegisterForm()
