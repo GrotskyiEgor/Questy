@@ -8,6 +8,23 @@ function tokenTimePrecent(userTimer, allTime){
     return token
 }
 
+function showResult(type) {
+    const resultLine = document.querySelector(".result-line")
+    const resultText = document.querySelector(".result-line-text")
+
+    if (type){
+        resultText.textContent = "Правильно ";
+        resultText.style.color = "var(--green-main)"
+    } else {
+        resultText.textContent = "Неправильно";
+        resultText.style.color = "var(--red-text)"
+    }
+
+    setTimeout(() => {
+        resultLine.classList.add("show");
+    }, 50)
+}
+
 function renderWaitQuestion(type) {
     const roomContent = document.getElementById("room-content");
 
@@ -26,6 +43,7 @@ function renderWaitQuestion(type) {
         textWaitQuestion= 'Тест завершено, ваш результат не буде зараховано'
         leaveButton= `<button class='leave-test' onclick="userLeaveTest()">Відключитися від тесту</button>`
     }
+    
     roomContent.innerHTML = `
         <div class="blur-overlay">
             <div class="wait-content">
@@ -39,11 +57,12 @@ function renderWaitQuestion(type) {
 }
 
 function renderQuestion(testId, quiz, answers, room, author_name) {
-    let state= getCookie("state")
-    let quizTime= getCookie("time");
-    let userTimer= 0
-    let curTime= 0
-    let token= 0
+    const delay = 2250
+    let state = getCookie("state")
+    let quizTime = getCookie("time");
+    let userTimer = 0
+    let curTime = 0
+    let token = 0
     const roomContent= document.getElementById("room-content");
 
     if (isNaN(quizTime) || quizTime < 0){
@@ -51,29 +70,30 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
     }
 
     if (roomContent != null) {
-        roomContent.className= "question-content";
-        roomContent.innerHTML= ""; 
+        roomContent.className = "question-content";
+        roomContent.innerHTML = ""; 
     };
 
-    const questionBlock= document.createElement("div");
-    questionBlock.className= "question";
+    const questionBlock = document.createElement("div");
+    questionBlock.className = "question";
 
-    const question= document.createElement("p");
-    question.textContent= quiz.question_text;
+    const question = document.createElement("p");
+    question.textContent = quiz.question_text;
     questionBlock.appendChild(question);
 
     const timer = document.createElement("p");
-    timer.id= "timer"
-    timer.textContent= quizTime;
+    timer.id = "timer"
+    timer.textContent = quizTime;
     questionBlock.appendChild(timer);
  
-    const answersDiv= document.createElement("div");
+    const answersDiv = document.createElement("div");
+    let answerDivColumns = answers.length % 2 === 0 ? "two-columns" : "one-column"
     
     if (quiz.question_type === "input"){
-        answersDiv.className= "answers-input";
+        answersDiv.className = "answers-input";
     }
     else{
-        answersDiv.className= "answers";
+        answersDiv.className = `answers ${answerDivColumns}`;
     }
 
     if (quiz.question_type === "choice" || quiz.question_type === "image"){
@@ -113,9 +133,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
 
         for (let count = 0; count < buttonsArrey.length; count++ ) {
             let button= buttonsArrey[count];
-            button.addEventListener(
-                type= "click" ,
-                listener= function (event) {
+            button.addEventListener("click", function (event) {
                     let cookie= getCookie("userAnswers")
                     let userTimers= getCookie("userTimers")
                     let userTokens= getCookie("userTokens")
@@ -141,14 +159,18 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                         setCookie("userTokens", newUserTokens)
                     }   
 
-                    renderWaitQuestion("test");
-                    
                     socket.emit("user_answer", {
                         room: room,
                         author_name: author_name,
                         username: username,
                         answer: button.id
                     });
+
+                    showResult(quiz.correct_answer === button.id);
+
+                    setTimeout(() => {
+                        renderWaitQuestion("test");               
+                    }, delay)
                 }
             )
         }
@@ -214,8 +236,6 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 setCookie("userTokens", newUserTokens)
                 setCookie("userTimers", newUserTimers)
             }       
-
-            renderWaitQuestion("test");
                     
             socket.emit("user_answer", {
                 room: room,
@@ -223,6 +243,12 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 username: username,
                 answer: answerValue
             });
+
+            showResult(quiz.correct_answer === answerValue);
+
+            setTimeout(() => {
+                renderWaitQuestion("test");               
+            }, delay)
         })
     
     }
@@ -277,26 +303,29 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         }
 
         multipleChoiceButton.addEventListener("click", function(event) {
-            curTime= getCookie("time");
-            let state= getCookie("state")
-            let userAnswer= getCookie("userAnswers")
-            let userTimers= getCookie("userTimers")
-            let userTokens= getCookie("userTokens")                  
-            let answerValue= ""
-            let arreyUserMultipleChoice= document.querySelectorAll(".active-multiple-answer")
-            allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
-            userTimer= allTime- curTime
-            token= tokenTimePrecent(userTimer, allTime)
+            curTime = getCookie("time");
+            let state = getCookie("state")
+            let userAnswer = getCookie("userAnswers")
+            let userTimers = getCookie("userTimers")
+            let userTokens = getCookie("userTokens")                  
+            let answerValue = ""
+            let userAnswerValue = ""
+            let arreyUserMultipleChoice = document.querySelectorAll(".active-multiple-answer")
+            allTime = plusAnswerTime + quizList[Number(state.replace(/\D/g, ""))].time
+            userTimer = allTime- curTime
+            token = tokenTimePrecent(userTimer, allTime)
 
-            newUserTokens= userTokens+ `|${token}`
-            newUserTimers= userTimers+ `|${userTimer}`
+            newUserTokens = userTokens + `|${token}`
+            newUserTimers = userTimers + `|${userTimer}`
 
             for (const button of arreyUserMultipleChoice){
                 if (!answerValue){
                     answerValue += button.id
+                    userAnswerValue += button.id
                 }
                 else{
                     answerValue += "$$$" + button.id
+                    userAnswerValue += "%$№" + button.id
                 }
             }
 
@@ -325,8 +354,6 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 setCookie("userTokens", newUserTokens)
                 setCookie("userTimers", newUserTimers)
             }       
-
-            renderWaitQuestion("test");
                     
             socket.emit("user_answer", {
                 room: room,
@@ -334,8 +361,23 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 username: username,
                 answer: answerValue
             });
+
+            showResult(quiz.correct_answer === userAnswerValue);
+
+            setTimeout(() => {
+                renderWaitQuestion("test");               
+            }, delay)
         })
     }
+
+    const resultLine = document.createElement("div");
+    resultLine.className = "result-line";
+
+    const resultLineText = document.createElement("p");
+    resultLineText.className = "result-line-text";
+
+    resultLine.appendChild(resultLineText)
+    roomContent.appendChild(resultLine)
 
     startTimer()
 }

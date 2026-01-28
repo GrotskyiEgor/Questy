@@ -87,7 +87,7 @@ def render_profile():
             if flask.request.form.get('choice') != None:
                 selected_option[0] = (flask.request.form.get('choice'))
     
-        dates_complete = sorted(set(dates_complete))
+        unique_dates_complete = sorted(set(dates_complete))
 
         if selected_option[0] == 'accuracy_by_date':
 
@@ -146,7 +146,7 @@ def render_profile():
             return {
                 "scores": scores,
                 'list_tests': list_tests,
-                'dates_complete': dates_complete,
+                'dates_complete': unique_dates_complete,
                 "scores_count": scores_count,
                 "tests_count": tests_count,
                 'select_chart': 'd_cmpl',

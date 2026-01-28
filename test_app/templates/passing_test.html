@@ -12,6 +12,7 @@
     <div class="content">
         <div class="question">
             <p>{{  list_quiz[question_number].question_text }}</p>
+            <p>{{list_answers[question_number]}} {{ list_answers[question_number]|length}} {{ list_answers[question_number]|length is odd}}</p>
         </div>
 
         {% if list_quiz[question_number].question_type == "image" %}
@@ -20,7 +21,7 @@
             </div>
         {% endif %}
         
-        <div class="answers">
+        <div class="answers{% if list_answers[question_number]|length is odd %} one-column {% else %} two-columns {% endif %}">
             {% if list_quiz[question_number].question_type == "choice" or list_quiz[question_number].question_type == "image" %}
                 {% if question_number + 1 != list_quiz|length %}
                     {% for answer in list_answers[question_number] %}         
@@ -86,7 +87,15 @@
                 </button>
             {% endif %}
         {% endif %}
+
+        <div class="result-line">
+            <p class="result-line-text"></p>
+        </div>
     </div>
-                
+    
+    <script>
+        const correct_answer_list = {{ correct_answer_list | default([]) | tojson }};
+        const question_number = {{ question_number }}
+    </script>
     <script src="{{ url_for('test_app.static', filename = 'js/passingTest.js') }}"></script>
 {% endblock %}

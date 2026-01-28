@@ -354,7 +354,7 @@ def handle_user_answers(data):
         test_id=TEST.id,
         date_complete=datetime.date.today(),
         time_complete=datetime.datetime.now().strftime("%H:%M:%S"),
-        user_id=USER.id if USER else 0,
+        user_id=USER.id if USER else None,
         user_name=user_name,
         test_code=room
     )

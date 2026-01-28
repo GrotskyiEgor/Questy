@@ -101,7 +101,7 @@ class Score(db.Model):
     task_test_id = db.Column(db.Integer, db.ForeignKey("task.id", ondelete="SET NULL"))
     class_id = db.Column(db.Integer, db.ForeignKey("classes.id", ondelete="SET NULL"))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
     user_name = db.Column(db.String, nullable=False)
 
     test_code = db.Column(db.Integer, nullable=True)

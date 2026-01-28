@@ -8,6 +8,7 @@ from Project.render_page import render_page
 def render_passing_test():
     list_answers = []
     list_quiz = []
+    correct_answer_list = []
 
     test_id = flask.request.args.get("test_id")
     question_number = flask.request.args.get("question_number")
@@ -17,10 +18,13 @@ def render_passing_test():
     for quiz in Quiz.query.filter_by(test_id= test_id).all():
         if quiz.question_type == "choice" or quiz.question_type == "image":
             list_answers.append(quiz.answer_options.split("%$№"))
+            correct_answer_list.append(quiz.correct_answer)
         elif quiz.question_type == "input":
             list_answers.append(quiz.correct_answer)
+            correct_answer_list.append(quiz.correct_answer)
         elif quiz.question_type == "multiple_choice":
             list_answers.append(quiz.answer_options.split("%$№"))
+            correct_answer_list.append(quiz.correct_answer.split("%$№"))
             
         list_quiz.append(quiz)
 
@@ -28,5 +32,6 @@ def render_passing_test():
         "test": test,
         "list_quiz": list_quiz,
         "list_answers": list_answers,
+        "correct_answer_list": correct_answer_list,
         "question_number": int(question_number)
     }

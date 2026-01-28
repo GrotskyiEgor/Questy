@@ -427,7 +427,11 @@
                     answer: button.id
                 });
                 
-                renderWaitQuestion();
+                showResult();
+
+                setTimeout(() => {
+                    renderWaitQuestion("test");               
+                }, 2500)
             }
         )
     }

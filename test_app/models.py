@@ -52,6 +52,8 @@ class Quiz(db.Model):
             "time": self.time,
             "test_id": self.test_id
         }
+    
+    
 
 
 class Room(db.Model):
