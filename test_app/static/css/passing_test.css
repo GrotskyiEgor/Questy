@@ -3,7 +3,8 @@
     --green-light: #a5d6a7;
     --shadow: rgba(0, 0, 0, 0.2);
     --green-second: #66bb6a;
-    --red-text: #FF0000;
+    --green-text: #6db86d;
+    --red-text: rgba(247, 108, 108);
 }
 
 * {
@@ -384,7 +385,7 @@ body {
     left: 0;
     height: 15vh;
     width: 100vw;
-    background-color: rgb(168, 168, 168);
+    background-color: #f9f9f9;
 
     display: flex;
     justify-content: center;

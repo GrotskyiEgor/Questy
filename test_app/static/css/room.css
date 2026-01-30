@@ -42,7 +42,7 @@ main {
     border-radius: 1.2vh;
     padding: 1vw;
     width: 66vw;
-    /* height: 95vh; */
+    height: 98vh;
 
     box-shadow: 0 4px 1.2vh var(--shadow);
 }
@@ -50,12 +50,12 @@ main {
 .wait-side-bottom {
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
 
     gap: 1vh;
     width: 100%;
-    /* height: 11vh; */
+    height: 20vh;
 }
 
 .info-bar {
@@ -106,7 +106,8 @@ main {
     flex-direction: column;
     justify-content: start;
 
-    height: 60%;
+    margin-top: 1vh;
+    height: 64%;
 }
 
 .user-list {
@@ -186,14 +187,12 @@ main {
     background-color: green;
 }
 
-
-
 .btn-start {
     background-color: rgb(109, 184, 109);
     color: white;
 
     width: 100%;
-    height: 6vh;
+    height: 6.8vh;
 
     padding: 1vh 2vw;
     border: none;
@@ -208,7 +207,7 @@ main {
     color: white;
 
     width: 100%;
-    height:6vh;
+    height: 6.8vh;
 
     padding: 1vh 2vw;
     border: none;
@@ -242,14 +241,14 @@ main {
 .chat h2{
     margin: 0;
     text-align: center;
-    font-size: 3vh;
+    font-size: 3.5vh;
     color: #444;
 }
 
 .wait-title{
     margin: 0;
     text-align: center;
-    font-size: 3.7vh;
+    font-size: 3.5vh;
     color: #3b3939;
 }
 
@@ -332,7 +331,7 @@ main {
     display: flex;
     justify-content: space-between;
     gap: 1vw;
-    height: 100%;
+    height: 98.5vh;
 }
 
 .test-info-box, .instructions-box {

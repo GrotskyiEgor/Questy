@@ -175,7 +175,7 @@ def handle_join(data):
 
     if device_id in devices:
         emit("kicked", {"succses": "succses"}, to=user_sid)
-        disconnect(sid= user_sid)
+        disconnect(sid=user_sid)
 
     users[user_sid] = username
     devices[device_id] = user_sid

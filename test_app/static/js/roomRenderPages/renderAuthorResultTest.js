@@ -209,7 +209,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         // найти лучший результат
         const resultsInfoBoxText2 = document.createElement('p');
         resultsInfoBoxText2.id= "results-info-box-text2"
-        resultsInfoBoxText2.innerHTML = `<p><strong>Найкращий результат:</strong>${best_score_data.user_name} (${best_score_data.accuracy})</p>`;
+        resultsInfoBoxText2.innerHTML = `<p><strong>Найкращий результат: </strong>${best_score_data.user_name} (${best_score_data.accuracy})</p>`;
 
         resultsInfoBox.appendChild(headerTitle3);
         resultsInfoBox.appendChild(resultsInfoBoxText2);
@@ -276,7 +276,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         container.appendChild(contentBox)
 
         const tableTitle = document.createElement('div');
-        tableTitle.className = 'results-header-block';
+        tableTitle.className = 'results-table-block';
 
         const userTitle = document.createElement('h1');
         userTitle.textContent = "Натисніть на ряд таблиці щоб побачити особисту статистику";

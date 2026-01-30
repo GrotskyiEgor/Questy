@@ -13,7 +13,7 @@ function showResult(type, nextUrl, delay = 2000) {
 
     if (type){
         resultText.textContent = "Правильно ";
-        resultText.style.color = "var(--green-main)"
+        resultText.style.color = "var(--green-text)"
     } else {
         resultText.textContent = "Неправильно";
         resultText.style.color = "var(--red-text)"
@@ -88,7 +88,7 @@ if (multipleChoiceButton){
     })
 }
 
-for (let count = 0; count < multipleChoiceButtons .length; count++ ) {
+for (let count = 0; count < multipleChoiceButtons .length; count++) {
     let button= multipleChoiceButtons [count];
 
     const checkmark = document.createElement("span")
