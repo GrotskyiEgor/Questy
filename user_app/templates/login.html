@@ -29,16 +29,23 @@
             </div>
 
             <button type="submit" class="btn-login">Авторизуватись</button>
-
-            <div class="linkTxt">
-                <p>Не маєте акаунту?
-                    <a href="/sign_up/" class="reg-link">Створити акаунт</a>
-                </p>
-                <p>
-                    <a href="/send_email_app/" class="reg-link">Забули пароль?</a>
-                </p>
-            </div>
         </form>
+
+        <div class="google-login">
+            <a href="{{ url_for('user_app.render_login_app') }}" class="btn-google">
+                <img src="{{ url_for('static', filename='images/google-icon.svg') }}" alt="Google Icon">
+                Увійти через Google
+            </a>
+        </div>
+
+        <div class="linkTxt">
+            <p>Не маєте акаунту?
+                <a href="/sign_up/" class="reg-link">Створити акаунт</a>
+            </p>
+            <p>
+                <a href="/send_email_app/" class="reg-link">Забули пароль?</a>
+            </p>
+        </div>
     </div>
 
     <div class="info-text login">

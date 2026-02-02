@@ -135,21 +135,22 @@ form button{
     cursor: pointer;
     font-size: 2.56vh;
     font-weight: 600;
+    margin-top: 1vh;
 }
 
 form button:hover{
     box-shadow: 0 0 1.6vh rgba(0, 0, 0, 0.5);
 }
 
-form .linkTxt{
+ .linkTxt{
     font-size: 2.24vh;
     color:  black;
     text-align: center;
-    margin: 3.2vh 0 1.6vh;
+    padding: 3.2vh 0 1.6vh;
 }
 
 .linkTxt p a{
-    color: #17a;
+    color: #546e4f;
     text-decoration: none;
     font-weight: 600;
 }
@@ -223,4 +224,60 @@ form .linkTxt{
 .input-box input:focus ~ i,
 .input-box input:valid ~ i {
     color: #3b496d;
+}
+
+.forgotPasswordTxt {
+    font-size: 2.25vh;
+    text-align: right;
+    font-style: italic;
+    margin-top: 0.65vh; 
+    /* margin-bottom: 2vh;  */
+}
+
+.forgotPasswordTxt a {
+    color: #6b7280; 
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.forgotPasswordTxt a:hover {
+    color: #3b496d; 
+}
+
+
+.google-login {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5vh; 
+}
+
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 1vh; 
+    padding: 1.6vh 2vh;
+    font-size: 2.256vh;
+    color: #5d6370; 
+
+    background-color: transparent;
+    border: 0.16vh solid #d1d5db; 
+    border-radius: 6.4vh; 
+
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-google:hover {
+    background-color: #f3f4f6;
+    border-color: #b5bfd1;
+    color: #3b496d; 
+}
+
+.btn-google img {
+    width: 2.7vh;
+    height: 2.85vh;
 }
