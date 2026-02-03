@@ -71,7 +71,7 @@
         }else if (timerPaused == 'false'){
             timerPaused= false
         } 
-
+        // authorStart
         if (state && state.includes("STATE_AUTHOR_START")) {
             state= getCookie("state")
             let time= getCookie("time")
@@ -157,12 +157,12 @@
             }
         });
 
-        socket.on('user_disconnected', function(data) {  
-            
+        socket.on('user_disconnected', function(data) {         
             let messages = document.getElementById("messages");
-            if (messages) {
-                messages.innerHTML += `<p class="other-msg">${data['msg']}</p>`;  
-            }  
+            
+            //if (messages) {
+            //    messages.innerHTML += `<p class="other-msg">${data['msg']}</p>`;  
+            //}  
 
             if (messages && messages.children.length != 1){
                 const emptyMessages= document.getElementById("no-messages");
@@ -298,11 +298,19 @@
         });
 
         socket.on("create_user_block", function(data) {  
-            if (!state){    
+            if (!state){   
                 if (username === data["username"]){
-                    setCookie("connected", "1")
-                    setCookie("room", room)
+                    setCookie("connected", "1");
+                    setCookie("room", room);
                     renderRoomMain(room, authorName, username, quizList);
+
+                    let users_list = data["users_list"].slice(1, -1);
+                    users_list = users_list.split("||");
+                    for (let user of users_list){
+                        if (user != username && user != authorName){
+                            createUserBlock(username, authorName, user, null, "not");
+                        }
+                    }
                 }  
                 createUserBlock(username, authorName, data['username'], data['user_ip'], "not");
             }

@@ -76,7 +76,7 @@ def render_result_task():
         "users": users_list,
         "accuracy": accuracy,
         "total_questions": total_questions,
-        "average_accuracy": [average_accuracy, 13, 52, 56, 42],
+        "average_accuracy": [average_accuracy],
         "date_complete": date_complete,
         "do_score_list": do_score_list,
         "undo_user_list": undo_user_list,

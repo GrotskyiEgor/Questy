@@ -56,8 +56,6 @@ body {
     cursor: pointer;
     font-size: 4vh;
     box-shadow: 0 0 1vh rgba(0,0,0,0.2);
-
-
 }
 
 .hide-btn:hover {

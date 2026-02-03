@@ -205,7 +205,6 @@ def handle_join(data):
 
     db.session.commit()
 
-
 @Project.settings.socketio.on('disconnect')
 def handle_disconnect():
     username = users.pop(flask.request.sid, None)
@@ -280,8 +279,6 @@ def handle_kick_user(data):
         ROOM = Room.query.filter_by(test_code=room).first()
         ROOM.user_list = ROOM.user_list.replace(f"|{username}|", "")
         db.session.commit()
-        
-        disconnect(sid=kick_sid)
     else:
         print(f"Користувача {username} не знайдено серед підключених.")
 
@@ -442,7 +439,10 @@ def handle_new_user(data):
     room = data['room']
     username = data['username']
 
-    emit("create_user_block", {"username": username, "user_ip": data["user_ip"]}, to=room)
+    ROOM = Room.query.filter_by(test_code=room).first()
+    users_list = ROOM.user_list
+
+    emit("create_user_block", {"username": username, "user_ip": data["user_ip"], "users_list": users_list}, to=room)
 
 
 @Project.settings.socketio.on('new_user_admin')

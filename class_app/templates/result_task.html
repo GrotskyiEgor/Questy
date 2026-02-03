@@ -119,12 +119,13 @@
                     <div class="course-tasks">
                         <div class="task">
                             <div class="user-badge">
-                                {{ user.username }} — {{ user.class_name }}
+                                {{ user.username }} — {{ class.lesson }}
                             </div>
 
-                            <h3>{{ user.username }}</h3>
-                            <p>{{ score.accuracy }}</p>
-                            <p>{{ score.date_complete }}</p>
+                            <p><strong>Результат: </strong></p>
+                            <h3><strong>Користувач: </strong>{{ user.username }}</h3>
+                            <p><strong>Результат: </strong>{{ score.accuracy }}</p>
+                            <p><strong>Дата: </strong>{{ score.date_complete }}</p>
         
                             <a href="/review_results{{ score.id }}?bask_to_class={{ class.id }}">
                                 <button class="see-more-class">Переглянути</button>

@@ -316,8 +316,6 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         userCount++;
         userArray.push(data.username);
-        console.log("User", userCount, userArray);
-
         resultData[username] = result;
 
         appendResultRow(resultTable, username, result.correct_answers_list, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
