@@ -162,7 +162,7 @@ def room_get_result(room, author_name, username):
         }
 
     print("room_get_result_data, best_score_data, averega_score")
-    print(room_get_result_data, best_score_data, averega_score)
+    print(room_get_result_data, best_score_data, averega_score, "\n\n\n")
     return room_get_result_data, best_score_data, averega_score
 
 @Project.settings.socketio.on('join')
@@ -486,7 +486,8 @@ def render_room(test_code):
             list_quiz.append(quiz.dict()) 
 
     test = Test.query.filter_by(test_code= test_code).first()
-
+    if flask.request.method == "POST":
+        print("все хорошо")
     return {
         "test": test,
         "list_quiz": list_quiz,
