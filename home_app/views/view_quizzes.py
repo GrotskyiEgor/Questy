@@ -56,7 +56,7 @@ def delete_test(test_id):
         db.session.commit()
 
         question_images_dic = os.path.abspath(os.path.join(__file__, "..", "..","..","test_app","static","images", f"{test.id}"))
-        test_media_dir= os.path.abspath(os.path.join(__file__, "..", "..","..","home_app","static","images", "media", f"{test.id}"))
+        test_media_path= os.path.abspath(os.path.join(__file__, "..", "..","..","home_app","static","images", f"{test.id}.png"))
 
         if os.path.exists(question_images_dic):
             try:
@@ -64,9 +64,9 @@ def delete_test(test_id):
             except Exception as error:
                 print(error)
 
-        if os.path.exists(test_media_dir):
+        if os.path.exists(test_media_path):
             try:
-                shutil.rmtree(test_media_dir)
+                os.remove(test_media_path)
             except Exception as error:
                 print(error)
 

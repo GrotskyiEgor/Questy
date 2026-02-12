@@ -3,9 +3,11 @@ import random
 import datetime
 import os
 import json
+import traceback
 
 from flask_login import current_user
 
+from Project.settings import csrf
 from Project.database import db
 from ..models import Test, Quiz
 from Project.render_page import render_page
@@ -15,20 +17,19 @@ from Project.render_page import render_page
 def render_create_test():
     return {}
 
-
+@csrf.exempt
 def create_test():
     try:
         data = json.loads(flask.request.form.get('data'))
         images = flask.request.files
+        print("AUTH:", current_user.is_authenticated)
 
         title = data.get("topic")
-        description = data.get("description")
-        total_questions = data.get('total_questions')
-        # answers_per_question = data.get('answers_per_question')
+        description = data.get("description") 
         time= data.get('time')
-        image_form = data.get("image")
+        test_image_file = flask.request.files.get("test-image")
 
-        total_questions = total_questions or len(data["questions"])
+        total_questions = len(data["questions"])
         time = time or 20
         
         test = Test(
@@ -37,7 +38,7 @@ def create_test():
             total_questions = total_questions,
             test_code = 0,
             author_name = current_user.username,
-            image = 1 if image_form else 0,
+            image = test_image_file.filename if test_image_file else None,
             created_date = datetime.date.today()
         )
 
@@ -45,33 +46,39 @@ def create_test():
         db.session.commit()
 
         IMAGES_DIR = os.path.abspath(os.path.join(__file__, "..", "..","..","test_app","static","images", f"{test.id}"))
-        os.makedirs(IMAGES_DIR, exist_ok= True)
+        os.makedirs(IMAGES_DIR, exist_ok=True)
 
-        for quizzes in data["questions"]:
-            image_name= quizzes.get('image_name')
+        if test_image_file:
+            test_image_file.save(os.path.join(os.path.abspath(os.path.join(__file__, "..", "..","..","home_app","static","images", f"{test.id}.png"))))
+
+        for index, quizzes in enumerate(data["questions"]):
+            file_key = f"question-image-{index}"
+            quiz_image_file = images.get(file_key)
+            quiz_image_filename = None
+            
+            if quiz_image_file:
+                quiz_image_filename = quiz_image_file.filename
+                quiz_image_file.save(os.path.abspath(os.path.join(IMAGES_DIR, f"{quiz_image_filename}")))
 
             answers_list = quizzes["options"].copy()
-            image_name = quizzes.get("image_name")
             random.shuffle(answers_list)
+
             quiz = Quiz(
                 question_type=quizzes["question_type"],
                 question_text=quizzes["question_text"],
-                image_name=image_name if image_name else None,
+                image_name=quiz_image_filename,
                 answer_options="%$№".join(answers_list),
                 correct_answer=quizzes["correct_answer"],
                 time=quizzes["time"],
                 test_id=test.id             
             )
             db.session.add(quiz)
-
-            if image_name and image_name in images:
-                image= flask.request.files[image_name]
-                image.save(os.path.abspath(os.path.join(IMAGES_DIR, f"{image_name}")))
                        
         db.session.commit()
 
     except Exception as error:
-        print(error)
+        traceback.print_exc()
+        return {"error": str(error)}, 400
 
     return {}
 

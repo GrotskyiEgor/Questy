@@ -38,7 +38,7 @@
                     <div class="test-card" 
                         data-test-id= "{{ test.id }}"
                         data-test-title= "{{ test.title }}"
-                        style="background-image: url({% if test.image %}/home_app/static/images/media/{{ test.id }}{% else %}/home_app/static/images/media/4.png{% endif %});">
+                        style="background-image: url({% if test.image %}/home_app/static/images/{{ test.id }}.png{% else %}/home_app/static/images/media/{{ range(1,4)|random }}.png{% endif %});">
                         <div class="test-info">
                             <h3>{{ test.title }}</h3>
                             <p>Автор: {{ test.author_name }}</p>

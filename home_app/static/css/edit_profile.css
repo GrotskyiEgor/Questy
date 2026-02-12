@@ -83,19 +83,6 @@ main {
     margin-bottom: 4.5vh;
 }
 
-/* .input-code{
-    width: 100%;
-    background-color: none;
-    color: #38475a;
-    font-size: 16px;
-    font-weight: 300;
-    border: 1px solid #EAECF0;
-    padding: 9px;
-    outline: none;
-    border-radius: 8px;
-    margin-bottom: 17px;
-} */
-
 .input-group input::placeholder{
     color: #484d54ce;
     font-size: 4.3vh;

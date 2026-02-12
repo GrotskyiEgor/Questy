@@ -14,6 +14,7 @@ function buildTest(){
     let flagError = false
     let messageError = ""
     let questionCount= 0
+    let correctData = null
 
     let arrayQuestionBlock = document.querySelectorAll(".question-block") 
     arrayQuestionBlock.forEach(questionBlock => {
@@ -29,7 +30,6 @@ function buildTest(){
         let answerRadioFlag = false
         let countAnswers = 0
         let countCorrectAnswers = 0
-        let correctData = ""
 
 
         let questionText = questionBlock.querySelector(".question-text")
@@ -160,32 +160,48 @@ function buildTest(){
         correctData = data
     }
     
-    return correctData
+    if (!correctData){
+        alert("not data")
+        return null
+    } else {
+        alert("data")
+        return correctData
+    }
 }
 
 $("#submit-button").click(function () {
-    const jsonData = buildTest()
-    const imageData = new FormData
+    const testData = buildTest()
+    if (!testData) return;
 
-    imageData.append('data', JSON.stringify(jsonData))
+    const formData = new FormData
+    formData.append("data", JSON.stringify(testData));
+    console.log(testData)
 
-    document.querySelectorAll(".answer-image").forEach((image) => {
+    const testImageInput = document.getElementById("test-image")
+    if(testImageInput.files.length > 0){
+        alert("image")
+        formData.append("test-image", testImageInput.files[0])
+    }
+
+    document.querySelectorAll(".answer-image").forEach((image, index) => {
         if (image.files.length > 0){
-            const file = image.files[0]
-            imageData.append(file.name, file)
+            formData.append(`question-image-${index}`, image.files[0])
+            testData.questions[index].image_name = image.files[0].name
         }
     })
+
     $.ajax({
         url: "/build_test",
         type: "POST",
-        data: imageData,
+        data: formData,
         processData: false,
         contentType: false,
         success: function (data) {
             window.location.href = "/quizzes/"
         },
         error: function (xhr){
-            console.log('error')
+            console.log(xhr.status)
+            console.log(xhr.responseText)
         }
     })
 })

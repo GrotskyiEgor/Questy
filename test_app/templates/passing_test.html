@@ -79,9 +79,7 @@
                 <button class="input-answer" data-next-url="/passing_test?test_id={{ test.id }}&question_number={{ question_number + 1 }}">
                     Відповісти на запитання
                 </button>
-            {% else %}
-                <input type="text" placeholder="Введіть відповідь на запитання" class="input-with-answer">
-                
+            {% else %}                
                 <button class="input-answer" data-next-url="/result_test?test_id= {{ test.id }}">
                     Відповісти на запитання
                 </button>
