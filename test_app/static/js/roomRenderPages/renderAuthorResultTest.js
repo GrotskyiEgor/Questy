@@ -142,10 +142,15 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
             renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
         });
 
+        const form = document.createElement('form');
+        form.method = 'POST';
+
         const exelButton= document.createElement('button');
         exelButton.className= 'exel-btn';
+        exelButton.type = "submit";
         exelButton.textContent = 'Завантажити Exel таблицю';
-        exelButton.addEventListener("click", () => excelTable(username, authorName, resultData, best_score_data));
+        // exelButton.addEventListener("click", () => excelTable(username, authorName, resultData, best_score_data));    
+        form.appendChild(exelButton);
 
         leftButtonBox.appendChild(allInfoButton)
         rigthButtonBox.appendChild(leaveButton)
@@ -270,7 +275,8 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         baseInfo.appendChild(legenBox); 
         baseInfo.appendChild(resultsInfoBox)
         infoBox.appendChild(baseInfo)
-        infoBox.appendChild(exelButton)
+        // infoBox.appendChild(exelButton)
+        infoBox.appendChild(form)
 
         contentBox.appendChild(infoBox)
         container.appendChild(contentBox)

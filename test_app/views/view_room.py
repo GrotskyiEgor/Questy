@@ -1,6 +1,9 @@
 import flask
 import datetime
+import io
+import os
 
+from openpyxl import Workbook
 from flask_socketio import join_room, emit, disconnect
 
 import Project
@@ -21,6 +24,12 @@ def get_sid(username):
     
     return None
 
+def room_get_result(room, author_name, username):
+    global room_get_result_data, best_score_data, averega_score
+    room_get_result_data= {}
+    
+    ROOM= Room.query.filter_by(test_code= room).first()
+    QUIZ_LIST = Quiz.query.filter_by(test_id= ROOM.test_id).all()
 
 def room_get_result(room, author_name):
     room_get_result_data = {}
@@ -494,6 +503,70 @@ def handle_change_time(data):
 
 
 @render_page(template_name='room.html')
+def excel_table(username, author_name, result_data, best_score_data,test_code):
+    """
+    result_data: dict
+    best_score_data: dict {'user_name': str, 'accuracy': int}
+    average_score: int | float
+    """
+
+    first_user = next(iter(result_data))
+    total_questions = len(result_data[first_user]["correct_answers_list"])
+
+    # Заголовок
+    header_row = ["Учень"]
+    for i in range(1, total_questions + 1):
+        header_row.append(f"Q{i}")
+    header_row.append("Точність")
+
+    table = [header_row]
+
+    total_accuracy = 0
+    users_count = 0
+
+    for user, data in result_data.items():
+        answers = data["correct_answers_list"]
+
+        correct = sum(1 for a in answers if a == 1)
+        accuracy_number = correct / len(answers)
+        accuracy = f"{accuracy_number * 100:.1f}%"
+
+        total_accuracy += accuracy_number
+        users_count += 1
+
+        row = [user]
+
+        for a in answers:
+            if a == 1:
+                row.append("✅")
+            elif a == 0:
+                row.append("❌")
+            else:
+                row.append("-")
+
+        row.append(accuracy)
+        table.append(row)
+
+    average_accuracy = f"{(total_accuracy / users_count) * 100:.1f}%"
+
+    # Пустая строка
+    table.append([])
+
+    # Итоги
+    table.append(["Найкращий результат", best_score_data["user_name"], f'{best_score_data["accuracy"]}%'])
+    table.append(["Середній результат", average_accuracy])
+
+    # Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Results"
+
+    for row in table:
+        ws.append(row)
+    #сохранять с f строкой 
+    wb.save(f"results{test_code}.xlsx")
+
+@render_page(template_name = 'room.html')
 def render_room(test_code):
     list_answers = []
     list_quiz = []
@@ -514,6 +587,36 @@ def render_room(test_code):
             list_quiz.append(quiz.dict()) 
 
     test = Test.query.filter_by(test_code= test_code).first()
+    if flask.request.method == "POST":
+        print("все хорошо")
+        print(room_get_result_data, best_score_data)
+        base_dir = os.path.dirname(
+            os.path.dirname(
+                os.path.dirname(os.path.abspath(__file__))
+            )
+        )
+        file_path = os.path.join(base_dir, f"results{test_code}.xlsx")
+        excel_table(
+        username="teacher",
+        author_name="admin",
+        result_data=room_get_result_data,
+        best_score_data=best_score_data,
+        test_code=test_code
+        )
+        
+        return_data = io.BytesIO()
+        with open(file_path, 'rb') as f:
+            return_data.write(f.read())
+        return_data.seek(0)
+
+        os.remove(file_path)
+
+        return flask.send_file(
+            return_data,
+            as_attachment=True,
+            download_name="results.xlsx",
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
 
     return {
         "test": test,
