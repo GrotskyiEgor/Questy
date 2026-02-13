@@ -2,8 +2,8 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     const content = document.getElementById("room-content");
     content.innerHTML = "";
 
-    const container = document.createElement("div");
-    container.className = "room-container";
+    // const container = document.createElement("div");
+    // container.className = "room-container";
     
     const waitSideTop = document.createElement("div");
     waitSideTop.className = "wait-side-top";
@@ -21,6 +21,9 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     const infoBar = document.createElement("div");
     infoBar.className = "info-bar";
 
+    const infoBarText = document.createElement("div");
+    infoBarText.className = "info-bar-text";
+
     const textAuthor = document.createElement("div");
     textAuthor.className = "info-text";
     textAuthor.textContent = `Автор: ${authorName}`;
@@ -29,8 +32,9 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     textCode.className = "info-text";
     textCode.innerHTML = `Код тесту:<strong>${testCode}</strong>`;
 
-    infoBar.appendChild(textAuthor);
-    infoBar.appendChild(textCode);
+    infoBarText.appendChild(textAuthor);
+    infoBarText.appendChild(textCode);
+    infoBar.appendChild(infoBarText);
     waitSideTop.appendChild(infoBar);
 
     let durationSeconds= 0
@@ -80,7 +84,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
                 <div class="user-name"><strong>Вчитель:</strong> ${authorName}</div>
             </div>
             <div class="user-block empty-block" id="emty-users-list">
-                <div class="user-name">Учні ще не приєдналися. Очікуємо...</div>
+                <div class="empty-name">Учні ще не приєдналися. Очікуємо...</div>
             </div>
         `;
     }else {
@@ -89,6 +93,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
                 <div class="user-name"><strong>Вчитель:</strong> ${authorName}</div>
             </div>`
     }
+
     const info1 = document.createElement("div");
     info1.className = "info-user";
 
@@ -97,11 +102,10 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     userListText.textContent = "Список учасників:";
     
     info1.appendChild(userListText)
+    info1.appendChild(userList);
     allUsers.appendChild(info1);
-    allUsers.appendChild(userList);
 
     if (authorName === username) {
-
         const info2 = document.createElement("div");
         info2.className = "info-user";
 
@@ -109,14 +113,21 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
         waitUsers.id = "wait-users";
         waitUsers.className = "wait-users";
 
+
+        waitUsers.innerHTML = `
+            <div class="user-block empty-block" id="emty-users-wait-list">
+                <div class="empty-name">Учні ще не приєдналися. Очікуємо...</div>
+            </div>
+        `;
         
+  
         const waitUsersText = document.createElement("h3");
         waitUsersText.className= "user-list-title"
         waitUsersText.textContent = "Зал очікування:";
         info2.appendChild(waitUsersText)
 
+        info2.appendChild(waitUsers);
         allUsers.appendChild(info2);
-        allUsers.appendChild(waitUsers);
     }
 
     waitSideTop.appendChild(allUsers);
@@ -124,7 +135,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     let waitSideBottom;
     // Кнопка "Почати" для автора
     waitSideBottom = document.createElement("div");
-    waitSideBottom.className = "wait-side-bottom";
+    waitSideBottom.className = "test-buttons";
     if (authorName === username) {
         const buttonStart = document.createElement("button");
         buttonStart.type = "button";
@@ -167,12 +178,28 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
 
     waitSide.appendChild(waitSideTop)
     if (waitSideBottom) {
-        waitSide.appendChild(waitSideBottom)
+        infoBar.appendChild(waitSideBottom)
     }
 
-    container.appendChild(waitSide);
-    container.appendChild(chat);
-    content.appendChild(container);
+    const chatToggleBtn = document.createElement("button");
+    chatToggleBtn.className = "chat-toggle-btn";
+    chatToggleBtn.textContent = "Чат";
+    
+    chatToggleBtn.addEventListener("click", ()=> {
+        chat.classList.toggle("open");
+        const waitSide = document.querySelector(".wait-side");
+
+        if (chat.classList.contains("open")){
+            waitSide.style.width = "69vw";
+        } else {
+            waitSide.style.width = "99vw";
+        }
+    })
+
+    content.appendChild(chatToggleBtn);
+
+    content.appendChild(waitSide);
+    content.appendChild(chat);
 
     // Кількість учасників
     const participantsBox = document.createElement("div");

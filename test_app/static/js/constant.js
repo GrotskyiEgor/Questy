@@ -38,3 +38,5 @@ const COOKIE_AUTHOR_START = 'authorStart'
 
 const TEXT_LEAVE_TEST = 'Покинути тест';
 const TEXT_WAIT = '';
+
+const plusImgUrl = "{{ url_for('test_app.static', filename='images/online_test/plus.png') }}";

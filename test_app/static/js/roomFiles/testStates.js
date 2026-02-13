@@ -35,7 +35,7 @@ function nextQuestion(){
     setCookie("countCorrectAnswer", 0)
 
     if (numberOfQuestion === totalQuestion- 1) {
-        nextButton.textContent = 'Кінець тесту'
+        nextButton.dataset.tooltip = "Кінець тесту"
         nextButton.removeEventListener("click", nextQuestion)
         nextButton.addEventListener("click", testStop);
     }

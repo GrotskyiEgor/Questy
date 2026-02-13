@@ -30,17 +30,21 @@ $(() => {
     })
 
     $('#leave-test-btn').on('click', () => {
-        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time"])
+        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "userList", "countCorrectAnswer"])
         $('#modal-bg-connect').fadeOut(200)
     })
 
     updateCodes();
     setInterval(updateCodes, 5000);
         
-    $('.search-btn').on('click', () => {
+    $('.search-btn').on('click', function(){
         const room = $('#room').val().trim();
         if (currentCodes.includes(room)) {
-            window.location.href = `/room${room}`; 
+            if (this.value == "True"){
+                window.location.href = `/room${room}`; 
+            } else{
+                window.location.href = `/temporary_name${room}`
+            }
         } 
     })
 

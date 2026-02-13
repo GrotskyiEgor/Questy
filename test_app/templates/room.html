@@ -30,7 +30,7 @@
     <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/renderResultTest.js') }}"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/roomRenderPages/renderAuthorResultTest.js') }}"></script>
     
-    <script>    
+    <script>  
         let username = "{{ username }}"; 
         const room = "{{ test.test_code }}"; 
         const testId = Number("{{ test.id }}");
@@ -55,7 +55,7 @@
                 reconnectionDelay: 1000
             }
         );
-        
+
         let state = getCookie("state");
         let connected= getCookie("connected")
         let timerPaused= getCookie("timeStop");
@@ -71,8 +71,8 @@
         }else if (timerPaused == 'false'){
             timerPaused= false
         } 
-
-        if (state && state.includes("STATE_AUTHOR_START")) {
+        // authorStart
+        if (state && state.includes("authorStart")) {
             state= getCookie("state")
             let time= getCookie("time")
             renderAuthorStart(quizList[Number(state.replace(/\D/g, ""))], room, authorName, Number(state.replace(/\D/g, "")), totalQuestion, Number(state.replace(/\D/g, "")));
@@ -157,12 +157,8 @@
             }
         });
 
-        socket.on('user_disconnected', function(data) {  
-            
+        socket.on('user_disconnected', function(data) {         
             let messages = document.getElementById("messages");
-            if (messages) {
-                messages.innerHTML += `<p class="other-msg">${data['msg']}</p>`;  
-            }  
 
             if (messages && messages.children.length != 1){
                 const emptyMessages= document.getElementById("no-messages");
@@ -298,11 +294,19 @@
         });
 
         socket.on("create_user_block", function(data) {  
-            if (!state){    
+            if (!state){   
                 if (username === data["username"]){
-                    setCookie("connected", "1")
-                    setCookie("room", room)
+                    setCookie("connected", "1");
+                    setCookie("room", room);
                     renderRoomMain(room, authorName, username, quizList);
+
+                    let users_list = data["users_list"].slice(1, -1);
+                    users_list = users_list.split("||");
+                    for (let user of users_list){
+                        if (user != username && user != authorName){
+                            createUserBlock(username, authorName, user, null, "not");
+                        }
+                    }
                 }  
                 createUserBlock(username, authorName, data['username'], data['user_ip'], "not");
             }
@@ -354,23 +358,26 @@
             
             const timerCount= getCookie("time")
             plusAnswerTime += 15
-            if (timerCount && timer.textContent != "Час закінчений"){
+            if (timerCount && timer.textContent != "Час"){
                 timer.textContent = parseInt(timerCount) + extraTimeSeconds
                 setCookie("time", parseInt(timerCount) + extraTimeSeconds)
             }
         });
 
         socket.on('change_time', function(data) {          
-            timerPaused= !timerPaused
-            setCookie("timeStop", timerPaused)
-            const playBtn= document.getElementById("play-btn")
+            timerPaused= !timerPaused;
+            setCookie("timeStop", timerPaused);
+            const playBtn = document.getElementById("play-btn");
+            const playImg = document.getElementById("play-img")
 
             if (playBtn){
                 if (timerPaused){
-                    playBtn.textContent= "Почати"
+                    // playBtn.textContent= "Почати";
+                    playImg.src = "test_app/static/images/online_test/play.png"
                 }
                 else{
-                    playBtn.textContent= "Зупинити"
+                    // playBtn.textContent= "Зупинити";
+                    playImg.src = "test_app/static/images/online_test/pause.png"
                 }
             }
         });

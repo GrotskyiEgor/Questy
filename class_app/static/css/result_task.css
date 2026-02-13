@@ -20,13 +20,19 @@
     gap: 20px;
 }
 
+.container-classroom {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+}
+
 .course-tasks {
     display: flex;
     justify-content: center;
 }
 
 .task {
-    width: 100%;
+    width: fit-content;
     max-width: 700px;
 
     background: #ffffff;
@@ -56,7 +62,7 @@
     background: #e8f5e9;
     color: #2e7d32;
 
-    font-size: 0.9rem;
+    font-size: 2.5vh;
     font-weight: 600;
 
     padding: 6px 12px;
@@ -133,4 +139,17 @@
 
 .home-button:active {
     transform: scale(0.95);
+}
+
+.see-more-class {
+    background-color: #356d7d;
+    color: white;
+    border: none;
+    padding: 1vh 1.5vh;
+    border-radius: 1vh;
+    cursor: pointer;
+    font-size: 1.8vh;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 1vh;
 }

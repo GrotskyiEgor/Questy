@@ -21,7 +21,7 @@ project = Flask(
 
 project.config['SECRET_KEY']= PROJECT_SECRET_KEY
 
-csrf= CSRFProtect()
+csrf = CSRFProtect()
 csrf.init_app(project)
 
 project.config.update(

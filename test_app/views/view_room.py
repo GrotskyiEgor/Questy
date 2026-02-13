@@ -7,6 +7,7 @@ from openpyxl import Workbook
 from flask_socketio import join_room, emit, disconnect
 
 import Project
+from Project.settings import csrf
 from Project.database import db
 from user_app.models import User, Score
 from ..models import Test, Room, Quiz
@@ -23,13 +24,6 @@ def get_sid(username):
             return sid
     
     return None
-
-def room_get_result(room, author_name, username):
-    global room_get_result_data, best_score_data, averega_score
-    room_get_result_data= {}
-    
-    ROOM= Room.query.filter_by(test_code= room).first()
-    QUIZ_LIST = Quiz.query.filter_by(test_id= ROOM.test_id).all()
 
 def room_get_result(room, author_name):
     room_get_result_data = {}
@@ -53,8 +47,7 @@ def room_get_result(room, author_name):
                     UNREG_USER_LIST.append(user)
 
     SCORE_LIST= Score.query.filter_by(test_code=room).all()
-    # print("all lists")
-    # print(SCORE_LIST, UNREG_USER_LIST, USER_LIST, QUIZ_LIST)
+
     if USER_LIST:
         for user in USER_LIST:
             answers_list = []
@@ -142,37 +135,64 @@ def room_get_result(room, author_name):
                 }
 
     BEST_SCORE = None
-    best_accuracy = 0
+    best_accuracy = -1
     averega_accuracy = 0
     averega_score = 0
 
     for score in SCORE_LIST:
         averega_accuracy += score.accuracy
         if score.accuracy > best_accuracy:
+            best_accuracy = score.accuracy
             BEST_SCORE = score
 
-    if len(SCORE_LIST) > 0:
-        averega_score = averega_accuracy // len(SCORE_LIST)
-    else:
-        averega_score= 0
+    WORST_SCORE = None
+    worst_accuracy = 101
 
-    best_score_data = {
-            "user_name": "None",
-            "accuracy": 0
-        }
+    for score in SCORE_LIST:
+        if score.accuracy < worst_accuracy:
+            worst_accuracy = score.accuracy
+            WORST_SCORE = score
 
     if BEST_SCORE:
-        best_score_data = {
-            "user_name": BEST_SCORE.user_name,
-            "accuracy": BEST_SCORE.accuracy,
-        }
-    elif len(SCORE_LIST) == 1:
-        best_score_data = {
-            "user_name": SCORE_LIST[0].user_name,
-            "accuracy": SCORE_LIST[0].accuracy,
-        }
+        averega_score = averega_accuracy // len(SCORE_LIST) 
+    else:
+        averega_score = 0
 
-    return room_get_result_data, best_score_data, averega_score
+    best_score_data = {
+        "user_name": BEST_SCORE.user_name if BEST_SCORE else "None",
+        "accuracy": BEST_SCORE.accuracy if BEST_SCORE else 0,
+    }
+
+    worst_score_data = {
+        "user_name": WORST_SCORE.user_name if WORST_SCORE else "None",
+        "accuracy": WORST_SCORE.accuracy if WORST_SCORE else 0,
+    }
+
+    question_correct_count = [0] * len(QUIZ_LIST)
+
+    for user_data in room_get_result_data.values():
+        for index, answer in enumerate(user_data["correct_answers_list"]):
+            if answer == 1:
+                question_correct_count[index] += 1
+
+    total_time_for_hardest_question = 0
+    min_correct = min(question_correct_count)
+    hardest_question_index = question_correct_count.index(min_correct)
+    hardest_question = QUIZ_LIST[hardest_question_index]
+
+    for user_data in room_get_result_data.values():
+        timers = user_data["timers_list"]
+
+        if timers and len(timers) > hardest_question_index:
+            total_time_for_hardest_question += int(timers[hardest_question_index])
+
+    hardest_question_data = {
+        "question_text": hardest_question.question_text,
+        "correct_answers": min_correct,
+        "total_time": total_time_for_hardest_question
+    }
+
+    return room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score
 
 
 @Project.settings.socketio.on('join')
@@ -213,7 +233,6 @@ def handle_join(data):
                 ROOM.all_members += new_user
 
     db.session.commit()
-
 
 @Project.settings.socketio.on('disconnect')
 def handle_disconnect():
@@ -289,8 +308,6 @@ def handle_kick_user(data):
         ROOM = Room.query.filter_by(test_code=room).first()
         ROOM.user_list = ROOM.user_list.replace(f"|{username}|", "")
         db.session.commit()
-        
-        disconnect(sid=kick_sid)
     else:
         print(f"Користувача {username} не знайдено серед підключених.")
 
@@ -379,7 +396,7 @@ def handle_user_answers(data):
 
     author_sid = get_sid(TEST.author_name)
     if author_sid:
-        room_get_result_data, best_score_data, averega_score = room_get_result(room, TEST.author_name)
+        room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score = room_get_result(room, TEST.author_name)
 
         user_result = room_get_result_data.get(user_name)
         if user_result:      
@@ -451,7 +468,10 @@ def handle_new_user(data):
     room = data['room']
     username = data['username']
 
-    emit("create_user_block", {"username": username, "user_ip": data["user_ip"]}, to=room)
+    ROOM = Room.query.filter_by(test_code=room).first()
+    users_list = ROOM.user_list
+
+    emit("create_user_block", {"username": username, "user_ip": data["user_ip"], "users_list": users_list}, to=room)
 
 
 @Project.settings.socketio.on('new_user_admin')
@@ -483,11 +503,13 @@ def handle_end_test(data):
 def handle_room_get_result(data):
     user_sid = get_sid(data["username"])
 
-    room_get_result_data, best_score_data, averega_score = room_get_result(data["room"], data["author_name"])
+    room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score = room_get_result(data["room"], data["author_name"])
    
     emit("room_get_result_data", {
         "room_get_result_data": room_get_result_data,
         "best_score_data": best_score_data,
+        "worst_score_data": worst_score_data,
+        "hardest_question_data": hardest_question_data,
         "averega_score": averega_score
     }, to= user_sid)
 
@@ -502,13 +524,15 @@ def handle_change_time(data):
     emit("change_time", to=data['room'])
 
 
-@render_page(template_name='room.html')
 def excel_table(username, author_name, result_data, best_score_data,test_code):
     """
     result_data: dict
     best_score_data: dict {'user_name': str, 'accuracy': int}
     average_score: int | float
     """
+
+    if not result_data:
+        return 
 
     first_user = next(iter(result_data))
     total_questions = len(result_data[first_user]["correct_answers_list"])
@@ -566,6 +590,7 @@ def excel_table(username, author_name, result_data, best_score_data,test_code):
     #сохранять с f строкой 
     wb.save(f"results{test_code}.xlsx")
 
+@csrf.exempt
 @render_page(template_name = 'room.html')
 def render_room(test_code):
     list_answers = []
@@ -585,11 +610,9 @@ def render_room(test_code):
         else :
             list_answers.append(quiz.answer_options.split("%$№"))
             list_quiz.append(quiz.dict()) 
-
-    test = Test.query.filter_by(test_code= test_code).first()
+    
     if flask.request.method == "POST":
-        print("все хорошо")
-        print(room_get_result_data, best_score_data)
+        room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score = room_get_result(test_code, test.author_name)
         base_dir = os.path.dirname(
             os.path.dirname(
                 os.path.dirname(os.path.abspath(__file__))
@@ -597,11 +620,11 @@ def render_room(test_code):
         )
         file_path = os.path.join(base_dir, f"results{test_code}.xlsx")
         excel_table(
-        username="teacher",
-        author_name="admin",
-        result_data=room_get_result_data,
-        best_score_data=best_score_data,
-        test_code=test_code
+            username="teacher",
+            author_name="admin",
+            result_data=room_get_result_data,
+            best_score_data=best_score_data,
+            test_code=test_code
         )
         
         return_data = io.BytesIO()

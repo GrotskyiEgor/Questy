@@ -71,9 +71,9 @@ function kickUser(kick_user, ip, type) {
 }
 
 function addUesrBlock(username, button){
-    const userBlock= button.closest(".user-block")
-    const userIP= userBlock.querySelector(".user-ip").textContent.trim()
-    let addUserList= getCookie("userList")
+    const userBlock = button.closest(".user-block")
+    const userIP = userBlock.querySelector(".user-ip").textContent.trim()
+    let addUserList = getCookie("userList")
 
     if (!addUserList){
         setCookie("userList", `${username}()${userIP}`)
@@ -94,28 +94,30 @@ function addUesrBlock(username, button){
 }
 
 function createUserBlock(username, authorName, blockUsername, ip, type) {   
-    let userListDiv
-    let checkingUserBlock
-    if (type === "not"){
-        userListDiv= document.getElementById("user-list")
-        const emptyUserBlock= document.getElementById("emty-users-list")
+    let userListDiv;
+    let checkingUserBlock;
     
+    if (type === "not"){
+        userListDiv= document.getElementById("user-list");
+        checkingUserBlock= document.getElementById(`user${blockUsername}`);
+
+        const emptyUserBlock= document.getElementById("emty-users-list");
+
         if (emptyUserBlock){
             emptyUserBlock.remove();
         }
-        
-        checkingUserBlock= document.getElementById(`${blockUsername}`)
-        
-        if (checkingUserBlock) {
-            return
-        }
     } else {
-        userListDiv= document.getElementById("wait-users") 
-        checkingUserBlock= document.getElementById(`${blockUsername}`)
-        
-        if (checkingUserBlock) {
-            return
+        userListDiv= document.getElementById("wait-users") ;
+        checkingUserBlock= document.getElementById(`user${blockUsername}`);
+
+        const emptyUserWaitBlock= document.getElementById("emty-users-wait-list");
+        if (emptyUserWaitBlock){
+            emptyUserWaitBlock.remove();
         }
+    }
+
+    if (checkingUserBlock) {
+        return
     }
     
     const userBlock= document.createElement("div");
@@ -129,24 +131,25 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
 
     const userActions= document.createElement("div");
     userActions.className= "user-actions";
-    
-    if (ip){
-        const userIP= document.createElement("p")
-        userIP.textContent= `ip: `
-
-        const spanIP= document.createElement("span")
-        spanIP.className= "user-ip"
-        spanIP.textContent= ip
-
-        userIP.appendChild(spanIP)
-        userBlock.appendChild(userIP)
-    }
-
-    let kickType
-    if (username === authorName) {
+     
+    let kickType 
+    if (username === authorName){
         const btnRemove= document.createElement("button");
         btnRemove.className= "btn-remove";
         btnRemove.type= "button";
+
+        if (ip){
+            const userIP= document.createElement("p")
+            userIP.textContent= `ip: `
+    
+            const spanIP= document.createElement("span")
+            spanIP.className= "user-ip"
+            spanIP.textContent= ip
+    
+            userIP.appendChild(spanIP)
+            userBlock.appendChild(userIP)
+        }
+        
         if (type === "wait"){
             btnRemove.textContent= "Заблокувати"
             kickType= "block"
@@ -165,6 +168,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
             btnRemove.textContent= "Видалити"
             kickType= "kick"
         }
+
         btnRemove.onclick = function () {
             kickUser(blockUsername, ip, kickType);
         };
@@ -193,15 +197,19 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
     return
 }
 
-function getDeviceId() {
+
+function getDeviceId(){
     let id = localStorage.getItem("device_id");
-    if (!id) {
+
+    if (!id){
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         id = "";
-        for (let i = 0; i < 16; i++) {
+
+        for (let letter = 0; letter < 16; letter++){
             id += chars[Math.floor(Math.random() * chars.length)];
         }
         localStorage.setItem("device_id", id);
     }
+
     return id;
 }

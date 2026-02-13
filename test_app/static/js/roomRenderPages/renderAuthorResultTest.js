@@ -88,6 +88,8 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
     socket.on("room_get_result_data", function(data) {  
         resultData = data.room_get_result_data;
         const best_score_data = data.best_score_data;
+        const worst_score_data = data.worst_score_data;
+        const hardest_question_data = data.hardest_question_data;
         const averega_score = data.averega_score;
 
         let accuracy= questionAccuracy(resultData, totalQuestion)
@@ -151,8 +153,9 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         exelButton.textContent = 'Завантажити Exel таблицю';
         // exelButton.addEventListener("click", () => excelTable(username, authorName, resultData, best_score_data));    
         form.appendChild(exelButton);
-
+        
         leftButtonBox.appendChild(allInfoButton)
+        rigthButtonBox.appendChild(form);
         rigthButtonBox.appendChild(leaveButton)
         buttonBox.appendChild(leftButtonBox)
         buttonBox.appendChild(rigthButtonBox)
@@ -209,16 +212,32 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         // посчитать средний результат 
         const resultsInfoBoxText = document.createElement('p')
         resultsInfoBoxText.id= "results-info-box-text"
-        resultsInfoBoxText.innerHTML= `<p><strong>Середний результат: </strong>${averega_score}</p>`;
+        resultsInfoBoxText.innerHTML= `<p><strong>Середний результат: </strong>${averega_score}%</p>`;
 
         // найти лучший результат
-        const resultsInfoBoxText2 = document.createElement('p');
-        resultsInfoBoxText2.id= "results-info-box-text2"
-        resultsInfoBoxText2.innerHTML = `<p><strong>Найкращий результат: </strong>${best_score_data.user_name} (${best_score_data.accuracy})</p>`;
+        const resultInfoBestScore = document.createElement('p');
+        resultInfoBestScore.id= "results-info-box-text2"
+        resultInfoBestScore.innerHTML = `<p><strong>Найкращий результат: </strong>${best_score_data.user_name} (${best_score_data.accuracy}%)</p>`;
+
+        const resultInfoWorstScore = document.createElement('p');
+        resultInfoWorstScore.id= "results-info-box-text2"
+        resultInfoWorstScore.innerHTML = `<p><strong>Худший результат: </strong>${worst_score_data.user_name} (${worst_score_data.accuracy}%)</p>`;
+
+        const worstResultQuestion = document.createElement('p');
+        worstResultQuestion.id= "results-info-box-text2"
+        worstResultQuestion.innerHTML = `
+            <p>
+                <strong>Сложнейший вопрос:</strong><br>
+                <strong>question_text: </strong>${hardest_question_data.question_text}<br>
+                <strong>correct_answers</strong>: ${hardest_question_data.correct_answers}<br>
+                <strong>total_time</strong>: ${hardest_question_data.total_time}
+            </p>`;
 
         resultsInfoBox.appendChild(headerTitle3);
-        resultsInfoBox.appendChild(resultsInfoBoxText2);
+        resultsInfoBox.appendChild(resultInfoBestScore);
+        resultsInfoBox.appendChild(resultInfoWorstScore);
         resultsInfoBox.appendChild(resultsInfoBoxText);
+        resultsInfoBox.appendChild(worstResultQuestion);
         // baseInfo.appendChild(resultsInfoBox);
 
         resultTable = document.createElement('div');
@@ -226,7 +245,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         resultTable.style.setProperty(
             'grid-template-columns',
-            `10vw repeat(${totalQuestion}, ${77.9 /totalQuestion}vw) 9.95vw`
+            `10vw repeat(${totalQuestion}, ${77.9 /totalQuestion}vw) 10.075vw`
         )
 
         const resultHeader = document.createElement('div');
@@ -275,8 +294,6 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         baseInfo.appendChild(legenBox); 
         baseInfo.appendChild(resultsInfoBox)
         infoBox.appendChild(baseInfo)
-        // infoBox.appendChild(exelButton)
-        infoBox.appendChild(form)
 
         contentBox.appendChild(infoBox)
         container.appendChild(contentBox)
@@ -322,8 +339,6 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         userCount++;
         userArray.push(data.username);
-        console.log("User", userCount, userArray);
-
         resultData[username] = result;
 
         appendResultRow(resultTable, username, result.correct_answers_list, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);

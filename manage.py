@@ -3,7 +3,7 @@ import Project
 
 def main():
     try:
-        # Project.load_env()
+        Project.load_env()
         Project.settings.socketio.run(
             Project.project, 
             host='localhost', 
@@ -16,3 +16,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Project/instance
+
+# static/images
+# /Project/instance/data.db

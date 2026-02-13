@@ -26,7 +26,7 @@
                 <input placeholder="Введіть код тесту" class= "input_code" id="room">
                 <div class="fake-input-border"></div>
             </div>
-            <button type="button" class="search-btn">ПІДКЛЮЧИТИСЬ</button>
+            <button type="button" class="search-btn" value="{{ is_authorization }}">ПІДКЛЮЧИТИСЬ</button>
         </div>
     </aside>
 
@@ -38,7 +38,7 @@
                     <div class="test-card" 
                         data-test-id= "{{ test.id }}"
                         data-test-title= "{{ test.title }}"
-                        style="background-image: url({% if test.image %}/home_app/static/images/media/{{ test.id }}{% else %}/home_app/static/images/media/4.png{% endif %});">
+                        style="background-image: url({% if test.image %}/home_app/static/images/{{ test.id }}.png{% else %}/home_app/static/images/media/{{ range(1,4)|random }}.png{% endif %});">
                         <div class="test-info">
                             <h3>{{ test.title }}</h3>
                             <p>Автор: {{ test.author_name }}</p>
