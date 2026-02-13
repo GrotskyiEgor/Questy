@@ -94,28 +94,30 @@ function addUesrBlock(username, button){
 }
 
 function createUserBlock(username, authorName, blockUsername, ip, type) {   
-    let userListDiv
-    let checkingUserBlock
-    if (type === "not"){
-        userListDiv= document.getElementById("user-list")
-        const emptyUserBlock= document.getElementById("emty-users-list")
+    let userListDiv;
+    let checkingUserBlock;
     
+    if (type === "not"){
+        userListDiv= document.getElementById("user-list");
+        checkingUserBlock= document.getElementById(`user${blockUsername}`);
+
+        const emptyUserBlock= document.getElementById("emty-users-list");
+
         if (emptyUserBlock){
             emptyUserBlock.remove();
         }
-        
-        checkingUserBlock= document.getElementById(`user${blockUsername}`)
-        
-        if (checkingUserBlock) {
-            return
-        }
     } else {
-        userListDiv= document.getElementById("wait-users") 
-        checkingUserBlock= document.getElementById(`${blockUsername}`)
-        
-        if (checkingUserBlock) {
-            return
+        userListDiv= document.getElementById("wait-users") ;
+        checkingUserBlock= document.getElementById(`user${blockUsername}`);
+
+        const emptyUserWaitBlock= document.getElementById("emty-users-wait-list");
+        if (emptyUserWaitBlock){
+            emptyUserWaitBlock.remove();
         }
+    }
+
+    if (checkingUserBlock) {
+        return
     }
     
     const userBlock= document.createElement("div");

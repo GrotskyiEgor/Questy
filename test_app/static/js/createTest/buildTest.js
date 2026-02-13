@@ -161,10 +161,8 @@ function buildTest(){
     }
     
     if (!correctData){
-        alert("not data")
         return null
     } else {
-        alert("data")
         return correctData
     }
 }
@@ -179,7 +177,6 @@ $("#submit-button").click(function () {
 
     const testImageInput = document.getElementById("test-image")
     if(testImageInput.files.length > 0){
-        alert("image")
         formData.append("test-image", testImageInput.files[0])
     }
 

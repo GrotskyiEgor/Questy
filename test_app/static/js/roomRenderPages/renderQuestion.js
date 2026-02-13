@@ -29,10 +29,11 @@ function renderWaitQuestion(type) {
     const roomContent = document.getElementById("room-content");
 
     roomContent.innerHTML = ""; 
-    roomContent.className = 'wait-next-question'
+    roomContent.className = 'room-content'
 
     let leaveButton= ""
     let textWaitQuestion= "Будь ласка, зачекайте, поки інші учасники відповідають..."
+    
     if (type === "wait"){
         leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
     } else if (type === "start"){

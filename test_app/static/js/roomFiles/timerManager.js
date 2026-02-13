@@ -12,6 +12,16 @@ function stopTime(){
     });
 }
 
+function timerStop(){
+    timerPaused = true;
+    setCookie("timeStop", "true")
+
+    if (timerInterval){
+        clearInterval(timerInterval);
+        timerInterval = null
+    }
+}
+
 function startTimer() {
     const timerText= document.getElementById("timer")
     let state= getCookie("state")
@@ -42,7 +52,10 @@ function startTimer() {
         
         if (time < 0){
                 clearInterval(timerInterval);
-                timerText.textContent = "Час"
+                timerText.textContent = "";
+                timerText.innerHTML = `
+                    <img src="test_app/static/images/online_test/time.png" class="online-img">
+                    `
         
                 setTimeout(() => {
                     if (username != authorName){

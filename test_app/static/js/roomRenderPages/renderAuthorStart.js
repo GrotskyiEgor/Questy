@@ -41,13 +41,14 @@ function addUserAnswer(username, answer, authorname, quiz) {
 
     socket.once('get_usernames', function(data){
         let userArrey= data;
-        lengthArrey= userArrey.length
+        lengthArrey= userArrey.length;
 
-        countUsersAnswer= getCookie("countUsersAnswer")
-        correctAnswerChart= getCookie("countCorrectAnswer")
+        countUsersAnswer= getCookie("countUsersAnswer");
+        correctAnswerChart= getCookie("countCorrectAnswer");
         
         if (lengthArrey === Number(countUsersAnswer)){
-            renderDoughnutChart("donat-chart", lengthArrey, correctAnswerChart)
+            timerStop();
+            renderDoughnutChart("donat-chart", lengthArrey, correctAnswerChart);
         }
     })
 }
@@ -147,10 +148,10 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
     chartCanvas.id = 'donat-chart'
     chartCanvas.className = 'donat-chart'
 
-    userInfo.appendChild(studInfoBox)
-
     chartDiv.appendChild(chartCanvas)
     userInfo.appendChild(chartDiv)
+    userInfo.appendChild(studInfoBox)
+
 
     userBlock.appendChild(userInfo)
 
@@ -169,11 +170,20 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
         lengthArrey = userArrey.length
 
         if (number_of_question === totalQuestion- 1){
-            nextButton= `<button id="next-q" class="next-q" onclick="testStop()">Кінець тесту</button>`
+            nextButton= `
+                <button id="next-q" class="next-q" onclick="testStop()" data-tooltip="Кінець тесту">
+                    <img src="test_app/static/images/online_test/next.png" class="online-img" alt="next-btn">
+                </button>
+                `
         }
         else{
-            nextButton= `<button id="next-q" class="next-q" onclick="nextQuestion()">Наступне питання</button>`
+            nextButton= `
+                <button id="next-q" class="next-q" onclick="nextQuestion()" data-tooltip="Наступне питання">
+                    <img src="test_app/static/images/online_test/next.png" class="online-img" alt="next-btn">
+                </button>
+                `
         }
+
         studInfoBox.innerHTML = `
             <div class= "test-nav-info"> 
                 <h3>Інформація для вчителя</h3>
@@ -184,11 +194,13 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
             </div>
             <div class="test-nav-btn"> 
                 ${nextButton}
-                <div class="test-time-btn"> 
-                    <button onclick="plusTime()" class="timer-btn">Плюс +15сек.</button>
-                    <button onclick="stopTime()" id="play-btn" class="timer-btn">Зупинити</button>
-                    <p id="timer">${quizTime}</p>
-                </div>
+                <p id="timer">${quizTime}</p>
+                <button onclick="plusTime()" class="timer-btn" data-tooltip="Додати час">
+                    <img src="test_app/static/images/online_test/plus.png" class="online-img" alt="plus-btn">
+                </button>
+                <button onclick="stopTime()" id="play-btn" class="timer-btn" data-tooltip="Почати">
+                    <img src="test_app/static/images/online_test/play.png" class="online-img" id="play-img" alt="play-btn">
+                </button>
             </div>
             `
 

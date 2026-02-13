@@ -44,8 +44,7 @@ def room_get_result(room, author_name):
                     UNREG_USER_LIST.append(user)
 
     SCORE_LIST= Score.query.filter_by(test_code=room).all()
-    # print("all lists")
-    # print(SCORE_LIST, UNREG_USER_LIST, USER_LIST, QUIZ_LIST)
+
     if USER_LIST:
         for user in USER_LIST:
             answers_list = []
@@ -133,37 +132,64 @@ def room_get_result(room, author_name):
                 }
 
     BEST_SCORE = None
-    best_accuracy = 0
+    best_accuracy = -1
     averega_accuracy = 0
     averega_score = 0
 
     for score in SCORE_LIST:
         averega_accuracy += score.accuracy
         if score.accuracy > best_accuracy:
+            best_accuracy = score.accuracy
             BEST_SCORE = score
 
-    if len(SCORE_LIST) > 0:
-        averega_score = averega_accuracy // len(SCORE_LIST)
-    else:
-        averega_score= 0
+    WORST_SCORE = None
+    worst_accuracy = 101
 
-    best_score_data = {
-            "user_name": "None",
-            "accuracy": 0
-        }
+    for score in SCORE_LIST:
+        if score.accuracy < worst_accuracy:
+            worst_accuracy = score.accuracy
+            WORST_SCORE = score
 
     if BEST_SCORE:
-        best_score_data = {
-            "user_name": BEST_SCORE.user_name,
-            "accuracy": BEST_SCORE.accuracy,
-        }
-    elif len(SCORE_LIST) == 1:
-        best_score_data = {
-            "user_name": SCORE_LIST[0].user_name,
-            "accuracy": SCORE_LIST[0].accuracy,
-        }
+        averega_score = averega_accuracy // len(SCORE_LIST) 
+    else:
+        averega_score = 0
 
-    return room_get_result_data, best_score_data, averega_score
+    best_score_data = {
+        "user_name": BEST_SCORE.user_name if BEST_SCORE else "None",
+        "accuracy": BEST_SCORE.accuracy if BEST_SCORE else 0,
+    }
+
+    worst_score_data = {
+        "user_name": WORST_SCORE.user_name if WORST_SCORE else "None",
+        "accuracy": WORST_SCORE.accuracy if WORST_SCORE else 0,
+    }
+
+    question_correct_count = [0] * len(QUIZ_LIST)
+
+    for user_data in room_get_result_data.values():
+        for index, answer in enumerate(user_data["correct_answers_list"]):
+            if answer == 1:
+                question_correct_count[index] += 1
+
+    total_time_for_hardest_question = 0
+    min_correct = min(question_correct_count)
+    hardest_question_index = question_correct_count.index(min_correct)
+    hardest_question = QUIZ_LIST[hardest_question_index]
+
+    for user_data in room_get_result_data.values():
+        timers = user_data["timers_list"]
+
+        if timers and len(timers) > hardest_question_index:
+            total_time_for_hardest_question += int(timers[hardest_question_index])
+
+    hardest_question_data = {
+        "question_text": hardest_question.question_text,
+        "correct_answers": min_correct,
+        "total_time": total_time_for_hardest_question
+    }
+
+    return room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score
 
 
 @Project.settings.socketio.on('join')
@@ -367,7 +393,7 @@ def handle_user_answers(data):
 
     author_sid = get_sid(TEST.author_name)
     if author_sid:
-        room_get_result_data, best_score_data, averega_score = room_get_result(room, TEST.author_name)
+        room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score = room_get_result(room, TEST.author_name)
 
         user_result = room_get_result_data.get(user_name)
         if user_result:      
@@ -474,11 +500,13 @@ def handle_end_test(data):
 def handle_room_get_result(data):
     user_sid = get_sid(data["username"])
 
-    room_get_result_data, best_score_data, averega_score = room_get_result(data["room"], data["author_name"])
+    room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score = room_get_result(data["room"], data["author_name"])
    
     emit("room_get_result_data", {
         "room_get_result_data": room_get_result_data,
         "best_score_data": best_score_data,
+        "worst_score_data": worst_score_data,
+        "hardest_question_data": hardest_question_data,
         "averega_score": averega_score
     }, to= user_sid)
 

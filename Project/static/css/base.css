@@ -81,7 +81,8 @@ header{
 .user-actions {
     display: flex;
     align-items: center;
-    gap: 2vw;
+    gap: 1vw;
+    /* width: 12vw; */
 }
 
 .logo {
