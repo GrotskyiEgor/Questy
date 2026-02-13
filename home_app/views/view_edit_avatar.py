@@ -38,3 +38,16 @@ def render_edit_avatar(user_id):
         "list_clothes": list_clothes,
         "name_classes": name_classes
     }
+
+# from flask import request
+# from flask_login import login_required, current_user
+# from user_app import user_app
+
+# @user_app.route('/profile/avatar', methods = ['POST'])
+# @login_required
+# def save_avatar():
+#     avatar = request.json['avatar']
+#     current_user.avatar = avatar
+#     User.session.commit()
+    
+#     return {'status': 'ok'}
