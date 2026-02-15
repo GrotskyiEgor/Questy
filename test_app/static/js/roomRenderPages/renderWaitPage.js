@@ -87,7 +87,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
                 <div class="empty-name">Учні ще не приєдналися. Очікуємо...</div>
             </div>
         `;
-    }else {
+    } else {
         userList.innerHTML = `
             <div class="user-block teacher-block">
                 <div class="user-name"><strong>Вчитель:</strong> ${authorName}</div>
@@ -211,8 +211,12 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
 
     if (userListName){
         let userListBlocks= userListName.split("</>")
+
         userListBlocks.forEach(block => {
-            createUserBlock(username, authorName, block.split("()")[0], 0, "not");
+            console.log("create blocks", username, authorName, block.split("()")[0], 0, "not");
+            console.log(userListName)
+            user_data = block.split("()");
+            createUserBlock(username, authorName, user_data[0], user_data[1], "not");
         })
     }
 

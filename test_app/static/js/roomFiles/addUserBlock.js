@@ -71,18 +71,27 @@ function kickUser(kick_user, ip, type) {
 }
 
 function addUesrBlock(username, button){
-    const userBlock = button.closest(".user-block")
-    const userIP = userBlock.querySelector(".user-ip").textContent.trim()
-    let addUserList = getCookie("userList")
+    const userBlock = button.closest(".user-block");
+    const userIP = userBlock.querySelector(".user-ip").textContent.trim();
+    let addUserList = getCookie("userList");
 
     if (!addUserList){
-        setCookie("userList", `${username}()${userIP}`)
+        setCookie("userList", `${username}()${userIP}`);
     } else {
-        setCookie("userList", `${addUserList}</>${username}()${userIP}`)
+        setCookie("userList", `${addUserList}</>${username}()${userIP}`);
     }
 
     if (userBlock){
-        userBlock.remove()
+        userBlock.remove();
+    }
+
+    const waitRoom = document.querySelector(".wait-users");
+    if (waitRoom.innerHTML.trim() === ""){
+        waitRoom.innerHTML += `
+            <div class="user-block empty-block" id="emty-users-wait-list">
+                <div class="empty-name">Учні ще не приєдналися. Очікуємо...</div>
+            </div>
+        `
     }
     
     socket.emit("new_user", {
@@ -96,6 +105,7 @@ function addUesrBlock(username, button){
 function createUserBlock(username, authorName, blockUsername, ip, type) {   
     let userListDiv;
     let checkingUserBlock;
+    console.log(type)
     
     if (type === "not"){
         userListDiv= document.getElementById("user-list");
@@ -104,6 +114,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
         const emptyUserBlock= document.getElementById("emty-users-list");
 
         if (emptyUserBlock){
+            console.log("remove")
             emptyUserBlock.remove();
         }
     } else {
