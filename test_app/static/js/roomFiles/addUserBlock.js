@@ -3,7 +3,11 @@ function leaveTest(){
     window.location.href = `/`;
 }
 
-function leaveTestBlock(kick_user, ip, type){
+function leaveTestBlock(room){
+    socket.emit("user_leave", {
+        room: room,
+    });
+
     clearCookie(["temporaryName", "isReconnected", "time", "room"])
     window.location.href = `/`;
 }
@@ -36,9 +40,18 @@ function authorLeaveTest(type){
     }, 200);
 }
 
-function kickUser(kick_user, ip, type) {   
+function kickUser(kick_user, ip, type, from) {   
     let UserList= getCookie("userList") || ""
     let users= UserList.split("</>").filter(username => username.trim() !== "")
+    console.log(from)
+
+    if (from == "wait"){
+        const waiteUserCount = document.querySelector(".wait-list-count")
+        waiteUserCount.textContent = Number(waiteUserCount.textContent) - 1
+    } else if (from == "user"){
+        const UserCount = document.querySelector(".user-list-count")
+        UserCount.textContent = Number(UserCount.textContent) - 1
+    }
 
     users= users.filter(userStr => {
         const [name, userIp]= userStr.split("()")
@@ -67,6 +80,15 @@ function kickUser(kick_user, ip, type) {
 
     if (removeUserBlock) {
         removeUserBlock.remove()
+    }
+
+    const waitRoom = document.querySelector(".wait-users");
+    if (waitRoom.innerHTML.trim() === ""){
+        waitRoom.innerHTML += `
+            <div class="user-block empty-block" id="emty-users-wait-list">
+                <div class="empty-name">Учні ще не приєдналися. Очікуємо...</div>
+            </div>
+        `
     }
 }
 
@@ -106,8 +128,16 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
     let userListDiv;
     let checkingUserBlock;
     console.log(type)
+    const waiteUserCount = document.querySelector(".wait-list-count")
+    const UserCount = document.querySelector(".user-list-count")
     
     if (type === "not"){
+        UserCount.textContent = Number(UserCount.textContent) + 1
+
+        if (username == authorName){
+            waiteUserCount.textContent = Number(waiteUserCount.textContent) - 1
+        }
+
         userListDiv= document.getElementById("user-list");
         checkingUserBlock= document.getElementById(`user${blockUsername}`);
 
@@ -118,6 +148,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
             emptyUserBlock.remove();
         }
     } else {
+        waiteUserCount.textContent = Number(waiteUserCount.textContent) + 1
         userListDiv= document.getElementById("wait-users") ;
         checkingUserBlock= document.getElementById(`user${blockUsername}`);
 
@@ -171,7 +202,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
             btnKick.textContent= "Видалити"
             
             btnKick.onclick = function () {
-                kickUser(blockUsername, ip, "kick");
+                kickUser(blockUsername, ip, "kick", "wait");
             };
 
             userActions.appendChild(btnKick);
@@ -181,7 +212,7 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
         }
 
         btnRemove.onclick = function () {
-            kickUser(blockUsername, ip, kickType);
+            kickUser(blockUsername, ip, kickType, "user");
         };
 
         if (type === "wait"){

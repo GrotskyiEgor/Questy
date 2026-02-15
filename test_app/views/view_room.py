@@ -523,6 +523,9 @@ def handle_plus_time(data):
 def handle_change_time(data):
     emit("change_time", to=data['room'])
 
+@Project.settings.socketio.on('user_leave')
+def handle_user_leave(data):
+    emit("user_leave", to=data['room'])
 
 def excel_table(username, author_name, result_data, best_score_data,test_code):
     """

@@ -352,6 +352,15 @@
             }
         });
 
+        socket.on('user_leave', function(data) {          
+            const UserCount = document.querySelector(".user-list-count")
+            console.log("LEAVE")
+
+            if (UserCount){
+                UserCount.textContent = Number(UserCount.textContent) - 1
+            }
+        });
+
         socket.on('plus_time', function(data) {          
             const timer= document.getElementById("timer")
             if (!timer) return;
