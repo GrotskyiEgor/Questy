@@ -6,7 +6,7 @@ def main():
         Project.load_env()
         Project.settings.socketio.run(
             Project.project, 
-            host='localhost', 
+            host='127.0.0.1', 
             port=8001, 
             debug=True
         )

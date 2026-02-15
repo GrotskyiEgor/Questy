@@ -4,6 +4,8 @@ import io
 import os
 
 from openpyxl import Workbook
+from openpyxl.chart import BarChart, Reference
+from openpyxl.styles import Font
 from flask_socketio import join_room, emit, disconnect
 
 import Project
@@ -524,10 +526,12 @@ def handle_change_time(data):
     emit("change_time", to=data['room'])
 
 
-def excel_table(username, author_name, result_data, best_score_data,test_code):
+def excel_table(username, author_name, result_data, best_score_data, worst_score_data, hardest_question_data, test_code):
     """
     result_data: dict
     best_score_data: dict {'user_name': str, 'accuracy': int}
+    worst_score_data: dict {'user_name': str, 'accuracy': int}
+    hardest_question_data: dict {'question_text': str, 'correct_answers': int, "total_time": int}
     average_score: int | float
     """
 
@@ -578,7 +582,13 @@ def excel_table(username, author_name, result_data, best_score_data,test_code):
 
     # Итоги
     table.append(["Найкращий результат", best_score_data["user_name"], f'{best_score_data["accuracy"]}%'])
+    table.append(["Гірший результат", worst_score_data["user_name"], f'{worst_score_data["accuracy"]}%'])
     table.append(["Середній результат", average_accuracy])
+    table.append(["Найскладніше питання", hardest_question_data["question_text"]])
+    table.append(["Кількість правильних відповідей", hardest_question_data["correct_answers"]])
+    table.append(["Загальний час", hardest_question_data["total_time"]])
+
+
 
     # Excel
     wb = Workbook()
@@ -624,6 +634,8 @@ def render_room(test_code):
             author_name="admin",
             result_data=room_get_result_data,
             best_score_data=best_score_data,
+            worst_score_data=worst_score_data,
+            hardest_question_data=hardest_question_data,
             test_code=test_code
         )
         
