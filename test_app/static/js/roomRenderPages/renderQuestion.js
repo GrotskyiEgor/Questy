@@ -18,9 +18,6 @@ function tokenTimePrecent(userTimer, allTime){
 }
 
 function showResult(type) {
-    const state = getCookie("state")
-    if (state.includes("question")) return;
-
     const resultLine = document.querySelector(".result-line")
     const resultText = document.querySelector(".result-line-text")
     const pageLock = document.querySelector(".page-lock")
@@ -43,6 +40,7 @@ function showResult(type) {
 }
 
 function renderWaitQuestion(type) {
+    console.log("ssss")
     const roomContent = document.getElementById("room-content");
 
     roomContent.innerHTML = ""; 
@@ -203,6 +201,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                     showResult(quiz.correct_answer === button.id);
 
                     setTimeout(() => {
+                        const state = getCookie("state")
+                        if (state.includes("question")) return;
+
                         renderWaitQuestion("test");               
                     }, delay)
                 }
@@ -281,6 +282,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             showResult(quiz.correct_answer === answerValue);
 
             setTimeout(() => {
+                const state = getCookie("state")
+                if (state.includes("question")) return;
+
                 renderWaitQuestion("test");               
             }, delay)
         })
@@ -407,6 +411,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             showResult(isCorrect);
 
             setTimeout(() => {
+                const state = getCookie("state")
+                if (state.includes("question")) return;
+
                 renderWaitQuestion("test");               
             }, delay)
         })
