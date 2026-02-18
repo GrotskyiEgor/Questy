@@ -183,7 +183,7 @@ def room_get_result(room, author_name):
     for user_data in room_get_result_data.values():
         timers = user_data["timers_list"]
 
-        if timers and len(timers) > hardest_question_index:
+        if timers and len(timers) > hardest_question_index and timers[hardest_question_index] and timers[hardest_question_index].strip():
             total_time_for_hardest_question += int(timers[hardest_question_index])
 
     hardest_question_data = {
@@ -286,8 +286,8 @@ def handle_clear_test_code(data):
         TEST.test_code = 0  
         
     db.session.commit()
+    emit("test_end", room=room)
     
-
 @Project.settings.socketio.on('kick_user')
 def handle_kick_user(data):
     username = data['user']
@@ -523,6 +523,9 @@ def handle_plus_time(data):
 def handle_change_time(data):
     emit("change_time", to=data['room'])
 
+@Project.settings.socketio.on('user_leave')
+def handle_user_leave(data):
+    emit("user_leave", {"leave_user": data["leave_user"]}, to=data['room'])
 
 def excel_table(username, author_name, result_data, best_score_data,test_code):
     """

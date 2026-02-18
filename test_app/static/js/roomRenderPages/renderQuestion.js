@@ -14,10 +14,10 @@ function showResult(type) {
 
     if (type){
         resultText.textContent = "Правильно ";
-        resultText.style.color = "var(--green-main)"
+        resultText.style.color = "var(--green-main)";
     } else {
         resultText.textContent = "Неправильно";
-        resultText.style.color = "var(--red-text)"
+        resultText.style.color = "var(--red-text)";
     }
 
     setTimeout(() => {
@@ -362,8 +362,16 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 username: username,
                 answer: answerValue
             });
+            
 
-            showResult(quiz.correct_answer === userAnswerValue);
+            const quizCorrectAnswer = quiz.correct_answer.split("%$№").sort();
+            const userAnswerValueArray = userAnswerValue.split("%$№").sort();
+
+
+            const isCorrect = quizCorrectAnswer.length === userAnswerValueArray.length && 
+                            quizCorrectAnswer.every((value, index) => value === userAnswerValueArray[index]);
+            
+            showResult(isCorrect);
 
             setTimeout(() => {
                 renderWaitQuestion("test");               

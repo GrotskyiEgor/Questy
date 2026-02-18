@@ -14,8 +14,6 @@ def render_login_app():
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
-        
-        print(email, password)
         user = User.query.filter_by(email= email).first()
         
         if user and user.email == email and check_password_hash(user.password, password): 

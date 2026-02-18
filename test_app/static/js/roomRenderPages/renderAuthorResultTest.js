@@ -212,7 +212,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         // посчитать средний результат 
         const resultsInfoBoxText = document.createElement('p')
         resultsInfoBoxText.id= "results-info-box-text"
-        resultsInfoBoxText.innerHTML= `<p><strong>Середний результат: </strong>${averega_score}%</p>`;
+        resultsInfoBoxText.innerHTML= `<p><strong>Середній результат: </strong>${averega_score}%</p>`;
 
         // найти лучший результат
         const resultInfoBestScore = document.createElement('p');
@@ -221,16 +221,16 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
         const resultInfoWorstScore = document.createElement('p');
         resultInfoWorstScore.id= "results-info-box-text2"
-        resultInfoWorstScore.innerHTML = `<p><strong>Худший результат: </strong>${worst_score_data.user_name} (${worst_score_data.accuracy}%)</p>`;
+        resultInfoWorstScore.innerHTML = `<p><strong>Найгірший результат: </strong>${worst_score_data.user_name} (${worst_score_data.accuracy}%)</p>`;
 
         const worstResultQuestion = document.createElement('p');
         worstResultQuestion.id= "results-info-box-text2"
         worstResultQuestion.innerHTML = `
             <p>
-                <strong>Сложнейший вопрос:</strong><br>
-                <strong>question_text: </strong>${hardest_question_data.question_text}<br>
-                <strong>correct_answers</strong>: ${hardest_question_data.correct_answers}<br>
-                <strong>total_time</strong>: ${hardest_question_data.total_time}
+                <strong>Найскладніше питання:</strong><br>
+                <strong>Питання: </strong>${hardest_question_data.question_text}<br>
+                <strong>Кількість правильних відповідей: </strong>${hardest_question_data.correct_answers}<br>
+                <strong>Витрачено часу: </strong> ${hardest_question_data.total_time}
             </p>`;
 
         resultsInfoBox.appendChild(headerTitle3);

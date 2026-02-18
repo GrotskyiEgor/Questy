@@ -42,8 +42,6 @@ def created_test(test_id):
     test.test_code = code
     Project.database.db.session.commit()
 
-    print("")
-
     last_page = flask.request.referrer
     return flask.redirect(last_page or "/")
     

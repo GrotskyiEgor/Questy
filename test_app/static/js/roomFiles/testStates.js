@@ -10,6 +10,7 @@ function testStop(){
 
 function authorStartTest() {
     let userList= getCookie("userList")
+    
     if (userList){
         socket.emit("author_start_test", {
             room: room,

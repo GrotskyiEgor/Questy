@@ -840,7 +840,7 @@ main {
     justify-content: space-between;
     align-items: center;
     padding: 1vw 1vh;
-    background-color: var(--green-light);
+    background-color: #f9f9f9;
     color: white;
     border-radius: 1vh;
 
@@ -1590,8 +1590,8 @@ main {
   border-collapse: collapse;
   height: 100%;
   width: 100%;
-  background: #fdfdfd;
-  border: 0.4vh solid #ddd;
+  background: #f9f9f9;
+  border: 0.4vh solid #ccc;
   border-radius: 1vh;
   overflow: hidden;
 }
@@ -1999,7 +1999,7 @@ body {
     left: 0;
     height: 15vh;
     width: 100vw;
-    background-color: rgb(168, 168, 168);
+    background-color: f9f9f9;
 
     display: flex;
     justify-content: center;
