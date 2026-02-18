@@ -182,11 +182,6 @@
     width: 80%;
 }
 
-
-/* .donat-chart{
-  width: 100%;
-} */
-
 .results-info-box {
   background: #ffffff;
   backdrop-filter: blur(1vh);
@@ -352,4 +347,16 @@
 .home-btn:hover {
     background-color: #4caf50;
     transform: translateY(-1px);
+}
+
+.page-lock {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.page-lock.active {
+    pointer-events: all;
 }

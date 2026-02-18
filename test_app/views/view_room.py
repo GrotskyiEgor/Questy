@@ -287,6 +287,20 @@ def handle_clear_test_code(data):
         
     db.session.commit()
     emit("test_end", room=room)
+
+@Project.settings.socketio.on('test_reset')
+def handle_clear_test_code(data):
+    room = data['room']
+    ROOM = Room.query.filter_by(test_code= room).first()
+
+    if ROOM:
+        db.session.delete(ROOM)
+
+    TEST = Test.query.filter_by(test_code= room).first()
+    if TEST:
+        TEST.test_code = 0  
+        
+    db.session.commit()
     
 @Project.settings.socketio.on('kick_user')
 def handle_kick_user(data):

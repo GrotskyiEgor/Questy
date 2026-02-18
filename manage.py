@@ -3,10 +3,10 @@ import Project
 
 def main():
     try:
-        Project.load_env()
+        # Project.load_env()
         Project.settings.socketio.run(
             Project.project, 
-            host='0.0.0.0', 
+            host='localhost', 
             port=8001, 
             debug=True
         )

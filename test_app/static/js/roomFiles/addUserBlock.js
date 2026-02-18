@@ -22,16 +22,19 @@ function authorLeaveTest(type){
     let currentURL = window.location.href;
     let roomCode = currentURL.split('room')[1];
     roomCode= roomCode.split("?")[0]
-   
-    socket.emit("test_end", {
-        room: roomCode
-    });
+    
+    if (type === "wait"){
+        socket.emit("test_end", {
+            room: roomCode
+        });
+    } else if (type === "test"){
+        socket.emit("test_reset", {
+            room: roomCode
+        });
+    }
     
     clearCookie(["room", "state", "userList", "countCorrectAnswer", "countUsersAnswer", "blockedUsers", "timeStop", "time"])
-
-    setTimeout(() => {
-        window.location.href = '/'; 
-    }, 50);
+    window.location.href = '/'; 
 }
 
 function kickUser(kick_user, ip, type, from) {   

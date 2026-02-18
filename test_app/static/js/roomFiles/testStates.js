@@ -66,6 +66,9 @@ function nextQuestion(){
         correctAnswer.textContent= `${quizList[numberOfQuestion].correct_answer}`
     }
 
+    const answerCounter = document.querySelector(".chart-answer-count")
+    if (answerCounter) answerCounter.remove()
+
     setCookie("time", Number(quizList[numberOfQuestion].time))
     resetTimer(Number(quizList[numberOfQuestion].time))
 
