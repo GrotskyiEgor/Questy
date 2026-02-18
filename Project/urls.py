@@ -27,6 +27,9 @@ user_app.add_url_rule(rule='/confirmation_account/', view_func=render_confirm_ac
 user_app.add_url_rule(rule='/login/', view_func=render_login_app, methods =['GET', 'POST'])
 user_app.add_url_rule(rule="/logout/", view_func=loguot, methods=['GET', 'POST'])
 
+user_app.add_url_rule(rule='/google_login/', view_func=google_login, methods=['GET', 'POST'])
+user_app.add_url_rule(rule='/google_authorize/', view_func=google_authorize, methods=['GET', 'POST'])
+
 # TEST APP
 test_app.add_url_rule(rule='/test_app', view_func=render_test_app, methods=['GET', 'POST'])
 test_app.add_url_rule(rule='/new_quiz/', view_func=render_new_quiz, methods=['GET', 'POST'])

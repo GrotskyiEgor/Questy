@@ -7,8 +7,10 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
         <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'> 
+        <script src="https://kit.fontawesome.com/e0e68b1b72.js" crossorigin="anonymous"></script>
         {% block links %} {% endblock %}
-        
+
+        <script src="{{ url_for('static', filename='js/burgerMenu.js') }}"></script>
         <script src="{{ url_for('static', filename='js/ckManager.js') }}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -50,6 +52,46 @@
                 {% endif %}
             </div>
         </header>
+
+
+        <header class="mobile-header">
+            <button class="logo-btn-hidden" onclick="window.location.href='/'">
+                <div class="mobile-logo">
+                    <img alt="Qusty logo" src="{{ url_for('static', filename='images/mobile-logo.svg') }}" >
+                </div>
+            </button>
+
+            <div class="user-actions">
+                {% if is_authorization %}
+                    <span class="username">{{ username }}</span>
+                    <a href="/logout" class="logout-btn">Вийти</a>
+                {% else %}
+                    <a href="/login" class="auth-btn">Увійти</a>
+                    <a href="/sign_up" class="auth-btn">Реєстрація</a>
+                {% endif %}
+            </div>
+
+            <button class="burger-btn" id="burger-btn">
+                <i class='bx bx-menu'></i>
+            </button>
+
+            <nav class="mobile-nav" id="mobile-nav">
+                {% if is_authorization %}
+                    <a href="/" class="{% if request.path == '/' %}active{% endif %}">Головна</a>
+                    <a href="/profile" class="{% if request.path == '/profile/' %}active{% endif %}">Профіль</a>      
+                    <a href="/class_page" class="{% if request.path == '/class_page' %}active{% endif %}">Класи</a>
+                    {% if is_teacher %}
+                        <a href="/quizzes" class="{% if request.path == '/quizzes/' %}active{% endif %}">Тести</a>
+                    {% endif %}
+                    <a href="/logout">Вийти <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                {% else %}
+                    <a href="/login">Увійти</a>
+                    <a href="/sign_up">Реєстрація</a>
+                {% endif %}
+            </nav>
+        </header>
+
+
 
         <main id="main">
             {% block content %}

@@ -555,3 +555,196 @@ header {
     width: 100%;
     height: auto;
 }
+
+
+@media (max-width: 768px) {
+    .navbar {
+        display: none;
+    }
+
+    ::-webkit-scrollbar{
+        display: none;
+    }
+
+    body {
+        height: auto;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        background: #f5f8f5;
+    }
+
+    main {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        /* padding: 0 12px; */
+        gap: 20px;
+    }
+
+    .info {
+        width: 95%;
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        background: white;
+    }
+
+    .start-t {
+        font-size: 24px;
+        text-align: center;
+        color: #2d6a4f;
+        margin-bottom: 12px;
+    }
+
+    .text-d {
+        font-size: 16px;
+        text-align: center;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    .enter-code input {
+        font-size: 16px;
+        padding: 12px 40px;
+    }
+
+    .search-btn {
+        font-size: 16px;
+        padding: 10px 0;
+        margin-top: 8px;
+    }
+
+    .tests {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        width: 95%;
+        padding: 12px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .tests h2 {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 12px;
+        color: #2d6a4f;
+    }
+
+    .tests-scroll {
+        display: flex; 
+        flex-direction: row; 
+        flex-wrap: wrap;
+        gap: 12px;
+        overflow-x: auto; 
+        /* padding-bottom: 8px;  */
+        scrollbar-color: rgba(45,106,79,0.5) rgba(0,0,0,0.1); 
+    }
+
+    .tests-scroll::-webkit-scrollbar {
+        height: 6px; 
+    }
+
+    .tests-scroll::-webkit-scrollbar-thumb {
+        background: rgba(45,106,79,0.5);
+        border-radius: 3px;
+    }
+
+    .tests-scroll::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.05);
+        border-radius: 3px;
+    }
+
+    .test-card {
+        max-width: 270px; 
+        max-height: 190px;
+
+        border-radius: 12px;
+        background: rgba(0,0,0,0.1);
+        background-size: cover; 
+        background-position: center;
+
+        flex-shrink: 0; 
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 5px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .test-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .test-info p {
+        font-size: 1rem;
+    }
+
+    .empty-content h2 {
+        font-size: 18px;
+    }
+
+    .empty-content p {
+        font-size: 14px;
+    }
+
+    .btn-create {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .modal {
+        width: 50%;
+        padding: 20px;
+        border-radius: 12px;
+        /* background-color: rebeccapurple; */
+    }
+
+    .back-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        font-size: 0.6rem;
+        padding: 5px;
+        width: 22px;
+        height: 22px;
+    }
+
+    .modal h2 {
+        font-size: 1.5rem;
+        text-align: left;
+    }
+
+    #modal-id {
+        font-size: 1.3rem;
+        text-align: left;
+
+    }
+
+    #modal-desc {
+        font-size: 1.2rem;
+        text-align: left;
+    }
+
+    .start-test-btn,
+    .leave-test-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 0.5rem;
+        padding: 6px;
+        height: 45px;
+    }
+
+}
+
