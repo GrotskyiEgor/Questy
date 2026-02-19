@@ -224,8 +224,6 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
         let userListBlocks= userListName.split("</>")
 
         userListBlocks.forEach(block => {
-            console.log("create blocks", username, authorName, block.split("()")[0], 0, "not");
-            console.log(userListName)
             user_data = block.split("()");
             createUserBlock(username, authorName, user_data[0], user_data[1], "not");
         })

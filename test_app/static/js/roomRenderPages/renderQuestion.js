@@ -40,36 +40,37 @@ function showResult(type) {
 }
 
 function renderWaitQuestion(type) {
-    console.log("ssss")
     const roomContent = document.getElementById("room-content");
 
-    roomContent.innerHTML = ""; 
-    roomContent.className = 'room-content'
-
-    let leaveButton= ""
-    let textWaitQuestion= "Будь ласка, зачекайте, поки інші учасники відповідають..."
+    if (roomContent){
+        roomContent.innerHTML = ""; 
+        roomContent.className = 'room-content'
     
-    if (type === "wait"){
-        leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
-    } else if (type === "start"){
-        textWaitQuestion= "Зачекайте, поки організатор прийме вас до тесту"
-        leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
-    } else if (type === "reconnect"){
-        setCookie("reconnect", "1")
-        textWaitQuestion= 'Тест завершено, ваш результат не буде зараховано'
-        leaveButton= `<button class='leave-test' onclick="userLeaveTest()">Відключитися від тесту</button>`
-    }
-    
-    roomContent.innerHTML = `
-        <div class="blur-overlay">
-            <div class="wait-content">
-                <div class="waiting-message">
-                    ${textWaitQuestion}
-                    ${leaveButton}
+        let leaveButton= ""
+        let textWaitQuestion= "Будь ласка, зачекайте, поки інші учасники відповідають..."
+        
+        if (type === "wait"){
+            leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
+        } else if (type === "start"){
+            textWaitQuestion= "Зачекайте, поки організатор прийме вас до тесту"
+            leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
+        } else if (type === "reconnect"){
+            setCookie("reconnect", "1")
+            textWaitQuestion= 'Тест завершено, ваш результат не буде зараховано'
+            leaveButton= `<button class='leave-test' onclick="userLeaveTest()">Відключитися від тесту</button>`
+        }
+        
+        roomContent.innerHTML = `
+            <div class="blur-overlay">
+                <div class="wait-content">
+                    <div class="waiting-message">
+                        ${textWaitQuestion}
+                        ${leaveButton}
+                    </div>
                 </div>
             </div>
-        </div>
-    `
+        `
+    }
 }
 
 function renderQuestion(testId, quiz, answers, room, author_name) {
@@ -341,7 +342,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         }
 
         multipleChoiceButton.addEventListener("click", function(event) {
-            curTime = getCookie("time");
+            curTime = Number(getCookie("time")) || 0;
             let state = getCookie("state")
             let userAnswer = getCookie("userAnswers")
             let userTimers = getCookie("userTimers")
@@ -349,9 +350,12 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             let answerValue = ""
             let userAnswerValue = ""
             let arreyUserMultipleChoice = document.querySelectorAll(".active-multiple-answer")
-            allTime = plusAnswerTime + quizList[Number(state.replace(/\D/g, ""))].time
+            allTime  = Number(plusAnswerTime) + Number(quizList[Number(state.replace(/\D/g, ""))].time)
             userTimer = allTime- curTime
             token = tokenTimePrecent(userTimer, allTime)
+
+            console.log("SOME")
+            console.log(allTime, token)
 
             newUserTokens = userTokens + `|${token}`
             newUserTimers = userTimers + `|${userTimer}`

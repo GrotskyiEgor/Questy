@@ -127,7 +127,7 @@
 
 .chart-box select {
     align-self: center;
-    padding: 1.5vh 2.5vw;
+    padding: 1.5vh 2vw;
     font-size: 2.2vh;
     border-radius: 1.5vh;
     border: 0.09vh solid var(--green-light);
@@ -192,7 +192,7 @@
   font-weight: 500;
   border: 0.2vh solid var(--green-light);
   box-shadow: 0 0.4vh 1vw rgba(0, 0, 0, 0.15);
-  min-width: 30vw;
+  width: 30vw;
   height: fit-content;
 }
 

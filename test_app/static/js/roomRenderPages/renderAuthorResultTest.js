@@ -84,13 +84,32 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         username: username,
         author_name: authorName
     });
+
+    console.log("2")
     
     socket.on("room_get_result_data", function(data) {  
+        console.log("вызов")
         resultData = data.room_get_result_data;
         const best_score_data = data.best_score_data;
         const worst_score_data = data.worst_score_data;
         const hardest_question_data = data.hardest_question_data;
         const averega_score = data.averega_score;
+
+        if (Object.keys(resultData).length === 0){
+            setTimeout(() => {
+                socket.emit("room_get_result", {
+                    room: room,
+                    username: username,
+                    author_name: authorName
+                });
+            }, 1000)
+            return
+        }
+
+        console.log(resultData)
+        console.log(best_score_data)
+        console.log(worst_score_data)
+        console.log(hardest_question_data)
 
         let accuracy= questionAccuracy(resultData, totalQuestion)
         accuracyAquestionsArray = accuracy.accuracyAquestionsArray
@@ -227,10 +246,9 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         worstResultQuestion.id= "results-info-box-text2"
         worstResultQuestion.innerHTML = `
             <p>
-                <strong>Найскладніше питання:</strong><br>
-                <strong>Питання: </strong>${hardest_question_data.question_text}<br>
+                <strong>Найскладніше питання: </strong>${hardest_question_data.question_text}<br>
                 <strong>Кількість правильних відповідей: </strong>${hardest_question_data.correct_answers}<br>
-                <strong>Витрачено часу: </strong> ${hardest_question_data.total_time}
+                <strong>Витрачено часу загалом: </strong> ${hardest_question_data.total_time}
             </p>`;
 
         resultsInfoBox.appendChild(headerTitle3);
@@ -289,10 +307,10 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
                 <span><span class="circle no-answer"></span> Немає відповіді</span>
             `
 
+        baseInfo.appendChild(resultsInfoBox)
         legenBox.appendChild(legenBoxTitle);
         legenBox.appendChild(legend);
         baseInfo.appendChild(legenBox); 
-        baseInfo.appendChild(resultsInfoBox)
         infoBox.appendChild(baseInfo)
 
         contentBox.appendChild(infoBox)

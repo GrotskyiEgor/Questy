@@ -52,7 +52,6 @@ function addUserAnswer(username, answer, authorname, quiz) {
         if (lengthArrey === Number(countUsersAnswer)){
             timerStop();
 
-            console.log(lengthArrey, correctAnswerChart)
             const answerDiv = document.createElement("div")
             answerDiv.className = "chart-answer-count"
 
@@ -214,7 +213,7 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
                 ${nextButton}
                 <p id="timer">${quizTime}</p>
                 <button onclick="plusTime()" class="timer-btn" data-tooltip="Додати час">
-                    <img src="test_app/static/images/online_test/plus.png" class="online-img" alt="plus-btn">
+                    <img src="test_app/static/images/online_test/plus.png" class="online-small-img" alt="plus-btn">
                 </button>
                 <button onclick="stopTime()" id="play-btn" class="timer-btn" data-tooltip="Почати">
                     <img src="test_app/static/images/online_test/play.png" class="online-img" id="play-img" alt="play-btn">

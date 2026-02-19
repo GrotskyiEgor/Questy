@@ -40,7 +40,6 @@ function authorLeaveTest(type){
 function kickUser(kick_user, ip, type, from) {   
     let UserList= getCookie("userList") || ""
     let users= UserList.split("</>").filter(username => username.trim() !== "")
-    console.log(from)
 
     if (from == "wait"){
         const waiteUserCount = document.querySelector(".wait-list-count")
@@ -128,7 +127,10 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
     const UserCount = document.querySelector(".user-list-count")
     
     if (type === "not"){
-        UserCount.textContent = Number(UserCount.textContent) + 1
+        
+        if (UserCount){
+            UserCount.textContent = Number(UserCount.textContent) + 1
+        }
 
         if (username == authorName){
             waiteUserCount.textContent = Number(waiteUserCount.textContent) - 1

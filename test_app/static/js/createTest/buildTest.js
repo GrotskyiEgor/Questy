@@ -173,7 +173,6 @@ $("#submit-button").click(function () {
 
     const formData = new FormData
     formData.append("data", JSON.stringify(testData));
-    console.log(testData)
 
     const testImageInput = document.getElementById("test-image")
     if(testImageInput.files.length > 0){

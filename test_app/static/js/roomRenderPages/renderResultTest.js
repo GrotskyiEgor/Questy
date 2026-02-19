@@ -17,7 +17,6 @@ function renderResultTest(username, totalQuestion, quizList, anwersList, testId)
     }
 
     let correctAnswer = 0;
-
     for (let count = 0; count < quizList.length; count++) {
         let arrayCorrectAnswers = []
         let arrayUserAnswers = []
@@ -25,15 +24,16 @@ function renderResultTest(username, totalQuestion, quizList, anwersList, testId)
         if (quizList[count].question_type === "multiple_choice"){
             arrayCorrectAnswers = quizList[count].correct_answer.split("%$№")
             arrayUserAnswers = answersArrey[count].split("$$$")
-            let correctAnswerAccept= true
+            let correctAnswerAccept = true
 
             if (arrayCorrectAnswers.length === arrayUserAnswers.length){
                 arrayCorrectAnswers.sort();
                 arrayUserAnswers.sort();
 
-                for(let question= 0; question < totalQuestion; question++){
-                    if (arrayCorrectAnswers[question] === arrayUserAnswers[question]){
-                        correctAnswerAccept= true;
+                for(let question= 0; question < arrayCorrectAnswers.length; question++){
+                    if (arrayCorrectAnswers[question] !== arrayUserAnswers[question]){
+                        correctAnswerAccept = false;
+                        break
                     }
                 }
             }

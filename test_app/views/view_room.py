@@ -186,6 +186,58 @@ def room_get_result(room, author_name):
         if timers and len(timers) > hardest_question_index and timers[hardest_question_index] and timers[hardest_question_index].strip():
             total_time_for_hardest_question += int(timers[hardest_question_index])
 
+    # # Список пользователей, у которых есть результаты
+    # user_results = []
+
+    # for username, user_data in room_get_result_data.items():
+    #     correct_count = sum(1 for a in user_data['correct_answers_list'] if a == 1)
+    #     total_questions = len(user_data['correct_answers_list'])
+    #     accuracy = (correct_count / total_questions) * 100 if total_questions > 0 else 0
+    #     user_results.append({
+    #         "user_name": username,
+    #         "accuracy": accuracy
+    #     })
+
+    # # Лучший, худший и средний результат
+    # if user_results:
+    #     BEST_SCORE = max(user_results, key=lambda x: x['accuracy'])
+    #     WORST_SCORE = min(user_results, key=lambda x: x['accuracy'])
+    #     averega_score = sum(u['accuracy'] for u in user_results) / len(user_results)
+    # else:
+    #     BEST_SCORE = {"user_name": "None", "accuracy": 0}
+    #     WORST_SCORE = {"user_name": "None", "accuracy": 0}
+    #     averega_score = 0
+
+    # best_score_data = {
+    #     "user_name": BEST_SCORE["user_name"],
+    #     "accuracy": BEST_SCORE["accuracy"]
+    # }
+
+    # worst_score_data = {
+    #     "user_name": WORST_SCORE["user_name"],
+    #     "accuracy": WORST_SCORE["accuracy"]
+    # }
+
+    # # Подсчет количества правильных ответов по каждому вопросу
+    # question_correct_count = [0] * len(QUIZ_LIST)
+
+    # for user_data in room_get_result_data.values():
+    #     for index, answer in enumerate(user_data["correct_answers_list"]):
+    #         if answer == 1:
+    #             question_correct_count[index] += 1
+
+    # # Самый сложный вопрос
+    # total_time_for_hardest_question = 0
+    # min_correct = min(question_correct_count)
+    # hardest_question_index = question_correct_count.index(min_correct)
+    # hardest_question = QUIZ_LIST[hardest_question_index]
+
+    # # Суммарное время, потраченное на сложный вопрос
+    # for user_data in room_get_result_data.values():
+    #     timers = user_data.get("timers_list", [])
+    #     if timers and len(timers) > hardest_question_index and timers[hardest_question_index].strip():
+    #         total_time_for_hardest_question += int(timers[hardest_question_index])
+
     hardest_question_data = {
         "question_text": hardest_question.question_text,
         "correct_answers": min_correct,
@@ -229,7 +281,7 @@ def handle_join(data):
         new_user = f'|{username}|'
         if new_user not in ROOM.user_list:
             ROOM.user_list += new_user
-            if username != test.author_name and username not in ROOM.all_members:
+            if test and ROOM and username != test.author_name and username not in ROOM.all_members:
                 ROOM.all_members += new_user
 
     db.session.commit()
@@ -516,8 +568,9 @@ def handle_end_test(data):
 @Project.settings.socketio.on('room_get_result')
 def handle_room_get_result(data):
     user_sid = get_sid(data["username"])
-
+    print("============", data["username"])
     room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score = room_get_result(data["room"], data["author_name"])
+    print(room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score)
    
     emit("room_get_result_data", {
         "room_get_result_data": room_get_result_data,

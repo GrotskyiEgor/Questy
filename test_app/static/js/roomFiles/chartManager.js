@@ -118,6 +118,10 @@ function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, 
     let accurancyNumbers= []
     let labels= []
 
+    if (!userName){
+        userName = getCookie("temporaryName")
+    }
+
     if (userName && resultData[userName]){
         accurancyNumbers= resultData[userName].correct_answers_list.map(result =>{
             switch (result){
@@ -133,8 +137,6 @@ function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, 
         accurancyNumbers= accurancyArray.map(Number)
         labels= accuracyAquestionsArray.map(item => item.question)
     }
-
-    console.log(accuracyAquestionsArray, accurancyArray, accurancyNumbers)
 
     const ctx= document.getElementById(canvasId).getContext('2d');
 
@@ -271,7 +273,7 @@ function renderCorrectWrongBarChart(canvasId, resultData, totalQuestion, userNam
                 },
                 tooltip: {
                     callbacks: {
-                        label: ctx => ctx.datasets.label+ ': '+ Math.abs(ctx.parsed.y) 
+                        label: ctx => ctx.dataset.label+ ': '+ Math.abs(ctx.parsed.y) 
                     }
                 }
             }
@@ -366,6 +368,10 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
     const totalTimers= new Array(totalQuestion).fill(0)
 
     let users= Object.keys(resultData)
+
+    if (userName === null){
+        userName = getCookie("temporaryName")
+    }
     if(userName){
         users= users.includes(userName) ? [userName] : []
     }
@@ -377,13 +383,17 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
     let type_list= []
     users.forEach(user => {
         if (type === "token"){
-            type_list= resultData[user].token_list
+            type_list = resultData[user].token_list
         } else if (type === "time"){
-            type_list= resultData[user].timers_list
+            type_list = resultData[user].timers_list
         }
         for (let number= 0; number < totalQuestion; number++){
-            const time= parseFloat(type_list[number])
-            totalTimers[number] += time
+            const time = parseFloat(type_list[number])
+            if (isNaN(time)){
+                totalTimers[number] += 5
+            } else {
+                totalTimers[number] += time
+            }
         }
     })
 
@@ -396,8 +406,10 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
         data: {
             labels: labels,
             datasets: [{
-                label: 'Суммарное время (сек) на вопрос',
-                data: totalTimers,
+                label: type === "token"
+                    ? 'Монети за питання'
+                    : 'Суммарное время (сек) на вопрос',
+                data: userName ? type_list.map(Number) : totalTimers,
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 fill: true,
