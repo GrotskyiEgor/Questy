@@ -3,3 +3,4 @@ from .view_sing_up import render_sign_up
 from .view_send_email import render_send_email
 from .view_reset_password import render_reset_app, render_confirm_account
 from .view_new_password import render_new_password
+from .veiw_login_google import google_login, google_authorize
