@@ -2,8 +2,12 @@ import flask
 import datetime
 import io
 import os
+import math
 
 from openpyxl import Workbook
+from openpyxl.chart import LineChart, PieChart, DoughnutChart, Reference, BarChart
+from openpyxl.chart.label import DataLabelList
+from openpyxl.styles import Font
 from flask_socketio import join_room, emit, disconnect
 
 import Project
@@ -568,9 +572,7 @@ def handle_end_test(data):
 @Project.settings.socketio.on('room_get_result')
 def handle_room_get_result(data):
     user_sid = get_sid(data["username"])
-    print("============", data["username"])
     room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score = room_get_result(data["room"], data["author_name"])
-    print(room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score)
    
     emit("room_get_result_data", {
         "room_get_result_data": room_get_result_data,
@@ -594,10 +596,12 @@ def handle_change_time(data):
 def handle_user_leave(data):
     emit("user_leave", {"leave_user": data["leave_user"]}, to=data['room'])
 
-def excel_table(username, author_name, result_data, best_score_data,test_code):
+def excel_table(username, author_name, result_data, best_score_data, worst_score_data, hardest_question_data, test_code):
     """
     result_data: dict
     best_score_data: dict {'user_name': str, 'accuracy': int}
+    worst_score_data: dict {'user_name': str, 'accuracy': int}
+    hardest_question_data: dict {'question_text': str, 'correct_answers': int, "total_time": int}
     average_score: int | float
     """
 
@@ -648,7 +652,13 @@ def excel_table(username, author_name, result_data, best_score_data,test_code):
 
     # Итоги
     table.append(["Найкращий результат", best_score_data["user_name"], f'{best_score_data["accuracy"]}%'])
+    table.append(["Гірший результат", worst_score_data["user_name"], f'{worst_score_data["accuracy"]}%'])
     table.append(["Середній результат", average_accuracy])
+    table.append(["Найскладніше питання", hardest_question_data["question_text"]])
+    table.append(["Кількість правильних відповідей", hardest_question_data["correct_answers"]])
+    table.append(["Загальний час", hardest_question_data["total_time"]])
+
+
 
     # Excel
     wb = Workbook()
@@ -658,6 +668,212 @@ def excel_table(username, author_name, result_data, best_score_data,test_code):
     for row in table:
         ws.append(row)
     #сохранять с f строкой 
+
+
+    # ---------------- ЛИСТ С ГРАФИКОМ ----------------
+
+    accuracy_ws = wb.create_sheet("Accuracy_Line")
+
+    labels = []
+    accuracy_numbers = []
+
+    first_user = next(iter(result_data))
+    total_questions = len(result_data[first_user]["correct_answers_list"])
+
+    # если нужен конкретный user (аналог userName)
+    selected_user = None  # сюда можешь передать username если нужно
+
+    if selected_user and selected_user in result_data:
+        answers = result_data[selected_user]["correct_answers_list"]
+        accuracy_numbers = [100 if a == 1 else 0 for a in answers]
+        labels = [f"Q{i+1}" for i in range(total_questions)]
+    else:
+        labels = [f"Q{i+1}" for i in range(total_questions)]
+        for i in range(total_questions):
+            correct = 0
+            for user in result_data:
+                if result_data[user]["correct_answers_list"][i] == 1:
+                    correct += 1
+            percent = (correct / len(result_data)) * 100
+            accuracy_numbers.append(percent)
+
+    accuracy_ws.append(["Питання", "Точність (%)"])
+
+    for i in range(total_questions):
+        accuracy_ws.append([labels[i], accuracy_numbers[i]])
+
+    line_chart = LineChart()
+    line_chart.title = "Точність відповідей (%)"
+    line_chart.y_axis.title = "Точність (%)"
+    line_chart.x_axis.title = "Номер питання"
+
+    data = Reference(accuracy_ws, min_col=2, min_row=1,
+                    max_row=total_questions + 1)
+    cats = Reference(accuracy_ws, min_col=1, min_row=2,
+                    max_row=total_questions + 1)
+
+    line_chart.add_data(data, titles_from_data=True)
+    line_chart.set_categories(cats)
+
+    accuracy_ws.add_chart(line_chart, "E2")
+
+    # ---------------- CORRECT / WRONG BAR CHART ----------------
+
+    bar_ws = wb.create_sheet("Correct_Wrong_Bar")
+
+    correct_counts = [0] * total_questions
+    wrong_counts = [0] * total_questions
+
+    for user in result_data:
+        answers = result_data[user]["correct_answers_list"]
+        for i in range(total_questions):
+            if answers[i] == 1:
+                correct_counts[i] += 1
+            else:
+                wrong_counts[i] += 1
+
+    wrong_counts = [-x for x in wrong_counts]
+
+    bar_ws.append(["Питання", "Правильно", "Неправильно"])
+
+    for i in range(total_questions):
+        bar_ws.append([f"Q{i+1}", correct_counts[i], wrong_counts[i]])
+
+    bar_chart = BarChart()
+    bar_chart.type = "col"
+    bar_chart.title = "Правильно / Неправильно"
+    bar_chart.y_axis.title = "Кількість користувачів"
+    bar_chart.x_axis.title = "Номер питання"
+
+    data = Reference(bar_ws, min_col=2, max_col=3,
+                    min_row=1, max_row=total_questions + 1)
+    cats = Reference(bar_ws, min_col=1,
+                    min_row=2, max_row=total_questions + 1)
+
+    bar_chart.add_data(data, titles_from_data=True)
+    bar_chart.set_categories(cats)
+
+    # динамический масштаб как в JS
+    max_correct = max(correct_counts)
+    max_wrong = max([-x for x in wrong_counts])
+
+    bar_chart.y_axis.scaling.min = -math.ceil(max_wrong * 1.2)
+    bar_chart.y_axis.scaling.max = math.ceil(max_correct * 1.2)
+
+    bar_ws.add_chart(bar_chart, "E2")
+
+
+    # ---------------- PIE CHART ----------------
+
+    pie_ws = wb.create_sheet("User_Pie")
+
+    users = list(result_data.keys())
+    total_slices = len(users) * total_questions
+
+    correct_total = 0
+    values = []
+
+    for user in users:
+        correct_count = sum(1 for a in result_data[user]["correct_answers_list"] if a == 1)
+        correct_total += correct_count
+        values.append(correct_count)
+
+    remaining = total_slices - correct_total
+
+    labels = users.copy()
+
+    if remaining > 0:
+        values.append(remaining)
+        labels.append("Неправильні / пропущені")
+
+    pie_ws.append(["Користувач", "Кількість"])
+
+    for i in range(len(values)):
+        pie_ws.append([labels[i], values[i]])
+
+    pie_chart = PieChart()
+    pie_chart.title = "Розподіл правильних відповідей"
+
+    data = Reference(pie_ws, min_col=2, min_row=1,
+                    max_row=len(values) + 1)
+    cats = Reference(pie_ws, min_col=1, min_row=2,
+                    max_row=len(values) + 1)
+
+    pie_chart.add_data(data, titles_from_data=True)
+    pie_chart.set_categories(cats)
+
+    pie_ws.add_chart(pie_chart, "E2")
+
+
+    # ---------------- TIME / TOKEN LINE CHART ----------------
+
+    time_ws = wb.create_sheet("Question_Time")
+
+    total_timers = [0] * total_questions
+    type_value = "time"  # или "token"
+
+    for user in result_data:
+        if type_value == "token":
+            type_list = result_data[user]["token_list"]
+        else:
+            type_list = result_data[user]["timers_list"]
+
+        for i in range(total_questions):
+            if type_list[i]:
+                total_timers[i] += int(type_list[i])
+
+    time_ws.append(["Питання", "Суммарне значення"])
+
+    for i in range(total_questions):
+        time_ws.append([f"Q{i+1}", total_timers[i]])
+
+    time_chart = LineChart()
+    time_chart.title = "Суммарне значення по питанням"
+    time_chart.y_axis.title = "Значення"
+    time_chart.x_axis.title = "Номер питання"
+
+    data = Reference(time_ws, min_col=2, min_row=1,
+                    max_row=total_questions + 1)
+    cats = Reference(time_ws, min_col=1, min_row=2,
+                    max_row=total_questions + 1)
+
+    time_chart.add_data(data, titles_from_data=True)
+    time_chart.set_categories(cats)
+
+    time_ws.add_chart(time_chart, "E2")
+
+
+    # ---------------- DOUGHNUT CHART ----------------
+
+    doughnut_ws = wb.create_sheet("Overall_Doughnut")
+
+    total_answers = len(result_data) * total_questions
+    correct_count = sum(
+        1 for user in result_data
+        for a in result_data[user]["correct_answers_list"]
+        if a == 1
+    )
+
+    correct_percent = (correct_count / total_answers) * 100
+    incorrect_percent = 100 - correct_percent
+
+    doughnut_ws.append(["Тип", "Відсоток"])
+    doughnut_ws.append(["Правильні (%)", correct_percent])
+    doughnut_ws.append(["Неправильні (%)", incorrect_percent])
+
+    doughnut_chart = DoughnutChart()
+    doughnut_chart.title = "Загальна точність (%)"
+
+    data = Reference(doughnut_ws, min_col=2, min_row=1, max_row=3)
+    cats = Reference(doughnut_ws, min_col=1, min_row=2, max_row=3)
+
+    doughnut_chart.add_data(data, titles_from_data=True)
+    doughnut_chart.set_categories(cats)
+
+    doughnut_ws.add_chart(doughnut_chart, "E2")
+
+
+    # ---------------- СОХРАНЕНИЕ ----------------
     wb.save(f"results{test_code}.xlsx")
 
 @csrf.exempt
@@ -694,6 +910,8 @@ def render_room(test_code):
             author_name="admin",
             result_data=room_get_result_data,
             best_score_data=best_score_data,
+            worst_score_data=worst_score_data,
+            hardest_question_data=hardest_question_data,
             test_code=test_code
         )
         
