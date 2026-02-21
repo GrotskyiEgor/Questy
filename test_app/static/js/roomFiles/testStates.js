@@ -55,7 +55,7 @@ function nextQuestion(){
     questionTitle.textContent = `Питання: ${numberOfQuestion + 1} з ${totalQuestion}`
     
     const questionText = document.getElementById("author-question")
-    questionText.textContent = `${quizList[numberOfQuestion].question_text}`
+    questionText.textContent = `${numberOfQuestion + 1}. ${quizList[numberOfQuestion].question_text}`
 
     const correctAnswer = document.getElementById("author-correct-answer")
 

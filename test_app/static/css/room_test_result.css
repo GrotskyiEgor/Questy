@@ -360,3 +360,49 @@
 .page-lock.active {
     pointer-events: all;
 }
+
+.correct {
+    background-color: var(--green-light);
+    border-left-color: var(--green-main);
+}
+
+.incorrect {
+    background-color: #ffc7c7;
+    border-left-color: rgb(238, 72, 72);
+}
+
+.user_answers {
+    background-color:rgba(255, 224, 130, 1.00);
+    border-left-color: rgb(244, 190, 28);
+}
+
+.question-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+
+@media (max-width: 769px) {
+    .result-info, .user-chart-wrapper {
+        width: 90vw;
+    }
+
+    .question-block {
+        width: 90vw;
+    }
+
+    .chart-user-box {
+        width: 100%;
+    }
+
+    .user-select-field {
+        width: 90%;
+    }
+
+    .home-btn {
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+        width: 70%;
+    }
+}

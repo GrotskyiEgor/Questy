@@ -137,3 +137,13 @@ main {
 .submit-btn:hover{
     opacity: 0.90;
 }
+
+@media (max-width: 769px) {
+    .container{
+        width: 80vw;
+    }
+
+    .title {
+        font-size: 3.7vh
+    }
+}

@@ -189,6 +189,7 @@ main {
 .question-text {
     margin-bottom: 15px;
 }
+
 .answer{
     padding: 10px 15px;
     border-radius: 8px;
@@ -201,7 +202,7 @@ main {
     border-left-color: var(--green-main);
 }
 .incorrect {
-    background-color: #ffe6e6;
+    background-color: #ffc7c7;
     border-left-color: rgb(238, 72, 72);
 }
 

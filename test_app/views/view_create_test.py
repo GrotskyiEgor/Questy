@@ -22,7 +22,6 @@ def create_test():
     try:
         data = json.loads(flask.request.form.get('data'))
         images = flask.request.files
-        print("AUTH:", current_user.is_authenticated)
 
         title = data.get("topic")
         description = data.get("description") 
@@ -45,11 +44,11 @@ def create_test():
         db.session.add(test)
         db.session.commit()
 
-        IMAGES_DIR = os.path.abspath(os.path.join(__file__, "..", "..","..","test_app","static","images", f"{test.id}"))
+        IMAGES_DIR = os.path.abspath(os.path.join(__file__, "..", "..","..", "test_app", "static", "images", f"{test.id}"))
         os.makedirs(IMAGES_DIR, exist_ok=True)
 
         if test_image_file:
-            test_image_file.save(os.path.join(os.path.abspath(os.path.join(__file__, "..", "..","..","home_app","static","images", f"{test.id}.png"))))
+            test_image_file.save(os.path.join(os.path.abspath(os.path.join(__file__, "..", "..", "..", "home_app", "static", "images", f"{test.id}.png"))))
 
         for index, quizzes in enumerate(data["questions"]):
             file_key = f"question-image-{index}"

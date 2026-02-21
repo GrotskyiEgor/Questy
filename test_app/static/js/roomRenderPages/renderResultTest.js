@@ -138,7 +138,7 @@ function renderResultTest(username, totalQuestion, quizList, anwersList, testId)
         questionHeader.className = 'question-header';
 
         const question = document.createElement('div');
-        question.textContent = `${quiz.question_text}`;
+        question.textContent = `${quiz_number + 1}. ${quiz.question_text}`;
         questionHeader.appendChild(question);
 
         questionBlock.appendChild(questionHeader);

@@ -95,6 +95,7 @@ body {
     margin-bottom: 1.5vh;
     font-size: 2.1vh;
 }
+
 .answer {
     padding: 1vh 1.5vh;
     border-radius: 0.8vh;
@@ -102,12 +103,14 @@ body {
     font-size: 2.3vh;
     border-left: 0.5vh solid transparent;
 }
+
 .correct {
     background-color: var(--green-light);
     border-left-color: var(--green-main);
 }
+
 .incorrect {
-    background-color: #ffe6e6;
+    background-color: #ffc7c7;
     border-left-color: rgb(238, 72, 72);
 }
 

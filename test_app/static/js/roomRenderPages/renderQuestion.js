@@ -109,7 +109,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
     questionBlock.className = "question";
 
     const question = document.createElement("p");
-    question.textContent = quiz.question_text;
+    question.textContent = `${Number(state.replace(/\D/g, "")) + 1}. ${quiz.question_text}`;
     questionBlock.appendChild(question);
 
     const timer = document.createElement("p");
