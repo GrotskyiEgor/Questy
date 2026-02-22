@@ -35,7 +35,6 @@ main {
     display: flex;
     flex-direction: row;
     left: 0.45vw;
-    top: 0.35vw;
     align-items: flex-start;
 }
 
@@ -98,7 +97,7 @@ main {
 }
 
 .info-text {
-    font-size: 2.5vh;
+    font-size: 2.4vh;
     color: #333;
 
     display: flex;
@@ -106,7 +105,7 @@ main {
     align-items: center;
     flex-direction: row;
 
-    gap: 0.4vw;
+    gap: 0.2vw;
 }
 
 .info-text strong {
@@ -506,8 +505,12 @@ main {
     justify-content: center;
     align-items: center;
     padding: 2vh 2vw;
-    gap: 2.5vh;
+    gap: 2vh;
     z-index: 3000;
+}
+
+.toast-wrapper {
+    display: none;
 }
 
 .question {
@@ -599,7 +602,7 @@ main {
     align-self: center;
     justify-content: center;
 
-    height: 40vh;
+    height: 100%;
 }
 
 .image-div img {
@@ -908,7 +911,7 @@ main {
     margin-left: 0.5vw;
 
     width: 49%;
-    height: 95%;
+    height: 76.5vh;
 }
 
 .all-user{
@@ -1461,7 +1464,7 @@ main {
 }
 
 .button-box button {
-    padding: 1.5vh 3vw;
+    padding: 1.5vh 1vw;
     font-size: 2.5vh;
     font-weight: 600;
     border-radius: 1.5vh;
@@ -1483,7 +1486,7 @@ main {
 
 .exel-btn {
     background: linear-gradient(135deg, #66bb6a, #4CAF50);
-    padding: 1.5vh 3vw;
+    padding: 1vh 1vw;
     font-size: 2.5vh;
     font-weight: 600;
     border-radius: 1.5vh;
@@ -1907,9 +1910,74 @@ main {
 }
 
 
+.answer-toast {
+    position: fixed;
+    top: 125%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+    width: 100vw;   
+    max-width: 100vw;
+    padding: 1.5vh 0;
+    align-items: center;
+
+    border-radius: 0;  
+    color: white;
+    box-shadow: 0 0.5vh 2vw rgba(0, 0, 0, 0.1); 
+    animation: toast-fade 0.35s ease forwards;
+
+    transition: top 0.4s ease-out;
+}
+
+.answer-toast-icon {
+    width: 8.5vh;
+    height: 8.5vh;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vh;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.answer-toast-title {
+    font-size: 2.5vh;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.answer-toast-text {
+    font-size: 2vh;
+    opacity: 0.85;
+    line-height: 1.2;
+}
+
+.answer-toast-right {
+    background: linear-gradient(135deg, #4ade80, #22c55e); 
+}
+
+.answer-toast-wrong {
+    background: linear-gradient(135deg, #f87171, #fca5a5); 
+}
+
+@keyframes toast-fade {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -52%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
 @media (max-width: 769px) {
     .mobile-header {
-        visibility: hidden;
+        display: none;
     }
 
     .question-content, .wait-content{
@@ -1921,11 +1989,25 @@ main {
         width: 90%;
     }
 
+    .room-content{
+        left: 0;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .info-bar-text {
+        flex-direction: column;
+        align-items: start;
+    }
+
     .wait-side {
-        margin-top: 8.5vh;
-        margin-left: 1vw;
-        width: 97vw;
-        height: 90.5vh;
+        display: flex;
+        width: 96%;
+        height: 98%;
     }
 
     .info-bar-text{
@@ -1952,19 +2034,20 @@ main {
     }
 
     .chat {
-        margin-top: 8.5vh;
-        height: 90vh;
+        display: none;
+        /* margin-top: 8.5vh;
+        height: 90vh; */
     }
 
     .btn-end {
-        font-size: 2vh;
-        padding: 1vh 0.5vw;
+        font-size: 2.3vh;
+        padding: 1vh 1vw;
         margin-left: 1vw;
     }
 
     .chat-toggle-btn{
-        visibility: hidden;
-        /* top: 29vh; */
+        /* visibility: hidden; */
+        display: none;
     }
 
     .question p {
@@ -2034,8 +2117,16 @@ main {
         height: 18vh;
     }
 
-    .results-container {
-        margin-top: -8vh;
+    .answer-toast-icon {
+        font-size: 2.5vh;        
+    }
+
+    .answer-toast-title {
+        font-size: 2.5vh;
+    }
+
+    .answer-toast-text {
+        font-size: 2vh;
     }
 }
 

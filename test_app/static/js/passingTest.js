@@ -5,25 +5,18 @@ const inputField = document.querySelector(".input-with-answer")
 const inputButton = document.querySelector(".input-answer")
 const multipleChoiceButton = document.querySelector(".multiple-choice-answer")
 
-const resultLine = document.querySelector(".result-line")
-
 function showResult(type, nextUrl, delay = 2000) {
-    const resultLine = document.querySelector(".result-line")
-    const resultText = document.querySelector(".result-line-text")
+    const rightLine = document.querySelector(".answer-toast-right")
+    const worstLine = document.querySelector(".answer-toast-wrong")
     const pageLock = document.querySelector(".page-lock")
 
     pageLock.classList.add("active")
 
     if (type){
-        resultText.textContent = "Правильно ";
-        resultText.style.color = "var(--green-text)"
+        rightLine.style.top = "50%";
     } else {
-        resultText.textContent = "Неправильно";
-        resultText.style.color = "var(--red-text)"
+        worstLine.style.top = "50%";
     }
-    setTimeout(() => {
-        resultLine.classList.add("show");
-    }, 50)
 
     setTimeout(() => {
         window.location.href = nextUrl;

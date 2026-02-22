@@ -111,9 +111,9 @@
     </script>
     
     <div class="wrapper">
+        <h2 class="h2-chart">Користувачі, що зробили завдання</h2>
         <div class="content">
             {% if do_user_list %}
-                <h2 class="h2-chart">Користувачі, що зробили завдання</h2>
                 {% for user in do_user_list %}
                     {% set score = do_score_list[loop.index0] %}
                     <div class="course-tasks">
@@ -132,11 +132,16 @@
                             </a>
                         </div>
                     </div>
-                {% endfor %}
+                    {% endfor %}
+            {% else  %}
+                <p>Таких користувачів ще немає</p>
             {% endif %}
+        </div>
             
+    
+        <h2 class="h2-chart">Користувачі, які не зробили завдання</h2>
+        <div class="content">
             {% if undo_user_list %}
-                <h2 class="h2-chart">Користувачі, які не зробили завдання</h2>
                 {% for user in undo_user_list %}
                     <div class="course-tasks">
                         <div class="task">
@@ -144,6 +149,8 @@
                         </div>
                     </div>
                 {% endfor %}
+            {% else  %}
+                <p>Таких користувачів ще немає</p>
             {% endif %}
         </div>
 

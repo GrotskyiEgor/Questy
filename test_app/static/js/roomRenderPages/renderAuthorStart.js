@@ -216,7 +216,7 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
                     <img src="test_app/static/images/online_test/plus.png" class="online-small-img" alt="plus-btn">
                 </button>
                 <button onclick="stopTime()" id="play-btn" class="timer-btn" data-tooltip="Почати">
-                    <img src="test_app/static/images/online_test/play.png" class="online-img" id="play-img" alt="play-btn">
+                    <img src="test_app/static/images/online_test/pause.png" class="online-img" id="play-img" alt="play-btn">
                 </button>
             </div>
             `

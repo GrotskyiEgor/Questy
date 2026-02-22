@@ -14,21 +14,27 @@
     margin-top: 25px;
 }
 
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .container-classroom {
     display: flex;
     flex-direction: column;
     width: 85%;
 }
 
+.content {
+    display: flex;
+    flex-direction: row;
+
+    width: 80vw;
+    gap: 2vh;
+
+    flex-wrap: wrap;
+}
+
 .course-tasks {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+
+    min-width: fit-content;
 }
 
 .task {

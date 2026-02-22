@@ -299,6 +299,7 @@ function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName=
     let correctTotal= 0
     let users= Object.keys(resultData)
     let totalSlices= users.length* totalQuestion
+
     if(userName){
         users= users.includes(userName) ? [userName] : []
         totalSlices= totalQuestion
@@ -319,9 +320,13 @@ function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName=
         dataColors.push('#e53935')
     }
 
-    const labels= [...users]
+    let labels= [...users]
     if (remaining > 0){
         labels.push("Неправильні / пропущені")
+    }
+
+    if (userName){
+        labels = ["Правильні","Неправильні / пропущені"]
     }
 
     charts[canvasId]= new Chart(ctx, {
@@ -387,9 +392,10 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
         } else if (type === "time"){
             type_list = resultData[user].timers_list
         }
+
         for (let number= 0; number < totalQuestion; number++){
             const time = parseFloat(type_list[number])
-            if (isNaN(time)){
+            if (time === ""){
                 totalTimers[number] += 5
             } else {
                 totalTimers[number] += time
@@ -398,7 +404,7 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
     })
 
     for (let label= 0; label < totalQuestion; label++){
-        labels.push(`Q${label+ 1}`)
+        labels.push(`Q${label + 1}`)
     }
 
     charts[canvasId] = new Chart(ctx, {
@@ -409,7 +415,11 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
                 label: type === "token"
                     ? 'Монети за питання'
                     : 'Суммарное время (сек) на вопрос',
-                data: userName ? type_list.map(Number) : totalTimers,
+                data: userName ? type_list.map(time => time === "" ? 5: Number(time)) : 
+                    totalTimers.map(time => { 
+                        console.log( time, users.length, time / users.length)
+                        return isNaN(time) ? 5 : time / users.length;
+                    }),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 fill: true,

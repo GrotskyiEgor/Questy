@@ -84,11 +84,8 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         username: username,
         author_name: authorName
     });
-
-    console.log("2")
     
     socket.on("room_get_result_data", function(data) {  
-        console.log("вызов")
         resultData = data.room_get_result_data;
         const best_score_data = data.best_score_data;
         const worst_score_data = data.worst_score_data;
@@ -102,14 +99,9 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
                     username: username,
                     author_name: authorName
                 });
-            }, 1000)
+            }, 500)
             return
         }
-
-        console.log(resultData)
-        console.log(best_score_data)
-        console.log(worst_score_data)
-        console.log(hardest_question_data)
 
         let accuracy= questionAccuracy(resultData, totalQuestion)
         accuracyAquestionsArray = accuracy.accuracyAquestionsArray
@@ -248,7 +240,8 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
             <p>
                 <strong>Найскладніше питання: </strong>${hardest_question_data.question_text}<br>
                 <strong>Кількість правильних відповідей: </strong>${hardest_question_data.correct_answers}<br>
-                <strong>Витрачено часу загалом: </strong> ${hardest_question_data.total_time}
+                <strong>Кількість неправильних відповідей: </strong>${Object.keys(resultData).length - hardest_question_data.correct_answers}<br>
+                <strong>В середньому витрачено часу на відповідь: </strong> ${hardest_question_data.total_time / Object.keys(resultData).length} c
             </p>`;
 
         resultsInfoBox.appendChild(headerTitle3);

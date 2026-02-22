@@ -18,25 +18,24 @@ function tokenTimePrecent(userTimer, allTime){
 }
 
 function showResult(type) {
-    const resultLine = document.querySelector(".result-line")
-    const resultText = document.querySelector(".result-line-text")
+    const toastWrapperDiv = document.querySelector(".toast-wrapper")
+    const rightLine = document.querySelector(".answer-toast-right")
+    const worstLine = document.querySelector(".answer-toast-wrong")
     const pageLock = document.querySelector(".page-lock")
 
     if (pageLock){
         pageLock.classList.add("active")
     }
 
-    if (type){
-        resultText.textContent = "Правильно ";
-        resultText.style.color = "var(--green-main)";
-    } else {
-        resultText.textContent = "Неправильно";
-        resultText.style.color = "var(--red-text)";
+    if (toastWrapperDiv){
+        toastWrapperDiv.style.display = "block";
     }
 
-    setTimeout(() => {
-        resultLine.classList.add("show");
-    }, 50)
+    if (type){
+        rightLine.style.top = "50%";
+    } else {
+        worstLine.style.top = "50%";
+    }
 }
 
 function renderWaitQuestion(type) {
@@ -423,14 +422,26 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         })
     }
 
-    const resultLine = document.createElement("div");
-    resultLine.className = "result-line";
+    const toastWrapper = document.createElement("div");
+    toastWrapper.className = "toast-wrapper";
+    toastWrapper.innerHTML += `
+        <div class="answer-toast answer-toast-right">
+            <div class="answer-toast-icon">✓</div>
+            <div class="answer-toast-content">
+                <div class="answer-toast-title">Правильна відповідь</div>
+                <div class="answer-toast-text">Ти обрав правильний варіант</div>
+            </div>
+        </div>
 
-    const resultLineText = document.createElement("p");
-    resultLineText.className = "result-line-text";
-
-    resultLine.appendChild(resultLineText)
-    roomContent.appendChild(resultLine)
+        <div class="answer-toast answer-toast-wrong">
+            <div class="answer-toast-icon">✗</div>
+            <div class="answer-toast-content">
+                <div class="answer-toast-title">Неправильна відповідь</div>
+                <div class="answer-toast-text">Ти обрав неправильний варіант</div>
+            </div>
+        </div>
+    `
+    roomContent.appendChild(toastWrapper);
 
     startTimer()
 }

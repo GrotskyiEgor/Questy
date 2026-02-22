@@ -377,34 +377,6 @@ body {
     color: rgb(5, 57, 22);
 }
 
-/*  */
-
-.result-line {
-    position: fixed;
-    bottom: -15vh;
-    left: 0;
-    height: 15vh;
-    width: 100vw;
-    background-color: #f9f9f9;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    transition: transform 0.6s ease-out;
-    transform: translateY(0);
-    z-index: 999;
-}
-
-.result-line.show {
-    transform: translateY(-57.5vh);
-}
-
-.result-line-text {
-    font-size: 11.5vh;
-    font-weight: 700;
-}
-
 .page-lock {
     position: fixed;
     inset: 0;
@@ -415,4 +387,71 @@ body {
 
 .page-lock.active {
     pointer-events: all;
+}
+
+.answer-toast {
+    position: fixed;
+    top: 125%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+    width: 100vw;   
+    max-width: 100vw;
+    padding: 1.5vh 0;
+    align-items: center;
+    /* gap: 5vw; */
+
+    border-radius: 0;  
+    color: white;
+    box-shadow: 0 0.5vh 2vw rgba(0, 0, 0, 0.1); 
+    animation: toast-fade 0.35s ease forwards;
+
+    transition: top 0.4s ease-out;
+}
+
+.answer-toast-icon {
+    width: 8.5vh;
+    height: 8.5vh;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background: rgba(149, 61, 61, 0.15); */
+    font-size: 1.97rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.answer-toast-title {
+    font-size: 1.94rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.answer-toast-text {
+    font-size: 1.6rem;
+    opacity: 0.85;
+    line-height: 1.2;
+}
+
+.answer-toast-right {
+    background: linear-gradient(135deg, #4ade80, #22c55e); 
+}
+
+.answer-toast-wrong {
+    background: linear-gradient(135deg, #f87171, #fca5a5); 
+}
+
+@keyframes toast-fade {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -52%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
 }

@@ -5,10 +5,6 @@
     font-family: 'Roboto', sans-serif;
 }
 
-main {
-    display: flex;
-}
-
 .wrapper{
     /* background-color: rgba(113, 145, 107, 1); */
     background-color: hwb(120 82% 11% / 0.877);
@@ -47,7 +43,6 @@ main {
     color: black;
     font-size: 4.5vh;
     font-weight: 67.5vh;
-    text-transform: capitalize;
     margin-bottom: 2vh;
 }
 
@@ -55,7 +50,6 @@ main {
     color: #484d54ce;
     font-size: 2.5vh;
     font-weight: 400;
-    text-transform: capitalize;
     margin-bottom: 4vh;
     line-height: 3vh;
 }
@@ -66,7 +60,6 @@ main {
 
 .input-group .label-title{
     color: #38475a;
-    text-transform: capitalize;
     margin-bottom: 3vh;
     font-size: 3.8vh;
     display: block;
@@ -90,18 +83,18 @@ main {
     width: 100%;
     background-color: none;
     color: #38475a;
-    font-size: 4.3vh;
+    font-size: 2.8vh;
     font-weight: 40.5vw;
     border: 0.27vh solid #EAECF0;
     padding: 2.4vh;
     outline: none;
     border-radius: 2.1vh;
-    margin-bottom: 4.5vh;
+    margin-bottom: 4vh;
 }
 
 .input-group input::placeholder{
     color: #484d54ce;
-    font-size: 4.3vh;
+    font-size: 2.8vh;
     font-weight: 54vw;
 }
 
@@ -125,7 +118,7 @@ main {
     background-color: rgb(29, 36, 27);
     border: 0.27vh solid transparent;
     color: #fff;
-    font-size: 3.5vh;
+    font-size: 3.2vh;
     font-weight: 500;
     padding: 2vh 5vh;
     border-radius: 1.8vh;
@@ -139,8 +132,18 @@ main {
 }
 
 @media (max-width: 769px) {
+    main {
+        position: fixed;
+        top: 8vh;
+        height: 92%;
+    }
+
+    .wrapper {
+        height: 90%;
+    }
+
     .container{
-        width: 80vw;
+        width: 88vw;
     }
 
     .title {
