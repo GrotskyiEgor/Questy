@@ -72,7 +72,7 @@
     font-weight: 600;
 }
 
-.task-header a button{
+.task-header a button, .task-header button{
     background: #43a047;
     color: #fff;
     border: none;
@@ -84,7 +84,7 @@
     transition: all 0.25s ease;
 }
 
-.task-header a button:hover {
+.task-header a button:hover, .task-header button:hover {
     background: #388e3c;
     transform: translateY(-2px);
     box-shadow: 0 3px 8px rgba(56, 142, 60, 0.3);
@@ -240,5 +240,10 @@
 
     .task-header a button:hover {
         background: #43a047;
+    }
+
+    .classroom-content{
+        padding: 5px;
+        gap: 8px;
     }
 }

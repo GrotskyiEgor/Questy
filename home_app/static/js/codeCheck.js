@@ -30,7 +30,7 @@ $(() => {
     })
 
     $('#leave-test-btn').on('click', () => {
-        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "userList", "countCorrectAnswer"])
+        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "userList", "countCorrectAnswer", "classId", "taskTestId"])
         $('#modal-bg-connect').fadeOut(200)
     })
 
@@ -75,7 +75,7 @@ $(() => {
     })
 
     $('.reconnect-back-btn').on('click', () => {
-        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "temporaryName", "timeStop", "time"])
+        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "temporaryName", "timeStop", "time", "classId", "taskTestId"])
         $('#modal-bg-connect').fadeOut(200)
     }) 
 

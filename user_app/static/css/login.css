@@ -281,3 +281,32 @@ form button:hover{
     width: 2.7vh;
     height: 2.85vh;
 }
+
+@media (max-width: 769px) {
+    .rotate-bg {
+        display: none;
+    }
+
+
+    .wrapper{
+        top: -4vh;
+        width: 98vw;
+        height: 75vh;
+    }
+
+    .wrapper .form-box {
+        width: 100%;
+    }
+
+    .wrapper .form-box.login {
+        padding: 0vh 5vw 0vh 5vw;
+    }
+
+    .wrapper .form-box .title {
+        font-size: 4vh;
+    }
+
+    .wrapper .info-text{
+        display: none;
+    }
+}

@@ -14,7 +14,7 @@ function leaveTestBlock(room, leave_user){
 }
 
 function userLeaveTest() {
-    clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "reconnect"])
+    clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "reconnect", "classId", "taskTestId"])
     window.location.href = '/';
 }
 

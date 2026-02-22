@@ -27,8 +27,8 @@ def render_test_result():
             list_answers.append(quiz.answer_options.split("%$№"))
             
     user_answers_cookies = flask.request.cookies.get("userAnswers")
-    task_test_id = flask.request.cookies.get(key= 'taskTestId') or None
-    class_id = flask.request.cookies.get(key= 'classId') or None
+    task_test_id = flask.request.cookies.get(key='taskTestId') or None
+    class_id = flask.request.cookies.get(key='classId') or None
     
     if user_answers_cookies:
         user_answers_cookies= unquote(user_answers_cookies)
@@ -73,7 +73,7 @@ def render_test_result():
 
         db.session.commit()
         
-        return flask.render_template(
+        response =  flask.make_response(flask.render_template(
             'result_test.html',
             test=test,
             tokens=count_correct_answers * 500,
@@ -88,6 +88,12 @@ def render_test_result():
             username =current_user.username if current_user.is_authenticated else "", 
             is_teacher=current_user.is_teacher if current_user.is_authenticated else "",
             is_admin=current_user.is_admin if current_user.is_authenticated else ""
-            )
+        ))
+
+        response.delete_cookie("userAnswers", path="/")
+        response.delete_cookie("taskTestId", path="/")
+        response.delete_cookie("classId", path="/")
+
+        return response
 
     return flask.redirect("/")

@@ -280,6 +280,8 @@
             userAnswers= getCookie("userAnswers")
             userTimers= getCookie("userTimers")
             userTokens= getCookie("userTokens")
+            task_test_id = getCookie("taskTestId")
+            class_id = getCookie("classId")
 
             socket.emit("user_answers", {
                 room: room,
@@ -287,7 +289,9 @@
                 author_name: authorName,
                 user_answers: userAnswers,
                 user_timers: userTimers,
-                user_tokens: userTokens
+                user_tokens: userTokens,
+                task_test_id: task_test_id,
+                class_id: class_id
             });
 
             setCookie("state", "resultTest")

@@ -54,10 +54,8 @@
                                 <a href="/passing_test?test_id={{ task.test_id }}&question_number=0&back_to_class={{ class.id }}">
                                     <button onclick="passingTaskTest({{ task.test_id }}, {{ class.id }})">Пройти тест</button>
                                 </a>
-                            {% elif test.test_code and username != class.teacher.username %}
-                                <a href= "/room{{ test.test_code }}">
-                                    <button>Пройти онлайн тест</button>
-                                </a>
+                            {% elif test.test_code and username != class.teacher.username %}                            
+                                <button onclick="passingTaskOnlineTest({{ task.test_id }}, {{ class.id }}, {{ test.test_code }})">Пройти онлайн тест</button>                            
                             {% endif %}
                         </div>
 
@@ -128,8 +126,13 @@
         function passingTaskTest(testId, classId){
             setCookie("taskTestId", testId)
             setCookie("classId", classId)
-            //document.cookie = `taskTestId= ${testId}; path = /`; 
-            //document.cookie = `classId= ${classId}; path = /`; 
+        }
+
+        function passingTaskOnlineTest(testId, classId, room){
+            setCookie("taskTestId", testId)
+            setCookie("classId", classId)
+
+            window.location.href = `/room${room}`
         }
     </script>
 {% endblock %}

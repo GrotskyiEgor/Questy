@@ -177,6 +177,9 @@ def handle_user_answers(data):
     room = data["room"]
     user_name = data["username"]
     user_tokens = data["user_tokens"]
+    task_test_id = data["task_test_id"]
+    class_id = data["class_id"]
+
     tokens = 0
     new_token_list = None
     ROOM = Room.query.filter_by(test_code=room).first()
@@ -223,6 +226,8 @@ def handle_user_answers(data):
         test_id=TEST.id,
         date_complete=datetime.date.today(),
         time_complete=datetime.datetime.now().strftime("%H:%M:%S"),
+        task_test_id = task_test_id or None,
+        class_id = class_id or None,
         user_id=USER.id if USER else None,
         user_name=user_name,
         test_code=room

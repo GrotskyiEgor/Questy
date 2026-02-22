@@ -845,4 +845,12 @@ hr {
     width: 80%;
 }
 
+@media (max-width: 769px) {
+    .class-btn-wrapper, .select-info-text{
+        display: none;
+    }
 
+    .card {
+        width: 45vw;
+    }
+}
