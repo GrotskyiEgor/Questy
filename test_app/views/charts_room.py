@@ -49,8 +49,13 @@ def room_get_result(room, author_name):
                     answers_str = score.user_answer
             
             if answers_str:
+                print(answers_str)
                 answers_list = answers_str.strip('|').split('||')
+                print(answers_str.strip('|'))
 
+                print("99679697")
+                print(QUIZ_LIST)
+                print(answers_list)
                 for index, quiz in enumerate(QUIZ_LIST):
                     if answers_list[index] == "not_answer":
                         correct_answers_list.append(2)
@@ -175,7 +180,8 @@ def room_get_result(room, author_name):
     hardest_question_data = {
         "question_text": hardest_question.question_text,
         "correct_answers": min_correct,
-        "total_time": total_time_for_hardest_question
+        "total_time": int(total_time_for_hardest_question),
+        "hardest_question_index": hardest_question_index
     }
 
     return room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score
@@ -466,7 +472,7 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     correct_percent = (correct_count / total_answers) * 100
     incorrect_percent = 100 - correct_percent
 
-    doughnut_ws.append(["Тип", "Відсоток"])
+    doughnut_ws.append(["Тип", "Відсоток (%)"])
     doughnut_ws.append(["Правильні (%)", correct_percent])
     doughnut_ws.append(["Неправильні (%)", incorrect_percent])
 

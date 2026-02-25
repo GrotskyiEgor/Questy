@@ -62,9 +62,9 @@ def render_test_result():
                 accuracy=count_correct_answers/len(quizzes_list) * 100 // 1,
                 date_complete=datetime.date.today(),
                 time_complete=datetime.datetime.now().strftime("%H:%M:%S"),
-                task_test_id=task_test_id, 
+                task_test_id=int(task_test_id) if task_test_id else None, 
                 test_id=test_id,
-                class_id=class_id,
+                class_id=int(class_id) if class_id else None,
                 user_id=current_user.id,
                 user_name=current_user.username
             )

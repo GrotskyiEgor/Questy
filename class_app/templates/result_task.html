@@ -127,8 +127,10 @@
                             <p><strong>Результат: </strong>{{ score.accuracy }}</p>
                             <p><strong>Дата: </strong>{{ score.date_complete }}</p>
         
-                            <a href="/review_results{{ score.id }}?bask_to_class={{ class.id }}">
-                                <button class="see-more-class">Переглянути</button>
+                            <a href="/review_results{{ score.id }}?back_to_class={{ class.id }}&back_to_task_result={{task.id}}" class="start-btn-a">
+                                <button class="see-more-class">
+                                    Переглянути
+                                </button>
                             </a>
                         </div>
                     </div>

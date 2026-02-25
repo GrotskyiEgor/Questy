@@ -19,12 +19,16 @@
                     <p>Ваш результат: <strong>{{ count_correct_answers }}</strong> з {{ list_quiz|length }}</p>
                 {% endif %}
                 
-                <p>Точність правильних відповідей: <strong>{{ accuracy }}%</strong></p>
+                <p>Точність правильних відповідей: <strong>{{ score.accuracy }}%</strong></p>
 
-                {% if bask_to_class %}
-                    <a class="home-link" href="/class_courses{{ bask_to_class }}">
+                {% if back_to_class and not back_to_task_result%}
+                    <a class="home-link" href="/class_courses{{ back_to_class }}">
                         <button class="home-btn">До класу</button>
-                    </a>
+                    </a>  
+                {% elif back_to_task_result and back_to_class %}
+                    <a class="home-link" href="/result_task?class_id={{ back_to_class }}&task_id={{ back_to_task_result }}">
+                        <button class="home-btn">Повернутись до сторінки результатів</button>
+                    </a> 
                 {% else %}
                     <a class="home-link" href="/profile">
                         <button class="home-btn">До профiлю</button>

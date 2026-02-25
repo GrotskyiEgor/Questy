@@ -93,13 +93,13 @@ function checkAnswers(type){
     let userTimers= getCookie("userTimers") || ""
     let userTokens= getCookie("userTokens") || ""
 
-    const curTime= Number(getCookie("time")) || 0
-    const allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
-    const userTimer= allTime -curTime
+    const curTime = Number(getCookie("time")) || 0
+    const allTime = plusAnswerTime + Number(quizList[Number(state.replace(/\D/g, ""))].time)
+    const userTimer = allTime - curTime
     
-    let answerList= answers.split("|")
-    answerList= answerList.filter(answer => answer && answer !== " ")
-    let missingCount= 1+ questionIndex- answerList.length
+    let answerList = answers.split("|")
+    answerList = answerList.filter(answer => answer && answer !== " ")
+    let missingCount = 1 + questionIndex- answerList.length
 
     if (missingCount < 0){
         return
@@ -110,22 +110,33 @@ function checkAnswers(type){
     if (type === "test"){
         for (let miss = 0; miss < missingCount; miss++) {
             answers += "|not_answer|";
-            if (userTimers === "" && userTokens === ""){
+            
+            if (userTimers === ""){
                 userTimers += `${userTimer}`;
-                userTokens += `${token}`;
             } else{
                 userTimers += `|${userTimer}`;
+            }
+
+            if (userTokens === ""){
+                userTokens += `${token}`;
+            } else {
                 userTokens += `|${token}`;
             }
         }
     } else if (type === "reconnect"){
         for (let miss = 0; miss < missingCount- 1; miss++) {
             answers += "|not_answer|";
-            if (userTimers === "" && userTokens === ""){
+            
+            if (userTimers === ""){
                 userTimers += `0`;
-                userTokens += `0`;
             } else{
                 userTimers += `|0`;
+                userTokens += `|0`;
+            }
+
+            if (userTokens === ""){
+                userTokens += `0`;
+            } else{
                 userTokens += `|0`;
             }
         }

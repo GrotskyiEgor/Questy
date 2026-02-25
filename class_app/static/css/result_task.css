@@ -147,6 +147,10 @@
     transform: scale(0.95);
 }
 
+.start-btn-a {
+    width: fit-content;
+}
+
 .see-more-class {
     background-color: #356d7d;
     color: white;

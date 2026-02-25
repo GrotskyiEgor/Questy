@@ -11,8 +11,7 @@
 {% block content %}
     <div class="content">
         <div class="question">
-            <p>{{  list_quiz[question_number].question_text }}</p>
-            <!-- <p>{{list_answers[question_number]}} {{ list_answers[question_number]|length}} {{ list_answers[question_number]|length is odd}}</p> -->
+            <p>{{ question_number + 1}}. {{  list_quiz[question_number].question_text }}</p>
         </div>
 
         {% if list_quiz[question_number].question_type == "image" %}

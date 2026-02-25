@@ -34,7 +34,7 @@ def render_result_task():
     print(do_user_list)
     print(undo_user_list)
 
-    # Собираем все оценки по классу
+    # Собираем все оценки по класу
     scores = Score.query.filter_by(class_id=CLASS.id).all()
 
     # Словарь: user_name -> список (date_complete, accuracy)
@@ -85,5 +85,6 @@ def render_result_task():
         "date_complete": date_complete,
         "do_score_list": do_score_list,
         "undo_user_list": undo_user_list,
+        "task": TASK,
         "class": CLASS
     }

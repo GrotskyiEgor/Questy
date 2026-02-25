@@ -145,7 +145,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
 
             selectBlock= false
             choiceSelector.innerHTML= `
-                <option value="1">Загальна успішність</option>
+                <option value="1">Загальна успішність(%)</option>
                 <option value="2">Кількість правильних/неправильних відповідей</option>
                 <option value="3">Відсоткове співвідношення правильних відповідей</option>
                 <option value="4">Витрачено часу на запитання</option>
@@ -228,17 +228,17 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         // найти лучший результат
         const resultInfoBestScore = document.createElement('p');
         resultInfoBestScore.id= "results-info-box-text2"
-        resultInfoBestScore.innerHTML = `<p><strong>Найкращий результат: </strong>${best_score_data.user_name} (${best_score_data.accuracy}%)</p>`;
+        resultInfoBestScore.innerHTML = `<p><strong>Найбільший результат: </strong>${best_score_data.accuracy}%</p>`;
 
         const resultInfoWorstScore = document.createElement('p');
         resultInfoWorstScore.id= "results-info-box-text2"
-        resultInfoWorstScore.innerHTML = `<p><strong>Найгірший результат: </strong>${worst_score_data.user_name} (${worst_score_data.accuracy}%)</p>`;
+        resultInfoWorstScore.innerHTML = `<p><strong>Найменший результат: </strong>${worst_score_data.accuracy}%</p>`;
 
         const worstResultQuestion = document.createElement('p');
         worstResultQuestion.id= "results-info-box-text2"
         worstResultQuestion.innerHTML = `
             <p>
-                <strong>Найскладніше питання: </strong>${hardest_question_data.question_text}<br>
+                <strong>Найскладніше питання (${hardest_question_data.hardest_question_index + 1}): </strong>${hardest_question_data.question_text}<br>
                 <strong>Кількість правильних відповідей: </strong>${hardest_question_data.correct_answers}<br>
                 <strong>Кількість неправильних відповідей: </strong>${Object.keys(resultData).length - hardest_question_data.correct_answers}<br>
                 <strong>В середньому витрачено часу на відповідь: </strong> ${hardest_question_data.total_time / Object.keys(resultData).length} c

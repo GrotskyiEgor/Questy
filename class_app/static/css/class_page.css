@@ -226,6 +226,7 @@
 
 
 .card-body li{
+    margin-left: 1vw;
     padding: 0.2vw;
     border-radius: 0.8vh;
     width: 100%;

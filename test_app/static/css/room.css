@@ -505,12 +505,8 @@ main {
     justify-content: center;
     align-items: center;
     padding: 2vh 2vw;
-    gap: 2vh;
+    /* gap: 2vh; */
     z-index: 3000;
-}
-
-.toast-wrapper {
-    display: none;
 }
 
 .question {
@@ -567,6 +563,7 @@ main {
 } */
 
 .answers {
+    margin-top: 2vh;
     display: grid;
     gap: 2vh;
     width: 100%;
@@ -704,6 +701,7 @@ main {
 /*  */
 
 .multiple-choice-answer{
+    margin-top: 2vh;
     width: 80%;
     height: fit-content;
     padding: 3vh 0px 3vh 0px;
@@ -2087,7 +2085,11 @@ main {
         font-size: 4.5vh;
     }
 
-    .multiple-answer, .active-multiple-answer{
+    .multiple-answer{
+        font-size: 2.5vh;
+    }
+
+    .active-multiple-answer{
         font-size: 2.5vh;
     }
 

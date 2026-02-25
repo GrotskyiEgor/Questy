@@ -96,11 +96,11 @@ function renderRightWorstBar(canvasId, resultData, totalQuestion, user){
                 label: 'Результат',
                 data: [correctAnswer, totalQuestion - correctAnswer],
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(69, 184, 46, 0.6)',
                     'rgba(255, 99, 132, 0.5)'
                 ],
                 borderColor: [
-                    'rgba(75, 192, 192, 1)',
+                    'rgba(69, 184, 46, 1)',
                     'rgba(255, 99, 132, 1)'
                 ],
                 borderWidth: 1
@@ -143,7 +143,7 @@ function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, 
     if (charts[canvasId]) {
         charts[canvasId].destroy();
     }
-  
+    
     charts[canvasId]= new Chart(ctx, {
         type: 'line',
         data: {
@@ -151,11 +151,11 @@ function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, 
             datasets: [{
                 label: 'Точність відповідей (%)',
                 data: accurancyNumbers,
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(69, 184, 46, 1)',
+                backgroundColor: 'rgba(69, 184, 46, 0.6)',
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                pointBackgroundColor: 'rgba(69, 184, 46, 1)',
                 pointRadius: 5
             }]
         },
@@ -301,8 +301,8 @@ function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName=
     let totalSlices= users.length* totalQuestion
 
     if(userName){
-        users= users.includes(userName) ? [userName] : []
-        totalSlices= totalQuestion
+        users = users.includes(userName) ? [userName] : []
+        totalSlices = totalQuestion
     }
 
     users.forEach((user, index) => {
@@ -314,7 +314,8 @@ function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName=
         dataColors.push(CHART_COLORS[index])
     })
 
-    let remaining= totalSlices- correctTotal
+    let remaining = totalSlices- correctTotal
+
     if (remaining > 0){
         dataValues.push(remaining)
         dataColors.push('#e53935')
@@ -325,8 +326,9 @@ function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName=
         labels.push("Неправильні / пропущені")
     }
 
+    const userDataColors = ['rgba(69, 184, 46, 1)', '#e53935']
     if (userName){
-        labels = ["Правильні","Неправильні / пропущені"]
+        labels = ["Правильні", "Неправильні / пропущені"]
     }
 
     charts[canvasId]= new Chart(ctx, {
@@ -335,7 +337,7 @@ function renderUserResultPieChart(canvasId, resultData, totalQuestion, userName=
             labels: labels,
             datasets: [{
                 data: dataValues,
-                backgroundColor: dataColors,
+                backgroundColor: userName ? userDataColors : dataColors,
                 borderColor: 'black',
                 borderWidth: 1
             }]
@@ -370,8 +372,7 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
     }
 
     let labels= []
-    const totalTimers= new Array(totalQuestion).fill(0)
-
+    const totalCounts= new Array(totalQuestion).fill(0)
     let users= Object.keys(resultData)
 
     if (userName === null){
@@ -396,9 +397,9 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
         for (let number= 0; number < totalQuestion; number++){
             const time = parseFloat(type_list[number])
             if (time === ""){
-                totalTimers[number] += 5
+                totalCounts[number] += 5
             } else {
-                totalTimers[number] += time
+                totalCounts[number] += time
             }
         }
     })
@@ -412,19 +413,20 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
         data: {
             labels: labels,
             datasets: [{
-                label: type === "token"
-                    ? 'Монети за питання'
-                    : 'Суммарное время (сек) на вопрос',
+                label: type === "time" ? 'Середнє час (сек)' : 'Усього зароблено токенів',
                 data: userName ? type_list.map(time => time === "" ? 5: Number(time)) : 
-                    totalTimers.map(time => { 
-                        console.log( time, users.length, time / users.length)
-                        return isNaN(time) ? 5 : time / users.length;
+                    totalCounts.map(count => { 
+                        if (type === "time"){
+                            return isNaN(count) ? 5 : count / users.length;
+                        } else {
+                            return count 
+                        }
                     }),
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(69, 184, 46, 1)',
+                backgroundColor: 'rgba(69, 184, 46, 0.6)',
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                pointBackgroundColor: 'rgba(69, 184, 46, 1)',
                 pointRadius: 5
             }]
         },
@@ -434,14 +436,14 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
                 x: {
                     title: {
                         display: true,
-                        text: 'Номер вопроса'
+                        text: 'Номер питання'
                     }
                 },
                 y: {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Суммарное время (сек)'
+                        text: type === "time" ? 'Середнє час (сек)' : 'Усього зароблено токенів'
                     }
                 }
             },
@@ -454,8 +456,8 @@ function renderQuestionValuesLineChart(canvasId, resultData, totalQuestion, user
 
 
 function renderDoughnutChart(canvasId, totalAnswer, correctCount){
-    let correctPercent= (correctCount/totalAnswer) * 100;
-    let incorrectPercent= 100- correctPercent;
+    let correctPercent = (correctCount / totalAnswer) * 100;
+    let incorrectPercent = 100 - correctPercent;
     
     try {
         let existing_chart = Chart.getChart('donat-chart')

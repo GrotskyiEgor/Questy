@@ -48,7 +48,7 @@
                             <div class="card with-tasks">
                                 <div class="card-header" style="background: {{ bg_color }};">
                                     <div class="h-left-info">
-                                        Назва классу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span><span>Код: {{ class.class_code }}</span>
+                                        Назва класу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span><span>Код: {{ class.class_code }}</span>
                                     </div>
 
                                     <div class="class-actions">
@@ -57,11 +57,11 @@
                                         <div class="dropdown">
                                             <form action="/delete_class{{ class.id }}" method="POST">
                                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                                <button type="submit" class="dropdown-btn d">Видалити класс</button>
+                                                <button type="submit" class="dropdown-btn d">Видалити клас</button>
                                             </form>
 
                                             <a href="/class_information{{ class.id }}" class="dropdown-btn i">
-                                                Інформація про класс
+                                                Інформація про клас
                                             </a>
                                         </div>
                                     </div>
@@ -89,7 +89,7 @@
                                 <div class="card-footer">
                                     <a href="/class_courses{{ class.id }}">
                                         <button class="start-btn" style="background: {{ bg_color }};">
-                                            Перейти до классу
+                                            Перейти до класу
                                         </button>
                                     </a>
                                     <a href="/create_task{{ class.id }}">
@@ -127,7 +127,7 @@
 
                             <div class="card with-tasks">
                                 <div class="card-header" style="background: {{ bg_color }};">
-                                    Назва классу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span>
+                                    Назва класу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span>
                                 </div>
 
                                 <div class="card-body">
@@ -148,7 +148,7 @@
                                 <div class="card-footer">
                                     <a href="/class_courses{{ class.id }}">
                                         <button class="start-btn" style="background: {{ bg_color }};">
-                                            Перейти до классу
+                                            Перейти до класу
                                         </button>
                                     </a>
                                 </div>
@@ -167,9 +167,9 @@
     <!-- Кнопка + -->
     <button class="add-btn">+</button>
     <ul class="menu-options">
-        <li id="join-course-button">Приєднатися до классу</li>
+        <li id="join-course-button">Приєднатися до класу</li>
         {% if is_teacher %}
-            <li id="create-course-button">Створити класс</li>
+            <li id="create-course-button">Створити клас</li>
         {% endif %}
     </ul>
 
@@ -182,17 +182,17 @@
             <form class="form" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <h2>Приєднатися до классу</h2>
+                <h2>Приєднатися до класу</h2>
                 <div class="form-group">
-                    <h3>Попросіть у свого викладача код классу та введіть його тут.</h3>
-                    <label>Код классу</label>
+                    <h3>Попросіть у свого викладача код класу та введіть його тут.</h3>
+                    <label>Код класу</label>
                     <input type="text" placeholder="Введіть код" name="code" required>
                 </div>
                 <div class="form-group">
-                    <label>Вимоги до входу за допомогою коду классу:</label>
+                    <label>Вимоги до входу за допомогою коду класу:</label>
                         <ul>
                             <li class="join-li">Використовуйте авторизований обліковий запис</li>
-                            <li class="join-li">Код классу має містити лише літери або цифри (5–8) і не включати пробіли й спеціальні символи</li>
+                            <li class="join-li">Код класу має містити лише літери або цифри (5–8) і не включати пробіли й спеціальні символи</li>
                         </ul>
                 </div>
     
@@ -209,17 +209,17 @@
             <form class="test-form" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <h2>Створити класс</h2>
+                <h2>Створити клас</h2>
                 <div class="form-group">
-                    <label>Назва классу:</label>
-                    <input type="text" placeholder="Введіть назву классу" name="title" required>
+                    <label>Назва класу:</label>
+                    <input type="text" placeholder="Введіть назву класу" name="title" required>
                 </div>
                 <div class="form-group">
                     <label>Назва уроку:</label>
                     <input type="text" placeholder="Введіть назву уроку" name="lesson" required>
                 </div>
                 <div class="form-group">
-                    <label>Колір классу:</label>
+                    <label>Колір класу:</label>
                     <select id="color-type" name="color-type">
                         <option value="single">Монотонний</option>
                         <option value="gradient">Градієнт</option>
@@ -239,7 +239,7 @@
                     <input type="number" placeholder="Введіть число" name="max-count" required>
                 </div>
         
-                <button class="join-course-btn" type="submit">Створити класс</button>
+                <button class="join-course-btn" type="submit">Створити клас</button>
             </div>
         </form>
     </div>   

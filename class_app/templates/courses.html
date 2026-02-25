@@ -18,7 +18,7 @@
                 </div>
 
                 {% if username == class.teacher.username %}    
-                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}">
+                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}" class="start-btn-a">
                         <button class="start-btn" style="background: {{ class.class_color1 }};">
                             Створити завдання
                         </button>
@@ -31,7 +31,7 @@
                 </div>
 
                 {% if username == class.teacher.username %}             
-                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}">
+                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}" class="start-btn-a">
                         <button class="start-btn" style="background: linear-gradient(135deg, {{ class.class_color1 }}, {{ class.class_color2 }});">
                             Створити завдання
                         </button>
@@ -54,8 +54,8 @@
                                 <a href="/passing_test?test_id={{ task.test_id }}&question_number=0&back_to_class={{ class.id }}">
                                     <button onclick="passingTaskTest({{ task.test_id }}, {{ class.id }})">Пройти тест</button>
                                 </a>
-                            {% elif test.test_code and username != class.teacher.username %}                            
-                                <button onclick="passingTaskOnlineTest({{ task.test_id }}, {{ class.id }}, {{ test.test_code }})">Пройти онлайн тест</button>                            
+                            {% elif test.test_code and username != class.teacher.username %}                          
+                                <button onclick="passingTaskOnlineTest({{ task.id }}, {{ class.id }}, {{ test.test_code }})">Пройти онлайн тест</button>                            
                             {% endif %}
                         </div>
 
@@ -84,7 +84,7 @@
                                             <button>Скинути тест</button>
                                         </form>
                                         {% if test.test_code != 0 and not can_start %}
-                                            <a href="/room{{ test.test_code }}?online_test='{{ task.id }}'">
+                                            <a href="/room{{ test.test_code }}?online_test='{{ task.id }}'&back_to_class={{ class.id }}">
                                                 <button class="start" type="button">Почати</button>
                                             </a>
                                         {% endif %}                           

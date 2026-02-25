@@ -179,7 +179,7 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
         author_name: authorname
     });
 
-    let quizTime= getCookie("time");
+    let quizTime= Number(getCookie("time"));
 
     socket.once('get_usernames', function(data){
         let userArrey = data;

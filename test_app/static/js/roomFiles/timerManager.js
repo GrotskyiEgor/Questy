@@ -35,8 +35,8 @@ function startTimer() {
     }
 
     timerInterval= setInterval(() =>{
-        const cookieTime= parseInt(getCookie("time"));
-        let time= parseInt(timerText.textContent);
+        const cookieTime = Number(getCookie("time"));
+        let time = Number(timerText.textContent);
 
         timerText.textContent= time;
 

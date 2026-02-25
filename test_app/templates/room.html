@@ -73,8 +73,8 @@
         } 
         // authorStart
         if (state && state.includes("authorStart")) {
-            state= getCookie("state")
-            let time= getCookie("time")
+            state = getCookie("state");
+            let time = Number(getCookie("time"));
             renderAuthorStart(quizList[Number(state.replace(/\D/g, ""))], room, authorName, Number(state.replace(/\D/g, "")), totalQuestion, Number(state.replace(/\D/g, "")));
         } 
         else if (state === "authorResultTest") {
@@ -94,7 +94,7 @@
             renderWaitQuestion("reconnect")
         }
         else if (state && state.includes("question")) {
-            let time= getCookie("time")
+            let time = Number(getCookie("time"))
             renderQuestion(Number("{{ test.id }}"), quizList[Number(state.replace(/\D/g, ""))], anwersList[Number(state.replace(/\D/g, ""))], room, authorName);
         } 
         else if (state && state.includes("wait")) {
@@ -203,8 +203,8 @@
 
         socket.on("reconnect_ping", function(data) {          
             state = getCookie("state");        
-            let newState= -2
-            let newTime= getCookie("time")      
+            let newState = -2
+            let newTime = Number(getCookie("time"))      
             if (username === authorName){  
                 if (state === "authorResultTest"){
                     newState= -1
@@ -383,7 +383,7 @@
             const timer= document.getElementById("timer")
             if (!timer) return;
             
-            const timerCount= getCookie("time")
+            const timerCount = Number(getCookie("time"))
             plusAnswerTime += 15
             if (timerCount && timer.textContent != "Час"){
                 timer.textContent = parseInt(timerCount) + extraTimeSeconds

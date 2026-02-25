@@ -27,10 +27,6 @@ function showResult(type) {
         pageLock.classList.add("active")
     }
 
-    if (toastWrapperDiv){
-        toastWrapperDiv.style.display = "block";
-    }
-
     if (type){
         rightLine.style.top = "50%";
     } else {
@@ -75,7 +71,7 @@ function renderWaitQuestion(type) {
 function renderQuestion(testId, quiz, answers, room, author_name) {
     const delay = 2250
     let state = getCookie("state")
-    let quizTime = getCookie("time");
+    let quizTime = Number(getCookie("time"));
     let userTimer = 0
     let curTime = 0
     let token = 0
@@ -166,47 +162,46 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         for (let count = 0; count < buttonsArrey.length; count++ ) {
             let button= buttonsArrey[count];
             button.addEventListener("click", function (event) {
-                    let cookie= getCookie("userAnswers")
-                    let userTimers= getCookie("userTimers")
-                    let userTokens= getCookie("userTokens")
+                let cookie = getCookie("userAnswers")
+                let userTimers = getCookie("userTimers")
+                let userTokens = getCookie("userTokens")
 
-                    curTime= getCookie("time");
-                    allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
-                    userTimer= allTime- curTime
-                    token= tokenTimePrecent(userTimer, allTime)
+                curTime = Number(getCookie("time"));
+                allTime = plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
+                userTimer = allTime- curTime
+                token = tokenTimePrecent(userTimer, allTime)
 
-                    setCookie("state", `wait${state.replace(/\D/g, "")}`)
-                    
-                    if (typeof cookie === "undefined"){
-                        setCookie("userAnswers", `|${button.id}|`)
-                        setCookie("userTimers", userTimer)
-                        setCookie("userTokens", token)
-                    }
-                    else{
-                        cookie= cookie+ `|${button.id}|`
-                        newUserTimers= userTimers+ `|${userTimer}`
-                        newUserTokens= userTokens+ `|${token}`
-                        setCookie("userAnswers", cookie)
-                        setCookie("userTimers", newUserTimers)
-                        setCookie("userTokens", newUserTokens)
-                    }   
+                setCookie("state", `wait${state.replace(/\D/g, "")}`)
 
-                    socket.emit("user_answer", {
-                        room: room,
-                        author_name: author_name,
-                        username: username,
-                        answer: button.id
-                    });
-
-                    showResult(quiz.correct_answer === button.id);
-
-                    setTimeout(() => {
-                        const state = getCookie("state")
-                        if (state.includes("question")) return;
-
-                        renderWaitQuestion("test");               
-                    }, delay)
+                if (typeof cookie === "undefined"){
+                    setCookie("userAnswers", `|${button.id}|`)
+                    setCookie("userTimers", userTimer)
+                    setCookie("userTokens", token)
                 }
+                else{
+                    cookie= cookie+ `|${button.id}|`
+                    newUserTimers= userTimers+ `|${userTimer}`
+                    newUserTokens= userTokens+ `|${token}`
+                    setCookie("userAnswers", cookie)
+                    setCookie("userTimers", newUserTimers)
+                    setCookie("userTokens", newUserTokens)
+                }   
+
+                socket.emit("user_answer", {
+                    room: room,
+                    author_name: author_name,
+                    username: username,
+                    answer: button.id
+                });
+
+                showResult(quiz.correct_answer === button.id);
+
+                setTimeout(() => {
+                    const state = getCookie("state")
+                    if (state.includes("question")) return;
+
+                    renderWaitQuestion("test");               
+                }, delay)}
             )
         }
     }
@@ -235,42 +230,36 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         });
         
         inputButton.addEventListener("click", function(event) {
-            let userAnswer= getCookie("userAnswers")
-            let userTimers= getCookie("userTimers")
-            let userTokens= getCookie("userTokens")    
-            let answerValue= document.querySelector(".input-with-answer").value.trim()
+            let userAnswer = getCookie("userAnswers");
+            let userTimers = getCookie("userTimers");
+            let userTokens = getCookie("userTokens")    ;
+            let answerValue = document.querySelector(".input-with-answer").value.trim();
 
-            curTime= getCookie("time");
-            allTime= plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
-            userTimer= allTime- curTime
-            token= tokenTimePrecent(userTimer, allTime)
+            curTime = Number(getCookie("time"));
+            allTime = plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time;
+            userTimer = allTime - curTime;
+            token = tokenTimePrecent(userTimer, allTime);
 
-            setCookie("state", `wait${state.replace(/\D/g, "")}`)
-            newUserTokens= userTokens+ `|${token}`
-            newUserTimers= userTimers+ `|${userTimer}`
+            setCookie("state", `wait${state.replace(/\D/g, "")}`);
+
+            newUserTokens = userTokens + `|${token}`;
+            newUserTimers = userTimers + `|${userTimer}`;
 
             if (typeof answerValue === "undefined"){
-                answerValue= "not_answer"
-                if (typeof userAnswer === "undefined"){
-                    setCookie("userTimers", userTimer)
-                    setCookie("userTokens", token)
-                }
-                else{
-                    setCookie("userTimers", newUserTimers)
-                    setCookie("userTokens", newUserTokens)
-                } 
+                answerValue= "not_answer";
             }
             
             if (typeof userAnswer === "undefined"){
-                setCookie("userAnswers", `|${answerValue}|`)
-                setCookie("userTokens", token)
+                setCookie("userAnswers", `|${answerValue}|`);
+                setCookie("userTimers", userTimer);
+                setCookie("userTokens", token);
             }
             else{
-                cookie= userAnswer + `|${answerValue}|`            
-                setCookie("userAnswers", cookie)
-                setCookie("userTokens", newUserTokens)
-                setCookie("userTimers", newUserTimers)
-            }       
+                cookie = userAnswer + `|${answerValue}|`;    
+                setCookie("userAnswers", cookie);
+                setCookie("userTokens", newUserTokens);
+                setCookie("userTimers", newUserTimers);
+            }     
                     
             socket.emit("user_answer", {
                 room: room,
@@ -353,9 +342,6 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             userTimer = allTime- curTime
             token = tokenTimePrecent(userTimer, allTime)
 
-            console.log("SOME")
-            console.log(allTime, token)
-
             newUserTokens = userTokens + `|${token}`
             newUserTimers = userTimers + `|${userTimer}`
 
@@ -374,28 +360,20 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
 
             if (typeof answerValue === "undefined"){
                 answerValue= "not_answer"
-                if (typeof userAnswer === "undefined"){
-                    setCookie("userTimers", userTimer)
-                    setCookie("userTokens", token)
-                }
-                else{
-                    setCookie("userTimers", newUserTimers)
-                    setCookie("userTokens", newUserTokens)
-                } 
             }
             
             if (typeof userAnswer === "undefined"){
-                setCookie("userAnswers", answerValue)
+                setCookie("userAnswers", `|${answerValue}|`)
                 setCookie("userTimers", userTimer)
                 setCookie("userTokens", token)
             }
             else{
-                cookie= userAnswer + `|${answerValue}|`
+                cookie = userAnswer + `|${answerValue}|`
                 setCookie("userAnswers", cookie)
                 setCookie("userTokens", newUserTokens)
                 setCookie("userTimers", newUserTimers)
             }       
-                    
+
             socket.emit("user_answer", {
                 room: room,
                 author_name: author_name,

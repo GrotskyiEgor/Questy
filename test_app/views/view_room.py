@@ -6,7 +6,7 @@ from flask_socketio import join_room, emit, disconnect
 
 import Project
 from Project.database import db
-from user_app.models import User, Score
+from user_app.models import User, Score, Task
 from ..models import Test, Room, Quiz
 from .charts_room import excel_table, room_get_result
 from Project.settings import csrf
@@ -176,9 +176,9 @@ def handle_send_usernames(data):
 def handle_user_answers(data):
     room = data["room"]
     user_name = data["username"]
-    user_tokens = data["user_tokens"]
-    task_test_id = data["task_test_id"]
-    class_id = data["class_id"]
+    user_tokens = data["user_tokens"] 
+    task_test_id = data.get("task_test_id")
+    class_id = data.get("class_id")
 
     tokens = 0
     new_token_list = None
@@ -226,8 +226,8 @@ def handle_user_answers(data):
         test_id=TEST.id,
         date_complete=datetime.date.today(),
         time_complete=datetime.datetime.now().strftime("%H:%M:%S"),
-        task_test_id = task_test_id or None,
-        class_id = class_id or None,
+        task_test_id=int(task_test_id) if task_test_id else None,
+        class_id=int(class_id) if class_id else None ,
         user_id=USER.id if USER else None,
         user_name=user_name,
         test_code=room
