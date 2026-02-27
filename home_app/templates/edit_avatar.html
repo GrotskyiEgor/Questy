@@ -11,26 +11,29 @@
 {% block content %}
     <form action="" method="POST" class="form">
         <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
-        {% for index_cloth in range(5) %}
-            <div class="{{name_classes[index_cloth]}}">
-            <p>Текст</p>
-            {% for index in range(3) %}
-                {% if index + 1 == list_clothes[index_cloth] %}
-                    <label>
-                        <input type="radio" name="{{name_classes[index_cloth]}}" checked value="{{index + 1}}">
-                        <img src="{{ url_for('home_app.static', filename='images/media/test.png') }}" alt="">
+        
+        {% for category in name_classes %}
+            {% set category_index = loop.index0 %}
+            <div class="{{ category }}">
+                <p>Выберите {{ category }}</p>
+                
+                {% for filename in all_options[category] %}
+                    {% set item_id = filename.split('.')[0] %}
+                    
+                    <label class="avatar-label">
+                        <input type="radio" 
+                               name="{{ category }}" 
+                               value="{{ item_id }}"
+                               {% if item_id|int == list_clothes[category_index] %}checked{% endif %}>
+                        
+                        <img src="{{ url_for('static', filename='media/' + category + '/' + filename) }}" 
+                             alt="{{ item_id }}" 
+                             style="width: 70px; cursor: pointer;">
                     </label>
-                {% else %}
-                    <label>
-                        <input type="radio" name="{{name_classes[index_cloth]}}" value="{{index + 1}}">
-                        <img src="{{ url_for('home_app.static', filename='images/media/test.png') }}" alt="">
-                    </label>
-                    {% endif %}
-            {% endfor %}
+                {% endfor %}
             </div> 
         {% endfor %}
     </form>
     
     <script src="{{ url_for('home_app.static', filename='js/avatarChanges.js') }}"></script>
 {% endblock %}
-
