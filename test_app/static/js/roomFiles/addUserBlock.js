@@ -43,10 +43,14 @@ function kickUser(kick_user, ip, type, from) {
 
     if (from == "wait"){
         const waiteUserCount = document.querySelector(".wait-list-count")
-        waiteUserCount.textContent = Number(waiteUserCount.textContent) - 1
+        const waitUsers = document.querySelector(".wait-users")
+        const userBlocks = waitUsers.querySelectorAll(".user-block")
+        waiteUserCount.textContent = Number(userBlocks.length)
     } else if (from == "user"){
         const UserCount = document.querySelector(".user-list-count")
-        UserCount.textContent = Number(UserCount.textContent) - 1
+        const userList = document.querySelector(".user-list")
+        const userBlocks = userList.querySelectorAll(".user-block")
+        UserCount.textContent = Number(userBlocks.length)
     }
 
     users= users.filter(userStr => {
@@ -86,6 +90,8 @@ function kickUser(kick_user, ip, type, from) {
             </div>
         `
     }
+
+    console.log("ggggg")
 }
 
 function addUesrBlock(username, button){
@@ -111,6 +117,8 @@ function addUesrBlock(username, button){
             </div>
         `
     }
+
+    console.log("user list +1")
     
     socket.emit("new_user", {
         room: room,
@@ -232,6 +240,16 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
         userListDiv.appendChild(userBlock);
         return userListDiv;
     }
+
+    // const waiteUserCount = document.querySelector(".wait-list-count")
+    // const waitUsers = document.querySelector(".wait-users")
+    // const userBlocks1 = waitUsers.querySelectorAll(".user-block")
+    // waiteUserCount.textContent = Number(userBlocks1.length)
+
+    // const UserCount = document.querySelector(".user-list-count")
+    // const userList = document.querySelector(".user-list")
+    // const userBlocks2 = userList.querySelectorAll(".user-block")
+    // UserCount.textContent = Number(userBlocks2.length)
 
     return
 }

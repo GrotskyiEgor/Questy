@@ -1961,6 +1961,10 @@ main {
     background: linear-gradient(135deg, #f87171, #fca5a5); 
 }
 
+.disable-hover * {
+    pointer-events: none !important;
+}
+
 @keyframes toast-fade {
     from {
         opacity: 0;
@@ -2081,8 +2085,8 @@ main {
     }
 
     .waiting-message{
-        width: 90%;
-        font-size: 4.5vh;
+        width: 70%;
+        font-size: 4vh;
     }
 
     .multiple-answer{

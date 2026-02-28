@@ -125,11 +125,14 @@
                 username: username,
                 device_id: getDeviceId()
             });
+
+            console.log("join")
         
             if (username !== authorName && !state) {                            
                 fetch('https://api.ipify.org?format=text')
                     .then(r => r.text())
                     .then(ip => {
+                        console.log("new_user_admin")
                         socket.emit("new_user_admin", {
                             room: room,
                             username: username,
@@ -317,10 +320,10 @@
         });
 
         socket.on("new_user_admin", function(data) {  
-            let addUser= true
-            let userList= getCookie("userList")
-            let blockedUsers= getCookie("blockedUsers")
-            let waitUserIp= document.querySelectorAll(".user-ip")
+            let addUser = true
+            let userList = getCookie("userList")
+            let blockedUsers = getCookie("blockedUsers")
+            let waitUserIp = document.querySelectorAll(".user-ip")
 
             if (blockedUsers){
                 blockedUsers= blockedUsers.split("$%^")
@@ -330,6 +333,16 @@
                         addUser= false
                     }
                 })
+            }
+
+            console.log("wait list +1")
+
+            if (userList){
+                const exists = userList
+                    .split("</>")
+                    .some(user => user.split("()")[1] === data.ip);
+
+                if (exists) addUser = false;
             }
 
             //if (userList){

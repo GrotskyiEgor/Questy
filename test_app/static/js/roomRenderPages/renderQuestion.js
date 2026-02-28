@@ -83,6 +83,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
 
     if (roomContent != null) {
         roomContent.className = "question-content";
+        roomContent.classList.add("disable-hover");
         roomContent.innerHTML = ""; 
     };
 
@@ -420,6 +421,10 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         </div>
     `
     roomContent.appendChild(toastWrapper);
+
+    setTimeout(() => {
+        roomContent.classList.remove("disable-hover");
+    }, 50)
 
     startTimer()
 }
