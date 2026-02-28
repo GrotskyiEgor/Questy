@@ -1,3 +1,21 @@
+function updateUserCounters() {
+    const waitUsers = document.querySelector(".wait-users");
+    const userList = document.querySelector(".user-list");
+
+    const waitCount = document.querySelector(".wait-list-count");
+    const userCount = document.querySelector(".user-list-count");
+
+    if (waitUsers && waitCount) {
+        const waitBlocks = waitUsers.querySelectorAll(".user-block:not(.empty-block)");
+        waitCount.textContent = waitBlocks.length;
+    }
+
+    if (userList && userCount) {
+        const userBlocks = userList.querySelectorAll(".user-block:not(.empty-block)");
+        userCount.textContent = userBlocks.length;
+    }
+}
+
 function leaveTest(){
     clearCookie(["temporaryName"])
     window.location.href = `/`;
@@ -82,6 +100,8 @@ function kickUser(kick_user, ip, type, from) {
         removeUserBlock.remove()
     }
 
+    updateUserCounters();
+
     const waitRoom = document.querySelector(".wait-users");
     if (waitRoom.innerHTML.trim() === ""){
         waitRoom.innerHTML += `
@@ -109,6 +129,8 @@ function addUesrBlock(username, button){
         userBlock.remove();
     }
 
+    updateUserCounters();
+
     const waitRoom = document.querySelector(".wait-users");
     if (waitRoom.innerHTML.trim() === ""){
         waitRoom.innerHTML += `
@@ -131,18 +153,18 @@ function addUesrBlock(username, button){
 function createUserBlock(username, authorName, blockUsername, ip, type) {   
     let userListDiv;
     let checkingUserBlock;
-    const waiteUserCount = document.querySelector(".wait-list-count")
-    const UserCount = document.querySelector(".user-list-count")
+    // const waiteUserCount = document.querySelector(".wait-list-count")
+    // const UserCount = document.querySelector(".user-list-count")
     
     if (type === "not"){
         
-        if (UserCount){
-            UserCount.textContent = Number(UserCount.textContent) + 1
-        }
+        // if (UserCount){
+        //     UserCount.textContent = Number(UserCount.textContent) + 1
+        // }
 
-        if (username == authorName){
-            waiteUserCount.textContent = Number(waiteUserCount.textContent) - 1
-        }
+        // if (username == authorName){
+        //     waiteUserCount.textContent = Number(waiteUserCount.textContent) - 1
+        // }
 
         userListDiv= document.getElementById("user-list");
         checkingUserBlock= document.getElementById(`user${blockUsername}`);
@@ -153,9 +175,9 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
             emptyUserBlock.remove();
         }
     } else {
-        waiteUserCount.textContent = Number(waiteUserCount.textContent) + 1
-        userListDiv= document.getElementById("wait-users") ;
-        checkingUserBlock= document.getElementById(`user${blockUsername}`);
+        // waiteUserCount.textContent = Number(waiteUserCount.textContent) + 1
+        userListDiv = document.getElementById("wait-users") ;
+        checkingUserBlock = document.getElementById(`user${blockUsername}`);
 
         const emptyUserWaitBlock= document.getElementById("emty-users-wait-list");
         if (emptyUserWaitBlock){
@@ -238,18 +260,9 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
 
     if (userListDiv){
         userListDiv.appendChild(userBlock);
+        updateUserCounters();
         return userListDiv;
     }
-
-    // const waiteUserCount = document.querySelector(".wait-list-count")
-    // const waitUsers = document.querySelector(".wait-users")
-    // const userBlocks1 = waitUsers.querySelectorAll(".user-block")
-    // waiteUserCount.textContent = Number(userBlocks1.length)
-
-    // const UserCount = document.querySelector(".user-list-count")
-    // const userList = document.querySelector(".user-list")
-    // const userBlocks2 = userList.querySelectorAll(".user-block")
-    // UserCount.textContent = Number(userBlocks2.length)
 
     return
 }

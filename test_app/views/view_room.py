@@ -325,10 +325,10 @@ def handle_new_user(data):
 @Project.settings.socketio.on('new_user_admin')
 def handle_new_user_admin(data):
     author_name = data["author_name"]
-    compound = data.get("compound", 0)
+    connected = data.get("connected", 0)
 
     author_sid = get_sid(author_name)
-    emit("new_user_admin", {"username": data["username"], "ip": data["ip"], "compound": compound}, to=author_sid)
+    emit("new_user_admin", {"username": data["username"], "ip": data["ip"], "connected": connected}, to=author_sid)
 
 
 @Project.settings.socketio.on('next_question')

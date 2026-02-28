@@ -137,7 +137,7 @@
                             room: room,
                             username: username,
                             author_name: authorName,
-                            connected:  connected,
+                            connected: connected,
                             ip: ip
                         });
                     })
@@ -324,6 +324,7 @@
             let userList = getCookie("userList")
             let blockedUsers = getCookie("blockedUsers")
             let waitUserIp = document.querySelectorAll(".user-ip")
+            let state = getCookie("state") || false
 
             if (blockedUsers){
                 blockedUsers= blockedUsers.split("$%^")
@@ -337,13 +338,13 @@
 
             console.log("wait list +1")
 
-            if (userList){
-                const exists = userList
-                    .split("</>")
-                    .some(user => user.split("()")[1] === data.ip);
-
-                if (exists) addUser = false;
-            }
+            //if (userList){
+            //    const exists = userList
+            //        .split("</>")
+            //        .some(user => user.split("()")[1] === data.ip);
+            //
+            //    if (exists) addUser = false;
+            //}
 
             //if (userList){
             //    userList= userList.split("</>")
@@ -364,8 +365,13 @@
             //    })
             //}
 
+            console.log("data.connected", data.connected, addUser, state)
             if (addUser && !state && !data.connected){
+                console.log("1")
                 createUserBlock(username, authorName, data['username'], data['ip'], "wait");
+            } else {
+                console.log("ww")
+                createUserBlock(username, authorName, data['username'], data['ip'], "not");
             }
         });
 
