@@ -206,7 +206,7 @@ function renderResultTest(username, totalQuestion, quizList, anwersList, testId)
 
             if (quiz.correct_answer !== answers){             
                 const answerIncorrect = document.createElement('div');
-                answerIncorrect.className = 'answer incorrect';
+                answerIncorrect.className = 'answer user_answers';
                 answerIncorrect.textContent = `✗ ${answers}`;
                 questionBlock.appendChild(answerIncorrect);
 

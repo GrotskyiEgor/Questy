@@ -37,13 +37,13 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     infoBar.appendChild(infoBarText);
     waitSideTop.appendChild(infoBar);
 
-    let durationSeconds= 0
+    let durationSeconds = 0
     quizzes.forEach(quiz => {
         durationSeconds += Number(quiz.time) + 15
     });
 
-    let duration= durationSeconds / 60
-    let durationFix= duration.toFixed(2)
+    let duration = Math.round(durationSeconds / 60)
+    // let durationFix = duration.toFixed(2)
 
     // Інформація про тест
     const testInfo = document.createElement("div");
@@ -52,7 +52,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
         <h3>Інформація про тест</h3>
         <ul>
             <li>Кількість запитань: ${quizzes.length}</li>
-            <li>Тривалість: ${durationFix} хвилин</li>
+            <li>Тривалість: ${duration} хвилин</li>
         </ul>
     `;
     waitSideTop.appendChild(testInfo);

@@ -161,7 +161,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion) {
         const exelButton= document.createElement('button');
         exelButton.className= 'exel-btn';
         exelButton.type = "submit";
-        exelButton.textContent = 'Завантажити Exel таблицю';
+        exelButton.textContent = 'Завантажити Excel таблицю';
         // exelButton.addEventListener("click", () => excelTable(username, authorName, resultData, best_score_data));    
         form.appendChild(exelButton);
         
