@@ -11,6 +11,7 @@ from openpyxl.drawing.colors import ColorChoice
 from user_app.models import User, Score
 from ..models import Room, Quiz
 
+
 def room_get_result(room, author_name):
     room_get_result_data = {}
     
@@ -306,7 +307,7 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     line_chart.add_data(data, titles_from_data=True)
     line_chart.set_categories(cats)
 
-    accuracy_ws.add_chart(line_chart, "E2")
+    accuracy_ws.add_chart(line_chart, "C1")
 
     # ---------------- CORRECT / WRONG BAR CHART ----------------
 
@@ -328,7 +329,7 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     bar_ws.append(["Питання", "Правильно", "Неправильно"])
 
     for i in range(total_questions):
-        bar_ws.append([f"Q{i+1}", correct_counts[i], wrong_counts[i]])
+        bar_ws.append([f"Q{i+1}", correct_counts[i], abs(wrong_counts[i])])
 
     bar_chart = BarChart()
     bar_chart.type = "col"
@@ -351,7 +352,7 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     bar_chart.y_axis.scaling.min = -math.ceil(max_wrong * 1.2)
     bar_chart.y_axis.scaling.max = math.ceil(max_correct * 1.2)
 
-    bar_ws.add_chart(bar_chart, "E2")
+    bar_ws.add_chart(bar_chart, "D1")
 
 
     # ---------------- PIE CHART ----------------
@@ -393,31 +394,7 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     pie_chart.add_data(data, titles_from_data=True)
     pie_chart.set_categories(cats)
 
-    CHART_COLORS = [
-        '1E88E5', '43A047', 'F4511E', '8E24AA', '3949AB',
-        '00ACC1', 'FB8C00', '6D4C41', '546E7A',
-        '5E35B1','039BE5','00897B','7CB342','C0CA33',
-        'FDD835','FF7043','8D6E63','78909C','EC407A'
-    ]
-
-    series = pie_chart.series[0]
-
-    for i in range(len(values)):
-        dp = DataPoint(idx=i)
-
-        # если это "остаток" (неправильные)
-        if i == len(values) - 1 and remaining > 0:
-            color = "E53935"
-        else:
-            color = CHART_COLORS[i % len(CHART_COLORS)]
-
-        dp.graphicalProperties = GraphicalProperties(
-            solidFill=color
-        )
-
-        series.data_points.append(dp)
-
-    pie_ws.add_chart(pie_chart, "E2")
+    pie_ws.add_chart(pie_chart, "C1")
 
 
     # ---------------- TIME / TOKEN LINE CHART ----------------
@@ -434,16 +411,15 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
             type_list = result_data[user]["timers_list"]
 
         for i in range(total_questions):
-            if type_list[i]:
-                total_timers[i] += int(type_list[i])
+            total_timers[i] += float(type_list[i])
 
-    time_ws.append(["Питання", "Суммарне значення"])
+    time_ws.append(["Питання", "Витрачено часу на запитання (сек)"])
 
     for i in range(total_questions):
         time_ws.append([f"Q{i+1}", total_timers[i]])
 
     time_chart = LineChart()
-    time_chart.title = "Суммарне значення по питанням"
+    time_chart.title = "Сумарний час на питання (сек)"
     time_chart.y_axis.title = "Значення"
     time_chart.x_axis.title = "Номер питання"
 
@@ -455,7 +431,7 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     time_chart.add_data(data, titles_from_data=True)
     time_chart.set_categories(cats)
 
-    time_ws.add_chart(time_chart, "E2")
+    time_ws.add_chart(time_chart, "C1")
 
 
     # ---------------- DOUGHNUT CHART ----------------
@@ -472,12 +448,12 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     correct_percent = (correct_count / total_answers) * 100
     incorrect_percent = 100 - correct_percent
 
-    doughnut_ws.append(["Тип", "Відсоток (%)"])
-    doughnut_ws.append(["Правильні (%)", correct_percent])
-    doughnut_ws.append(["Неправильні (%)", incorrect_percent])
+    doughnut_ws.append(["Тип", "Відсоток"])
+    doughnut_ws.append(["Правильні (%)", round(correct_percent, 1)])
+    doughnut_ws.append(["Неправильні (%)", round(incorrect_percent, 1)])
 
     doughnut_chart = DoughnutChart()
-    doughnut_chart.title = "Загальна точність (%)"
+    doughnut_chart.title = "Загальна точнисть правильних відповідей (%)"
 
     data = Reference(doughnut_ws, min_col=2, min_row=1, max_row=3)
     cats = Reference(doughnut_ws, min_col=1, min_row=2, max_row=3)
@@ -485,7 +461,7 @@ def excel_table(username, author_name, result_data, best_score_data, worst_score
     doughnut_chart.add_data(data, titles_from_data=True)
     doughnut_chart.set_categories(cats)
 
-    doughnut_ws.add_chart(doughnut_chart, "E2")
+    doughnut_ws.add_chart(doughnut_chart, "C1")
 
 
     # ---------------- СОХРАНЕНИЕ ----------------

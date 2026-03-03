@@ -381,6 +381,7 @@ def delete_code(test_id):
 
     return flask.redirect("/quizzes/")
 
+
 @csrf.exempt
 @render_page(template_name = 'room.html')
 def render_room(test_code):
