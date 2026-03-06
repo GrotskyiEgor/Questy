@@ -16,6 +16,8 @@ home_app.add_url_rule(rule='/quizzes/', view_func=render_quizzes, methods=['GET'
 home_app.add_url_rule(rule='/delete_test<test_id>', view_func=delete_test, methods=['POST'])
 home_app.add_url_rule(rule='/reset_test<test_id>', view_func=reset_test, methods=['POST'])
 
+home_app.add_url_rule(rule='/home/room<code>', view_func=set_room_test, methods=['POST'])
+
 # USER APP
 user_app.add_url_rule(rule="/sign_up/", view_func=render_sign_up, methods=['GET', 'POST'])
 

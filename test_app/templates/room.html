@@ -12,6 +12,7 @@
 {% block content %}
 
     <div class="room-content" id="room-content"></div>
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
@@ -325,6 +326,8 @@
             let blockedUsers = getCookie("blockedUsers")
             let waitUserIp = document.querySelectorAll(".user-ip")
             let state = getCookie("state") || false
+
+            console.log("add")
 
             if (blockedUsers){
                 blockedUsers= blockedUsers.split("$%^")

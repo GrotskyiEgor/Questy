@@ -326,7 +326,7 @@ def handle_new_user(data):
 def handle_new_user_admin(data):
     author_name = data["author_name"]
     connected = data.get("connected", 0)
-
+    print("alo")
     author_sid = get_sid(author_name)
     emit("new_user_admin", {"username": data["username"], "ip": data["ip"], "connected": connected}, to=author_sid)
 

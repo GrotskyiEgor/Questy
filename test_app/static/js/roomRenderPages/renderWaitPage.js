@@ -1,3 +1,28 @@
+function setRoomChanges(testCode, type, value){
+    const csrfToken = $('#csrf_token').val(); 
+
+    $.ajax ({
+        url: `/home/room?code=${testCode}`,
+        method: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+            ajax: true,                  
+            value: value,
+            type: type,
+            csrf_token: csrfToken
+        }),
+        success: function (data) {
+            console.log("false")   
+        },
+        error: function(thx) {
+            console.log(thx)
+        }
+    })
+
+    console.log("kimpintan")
+}
+
 function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     const content = document.getElementById("room-content");
     content.innerHTML = "";
@@ -49,11 +74,23 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     const testInfo = document.createElement("div");
     testInfo.className = "test-info-box";
     testInfo.innerHTML = `
-        <h3>Інформація про тест</h3>
-        <ul>
-            <li>Кількість запитань: ${quizzes.length}</li>
-            <li>Тривалість: ${duration} хвилин</li>
-        </ul>
+        <div class="">
+            <h3>Інформація про тест</h3>
+            <ul>
+                <li>Кількість запитань: ${quizzes.length}</li>
+                <li>Тривалість: ${duration} хвилин</li>
+            </ul>
+        </div>
+        <div class="">
+            <div class="radio-button-box">
+                <label for="done-after-due-time">Music for test</label>               
+                <input type="checkbox" id="done-after-due-time" name="done-after-due-time" class="music">
+            </div>
+            <div class="radio-button-box">
+                <label for="done-after-due-time">Show result for question</label>               
+                <input type="checkbox" id="done-after-due-time" name="done-after-due-time" class="show-result">
+            </div>
+        </div>
     `;
     waitSideTop.appendChild(testInfo);
 
@@ -233,6 +270,22 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
         if (event.key === "Enter"){
             event.preventDefault()
             $('.send-btn').click()
+        }
+    })
+
+    document.querySelector(".music").addEventListener('change', function(event) {
+        if (this.checked) {
+            setRoomChanges(testCode, "music", true)
+        } else {
+            setRoomChanges(testCode, "music", false)
+        }
+    })
+
+    document.querySelector(".show-result").addEventListener('change', function(event) {
+        if (this.checked) {
+            setRoomChanges(testCode, "show", true)
+        } else {
+            setRoomChanges(testCode, "show", false)
         }
     })
 }

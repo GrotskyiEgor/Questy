@@ -3,6 +3,12 @@ import flask
 from test_app.models import Room, Test
 from Project.render_page import render_page
 
+def set_room_test():
+    data = flask.request.get_json()
+    value = data.get('value')
+    typeChange = data.get('type')
+
+    print(f"music or show result {value} {typeChange}")
 
 def loguot():
     flask.session.clear()
