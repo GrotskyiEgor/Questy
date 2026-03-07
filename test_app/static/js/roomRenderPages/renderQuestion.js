@@ -41,7 +41,7 @@ function showResult(type, testshowResult, testMusic) {
 }
 
 function renderWaitQuestion(type, testMusic) {
-    if (testMusic) setMusicTheme("onlineRoomTheme");
+    setMusicTheme("onlineRoomTheme", testMusic);
 
     const roomContent = document.getElementById("room-content");
 
