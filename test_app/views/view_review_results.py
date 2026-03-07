@@ -42,7 +42,7 @@ def render_review_results(id):
                 count_correct_answers += 1
 
     tokens= count_correct_answers * 500
-    print(back_to_task_result)
+    # print(back_to_task_result)
     return {
         "test": TEST,
         "score": SCORE,

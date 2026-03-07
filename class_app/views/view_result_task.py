@@ -22,17 +22,17 @@ def render_result_task():
 
     # Разделение на сделавших и не сделавших
     for user in CLASS.users:
-        print(TASK.test_id, CLASS.id, user.id)
+        # print(TASK.test_id, CLASS.id, user.id)
         score = Score.query.filter_by(test_id=TASK.test_id, class_id=CLASS.id, user_id=user.id).first()
-        print(score)
+        # print(score)
         if score:
             do_user_list.append(user)
             do_score_list.append(score)
         else:
             undo_user_list.append(user)
 
-    print(do_user_list)
-    print(undo_user_list)
+    # print(do_user_list)
+    # print(undo_user_list)
 
     # Собираем все оценки по класу
     scores = Score.query.filter_by(class_id=CLASS.id).all()

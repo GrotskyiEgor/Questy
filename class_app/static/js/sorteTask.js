@@ -1,12 +1,16 @@
 $(document).ready(function () {
     $('#course').on('change', function (){
         const selectedValue = $(this).val()
+        const csrfToken = $('#csrf_token').val(); 
         
         $.ajax({
             url: "/task_page/sorte",
             type: "PUT",
             contentType: "application/json",
             dataType: "json",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
             data: JSON.stringify({sortytype: selectedValue}),
             success: function (data) {
                 $("#tasks").empty()

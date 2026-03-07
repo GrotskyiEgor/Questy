@@ -50,13 +50,12 @@ def room_get_result(room, author_name):
                     answers_str = score.user_answer
             
             if answers_str:
-                print(answers_str)
+                # print(answers_str)
                 answers_list = answers_str.strip('|').split('||')
-                print(answers_str.strip('|'))
+                # print(answers_str.strip('|'))
 
-                print("99679697")
-                print(QUIZ_LIST)
-                print(answers_list)
+                # print(QUIZ_LIST)
+                # print(answers_list)
                 for index, quiz in enumerate(QUIZ_LIST):
                     if answers_list[index] == "not_answer":
                         correct_answers_list.append(2)

@@ -41,7 +41,7 @@ function startTimer() {
         timerText.textContent= time;
 
         if (isNaN(cookieTime) && username != authorName){
-            renderWaitQuestion("test");
+            renderWaitQuestion("test", testMusic);
         }
 
         if (!timerPaused){
@@ -56,12 +56,32 @@ function startTimer() {
             timerText.innerHTML = `
                 <img src="test_app/static/images/online_test/time.png" class="online-img">
                 `
+
                 
             setTimeout(() => {
                 if (username != authorName){
-                    renderWaitQuestion("test");
-                }          
-            }, 1000)}
+                    renderWaitQuestion("test", testMusic);
+                } else if (username === authorName){
+                    countUsersAnswer= getCookie("countUsersAnswer");
+                    correctAnswerChart= getCookie("countCorrectAnswer");
+
+                    const answerDiv = document.createElement("div")
+                    answerDiv.className = "chart-answer-count"
+
+                    const worstCount = document.createElement("p")
+                    const rightCount = document.createElement("p")
+                    rightCount.textContent = `Правильних відповідей: ${correctAnswerChart}`
+                    worstCount.textContent = `Неправильних відповідей: ${lengthArrey - Number(correctAnswerChart)}`
+
+                    answerDiv.appendChild(rightCount)
+                    answerDiv.appendChild(worstCount)
+                    const chartDiv = document.querySelector(".chart-div")
+                    chartDiv.appendChild(answerDiv)
+
+                    renderDoughnutChart("donat-chart", lengthArrey, correctAnswerChart);
+                }         
+            }, 1000)
+        } 
     }, 1000);
 }
 

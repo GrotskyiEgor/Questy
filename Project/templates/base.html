@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
         <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'> 
+        <link rel="icon" type="image/x-icon" href="{{ url_for('home_app.static', filename='images/favicon.ico') }}">
         <script src="https://kit.fontawesome.com/e0e68b1b72.js" crossorigin="anonymous"></script>
         {% block links %} {% endblock %}
 
@@ -90,8 +91,6 @@
                 {% endif %}
             </nav>
         </header>
-
-
 
         <main id="main">
             {% block content %}

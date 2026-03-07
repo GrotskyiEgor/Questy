@@ -1,14 +1,28 @@
 import flask
 
+from Project.database import db
 from test_app.models import Room, Test
 from Project.render_page import render_page
 
-def set_room_test():
+def set_room_test(code):
     data = flask.request.get_json()
     value = data.get('value')
     typeChange = data.get('type')
 
-    print(f"music or show result {value} {typeChange}")
+    ROOM = Room.query.filter_by(test_code=code).first()
+    TEST = Test.query.filter_by(id=ROOM.test_id).first()
+
+    if TEST:
+        if typeChange == "music":
+            TEST.music = value
+        elif typeChange == "show":
+            TEST.show_result = value
+
+        db.session.commit()
+    
+    print(f"Updated TEST {TEST.id}: music={TEST.music}, show_result={TEST.show_result}")
+
+    return flask.jsonify({"status": "ok"})
 
 def loguot():
     flask.session.clear()

@@ -17,7 +17,7 @@ function tokenTimePrecent(userTimer, allTime){
     return token
 }
 
-function showResult(type) {
+function showResult(type, testshowResult, testMusic) {
     const toastWrapperDiv = document.querySelector(".toast-wrapper")
     const rightLine = document.querySelector(".answer-toast-right")
     const worstLine = document.querySelector(".answer-toast-wrong")
@@ -28,13 +28,21 @@ function showResult(type) {
     }
 
     if (type){
-        rightLine.style.top = "50%";
+        if (testshowResult) {
+            rightLine.style.top = "50%"; 
+            if (testMusic) playSound("correctResult");
+        }
     } else {
-        worstLine.style.top = "50%";
+        if (testshowResult){
+            worstLine.style.top = "50%"
+            if (testMusic) playSound("wrongResult")
+        }
     }
 }
 
-function renderWaitQuestion(type) {
+function renderWaitQuestion(type, testMusic) {
+    if (testMusic) setMusicTheme("onlineRoomTheme");
+
     const roomContent = document.getElementById("room-content");
 
     if (roomContent){
@@ -68,7 +76,11 @@ function renderWaitQuestion(type) {
     }
 }
 
-function renderQuestion(testId, quiz, answers, room, author_name) {
+function renderQuestion(testId, quiz, answers, room, author_name, testshowResult, testMusic) {
+    setMusicTheme("onlineQuestionTheme", testMusic);
+
+    console.log("renderQuestion")
+
     const delay = 2250
     let state = getCookie("state")
     let quizTime = Number(getCookie("time"));
@@ -78,7 +90,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
     const roomContent= document.getElementById("room-content");
 
     if (isNaN(quizTime) || quizTime < 0){
-        renderWaitQuestion("test")
+        renderWaitQuestion("test", testMusic)
     }
 
     if (roomContent != null) {
@@ -195,15 +207,16 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                     answer: button.id
                 });
 
-                showResult(quiz.correct_answer === button.id);
+
+                showResult(quiz.correct_answer === button.id, testshowResult, testMusic);
 
                 setTimeout(() => {
                     const state = getCookie("state")
                     if (state.includes("question")) return;
 
-                    renderWaitQuestion("test");               
-                }, delay)}
-            )
+                    renderWaitQuestion("test", testMusic);               
+                }, !testshowResult ? delay : 50)
+            })
         }
     }
     else if (quiz.question_type === "input"){        
@@ -269,7 +282,7 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 answer: answerValue
             });
 
-            showResult(quiz.correct_answer === answerValue);
+            showResult(quiz.correct_answer === answerValue, testshowResult, testMusic);
 
             setTimeout(() => {
                 const state = getCookie("state")
@@ -390,13 +403,13 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             const isCorrect = quizCorrectAnswer.length === userAnswerValueArray.length && 
                             quizCorrectAnswer.every((value, index) => value === userAnswerValueArray[index]);
             
-            showResult(isCorrect);
+            showResult(isCorrect, testshowResult, testMusic);
 
             setTimeout(() => {
                 const state = getCookie("state")
                 if (state.includes("question")) return;
 
-                renderWaitQuestion("test");               
+                renderWaitQuestion("test", testMusic);               
             }, delay)
         })
     }

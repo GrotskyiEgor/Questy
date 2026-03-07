@@ -12,10 +12,12 @@ class Test(db.Model):
     author_name = db.Column(db.String(100), nullable= False)
     created_date = db.Column(db.String(100), nullable= False)
 
+    show_result = db.Column(db.Boolean, default=True)
+    music = db.Column(db.Boolean, default=True)
+
     image= db.Column(db.String(100), nullable= True)
 
     quizes= db.relationship('Quiz', backref= 'test', cascade= "all, delete-orphan")
-
 
     def dict(self):
         return {

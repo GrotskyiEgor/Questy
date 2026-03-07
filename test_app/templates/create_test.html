@@ -39,6 +39,7 @@
         <i class='bx  bx-home'></i>
     </button>
 
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     <script src="{{ url_for('test_app.static', filename= 'js/createTest/createQuestion.js') }}"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/createTest/buildTest.js') }}"></script>
 {% endblock %}

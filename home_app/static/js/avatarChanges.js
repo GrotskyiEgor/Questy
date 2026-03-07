@@ -8,11 +8,13 @@ $(document).ready(function () {
         $.ajax({
             url: window.location.pathname, 
             method: 'POST',
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
             data: {
                 ajax: true,                  
                 field: fieldName,
                 value: fieldValue,
-                csrf_token: csrfToken
             }
         });
     });

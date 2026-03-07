@@ -110,8 +110,6 @@ function kickUser(kick_user, ip, type, from) {
             </div>
         `
     }
-
-    console.log("ggggg")
 }
 
 function addUesrBlock(username, button){
@@ -139,8 +137,6 @@ function addUesrBlock(username, button){
             </div>
         `
     }
-
-    console.log("user list +1")
     
     socket.emit("new_user", {
         room: room,

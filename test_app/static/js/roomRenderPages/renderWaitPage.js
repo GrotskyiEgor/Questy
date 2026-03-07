@@ -2,28 +2,32 @@ function setRoomChanges(testCode, type, value){
     const csrfToken = $('#csrf_token').val(); 
 
     $.ajax ({
-        url: `/home/room?code=${testCode}`,
+        url: `/home/room/${testCode}`,
         method: "POST",
         contentType: "application/json",
         dataType: "json",
+        headers: {
+            "X-CSRFToken": csrfToken
+        },
         data: JSON.stringify({
             ajax: true,                  
             value: value,
-            type: type,
-            csrf_token: csrfToken
+            type: type
         }),
-        success: function (data) {
-            console.log("false")   
-        },
+        // success: function (data) {
+        //     console.log("false")   
+        // },
         error: function(thx) {
             console.log(thx)
         }
     })
-
-    console.log("kimpintan")
 }
 
-function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
+function renderRoomMain(testCode, authorName, username, quizzes, userListName, testMusic, testShowResult) {
+    setMusicTheme("onlineRoomTheme", testMusic);
+
+    console.log("renderRoomMain")
+
     const content = document.getElementById("room-content");
     content.innerHTML = "";
 
@@ -82,15 +86,16 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
             </ul>
         </div>
         <div class="">
-            <div class="radio-button-box">
-                <label for="done-after-due-time">Music for test</label>               
-                <input type="checkbox" id="done-after-due-time" name="done-after-due-time" class="music">
-            </div>
-            <div class="radio-button-box">
-                <label for="done-after-due-time">Show result for question</label>               
-                <input type="checkbox" id="done-after-due-time" name="done-after-due-time" class="show-result">
-            </div>
+        <div class="radio-button-box">
+            <label for="done-after-due-time">Музика під час тестування</label>               
+            <input type="checkbox" name="done-after-due-time" class="music" ${testMusic ? "checked" : ""}>
         </div>
+        ${authorName === username ? `
+            <div class="radio-button-box">
+                <label for="done-after-due-time">Показувати результат відповіді на запитання користувачам</label>               
+                <input type="checkbox" name="done-after-due-time" class="show-result" ${testShowResult ? "checked" : ""}>
+            </div>
+        </div> ` : ""}
     `;
     waitSideTop.appendChild(testInfo);
 
@@ -140,7 +145,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
 
     const userListCount = document.createElement("span");
     userListCount.className= "user-list-count";
-    userListCount.textContent = 1;
+    userListCount.textContent = 0;
     
     userListText.appendChild(userListCount);
     info1.appendChild(userListText);
@@ -234,6 +239,10 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     chatToggleBtn.textContent = "Чат";
     
     chatToggleBtn.addEventListener("click", ()=> {
+        const newMessageCount = chatToggleBtn.querySelector(".new-task-count");
+        if (newMessageCount){
+            newMessageCount.remove()
+        }
         chat.classList.toggle("open");
         const waitSide = document.querySelector(".wait-side");
 
@@ -257,8 +266,9 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     participantsTitle.textContent = "Кількість учасників";
     participantsBox.appendChild(participantsTitle);
 
-    if (userListName){
-        let userListBlocks= userListName.split("</>")
+    if (userListName && userListName != true){
+        console.log(userListName)
+        let userListBlocks = userListName.split("</>")
 
         userListBlocks.forEach(block => {
             user_data = block.split("()");
@@ -272,20 +282,32 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
             $('.send-btn').click()
         }
     })
-
+    
     document.querySelector(".music").addEventListener('change', function(event) {
         if (this.checked) {
-            setRoomChanges(testCode, "music", true)
+            if (authorName === username){
+                setRoomChanges(testCode, "music", true)
+            }
+            console.log("~1~")
+            testMusic = true
+            setMusicTheme("onlineRoomTheme", testMusic)        
         } else {
-            setRoomChanges(testCode, "music", false)
+            if (authorName === username){
+                setRoomChanges(testCode, "music", false)
+            }
+            testMusic = false
+            console.log("~2~")
+            setAllMute()
         }
     })
 
-    document.querySelector(".show-result").addEventListener('change', function(event) {
-        if (this.checked) {
-            setRoomChanges(testCode, "show", true)
-        } else {
-            setRoomChanges(testCode, "show", false)
-        }
-    })
+    if (authorName === username){
+        document.querySelector(".show-result").addEventListener('change', function(event) {
+            if (this.checked) {
+                setRoomChanges(testCode, "show", true)
+            } else {
+                setRoomChanges(testCode, "show", false)
+            }
+        })
+    }
 }

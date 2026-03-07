@@ -60,8 +60,10 @@ def render_profile():
     show_graph= True
 
     buffer = io.BytesIO()
+    user = User.query.filter_by(id=current_user.id).first()
+    user_avatar = user.avatar.split("|")[0]
+
     if current_user.is_authenticated:
-        user = User.query.filter_by(id=current_user.id).first()
         
         scores = Score.query.filter_by(user_id=current_user.id).all()
         tests_count = len(Test.query.filter_by(author_name= current_user.username).all())
@@ -88,6 +90,7 @@ def render_profile():
             return {
                 "scores": scores,
                 "scores_count": scores_count,
+                "user_avatar": user_avatar,
                 "tests_count": tests_count,
                 "dates_complete": dates_complete,
                 'accuracy': accuracy or [],
@@ -118,6 +121,7 @@ def render_profile():
             return {
                 "scores": scores,
                 "scores_count": scores_count,
+                "user_avatar": user_avatar,
                 "tests_count": tests_count,
                 "dates_complete": dates_complete,
                 'accuracy': accuracy or [],
@@ -140,6 +144,7 @@ def render_profile():
             return {
                 "scores": scores,
                 'list_tests': list_tests,
+                "user_avatar": user_avatar,
                 'dates_complete': unique_dates_complete,
                 "scores_count": scores_count,
                 "tests_count": tests_count,
@@ -171,6 +176,7 @@ def render_profile():
             return {
                 "scores": scores,
                 "scores_count": scores_count,
+                "user_avatar": user_avatar,
                 "tests_count": tests_count,
                 'message': message,
                 'dates_complete': dates_complete,
@@ -204,6 +210,7 @@ def render_profile():
             return {
                 "scores": scores,
                 "scores_count": scores_count,
+                "user_avatar": user_avatar,
                 "tests_count": tests_count,
                 'message': message,
                 'dates_complete': dates_complete,
@@ -225,6 +232,7 @@ def render_profile():
     return {
         "scores": scores,
         "scores_count": scores_count,
+        "user_avatar": user_avatar,
         "tests_count": tests_count,
         'message': message,
         'list_tests': list_tests,

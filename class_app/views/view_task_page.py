@@ -60,17 +60,18 @@ def render_task_page():
             "overdue_task_list": overdue_task_list}
 
 def new_task():
-    USER = User.query.filter_by(id= current_user.id).first()
+    # User.query.filter_by(id= current_user.id).first()
+    USER = current_user
     class_online_task = []
 
     for CLASS in USER.classes:
-        online_task = []
+        count = 0
         for task in CLASS.tasks:
-            test= Test.query.filter_by(id= task.test_id).first()
-            if task.online and test.test_code:
-                online_task.append(task)
+            test = task.test
+            if task.online and test and test.test_code:
+                count += 1
 
-        class_online_task.append((CLASS.class_code , len(online_task)))
+        class_online_task.append((CLASS.class_code , count, CLASS.id))
 
     return json.dumps({ "class_online_task": class_online_task})
 

@@ -48,8 +48,8 @@ def class_sorte():
         classes_list= []
         tasks_class_user_list= []
 
-        user= User.query.filter_by(id= current_user.id).first()
-
+        # user= User.query.filter_by(id= current_user.id).first()
+        user= current_user
         for clas in user.classes:
             classes_id.append(clas.id)
 
@@ -61,7 +61,7 @@ def class_sorte():
             
             tasks_class_user_list.append(tasks_list)
         for id in classes_id:
-            find_class= Classes.query.filter_by(id= id).first()
+            find_class= Classes.query.filter_by(id=id).first()
             classes_list.append(find_class.dict())
 
         return flask.jsonify({

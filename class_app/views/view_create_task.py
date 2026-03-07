@@ -32,8 +32,6 @@ def render_create_task(id):
             due_time = flask.request.form['due-time']
             done_after_due_time = flask.request.form.get('done-after-due-time')
             online_test = flask.request.form.get('online-test')
-
-            print(online_test)
             
             TASK = Task(
                 title=title,

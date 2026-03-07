@@ -27,12 +27,17 @@ function cardTaskCreate(tasksArray){
 }
 
 $(() => {
+    const csrfToken = $('#csrf_token').val(); 
+
     $(".my-classes").on('click', (event => {
         $.ajax({
             url: "/class_page/sorte",
             type: "PUT",
             contentType: "application/json",
             dataType: "json",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
             data: JSON.stringify({sortyType: "my_classes"}),
             success: function(data){
                 let classDiv= $(".class-div")
@@ -114,18 +119,23 @@ $(() => {
     }))
 
     $(".classes").on('click', (event => {
+        const csrfToken = $('#csrf_token').val(); 
+
         $.ajax({
             url: "/class_page/sorte",
             type: "PUT",
             contentType: "application/json",
             dataType: "json",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
             data: JSON.stringify({sortyType: "classes"}),
             success: function(data){
                 let classDiv= $(".class-div")
                 classDiv.empty()
 
                 let cardDiv= $("<div class='card-div'></div>")
-                classDiv.append("<h2>Мої и</h2>")
+                classDiv.append("<h2>Мої класи</h2>")
 
                 const classes= data.classes_list
                 const tasks_class_user_list= data.tasks_class_user_list 

@@ -12,16 +12,19 @@
 {% block content %}
 
     <div class="room-content" id="room-content"></div>
-    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
-    
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+    <audio class="music-theme" id="onlineQuestionTheme" src="{{ url_for('test_app.static', filename= 'music/questionTheme.mp3') }}" loop></audio>
+    <audio class="music-theme" id="onlineRoomTheme" src="{{ url_for('test_app.static', filename= 'music/roomTheme.mp3') }}" loop></audio>
+    <audio class="music-sound" id="correctResult" src="{{ url_for('test_app.static', filename= 'music/correct.mp3') }}"></audio>
+    <audio class="music-sound" id="wrongResult" src="{{ url_for('test_app.static', filename= 'music/wrong.mp3') }}" ></audio>
+
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/constant.js') }}"></script>
 
     <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/addUserBlock.js') }}"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/chartManager.js') }}"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/timerManager.js') }}"></script>
-    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/excelTable.js') }}"></script>
 
     <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/testStates.js') }}"></script>
 
@@ -38,9 +41,21 @@
         const reconnect= getCookie("reconnect")
         const authorName= "{{ test.author_name }}";
         const totalQuestion = Number("{{ test.total_questions }}");
+        const testMusic = "{{test_music }}" === "True" ? true : false; 
+        const testShowResult = "{{ test_show_result }}" === "True" ? true : false; 
 
         const quizList = {{ list_quiz | tojson }};
         const anwersList = {{ list_answers | tojson }};
+
+        const theme = document.getElementById("onlineRoomTheme");
+
+        console.log(testMusic, testShowResult)
+
+        theme.play().then(() => {
+            theme.muted = false;
+        }).catch(error => {
+            console.log(error)
+        })
         
         if (!username) {
             username= getCookie("temporaryName");
@@ -58,11 +73,12 @@
         );
 
         let state = getCookie("state");
-        let connected= getCookie("connected")
-        let timerPaused= getCookie("timeStop");
-        let plusAnswerTime= 0;
-        let timerInterval= null;
-        let extraTimeSeconds= 15
+        let connected = getCookie("connected")
+        let timerPaused = getCookie("timeStop");
+        let plusAnswerTime = 0;
+        let timerInterval = null;
+        let extraTimeSeconds = 15
+        let newMessageCount = 0;
 
         if (timerPaused === NaN){
             setCookie("timeStop", "false")
@@ -72,17 +88,17 @@
         }else if (timerPaused == 'false'){
             timerPaused= false
         } 
-        // authorStart
+
         if (state && state.includes("authorStart")) {
             state = getCookie("state");
             let time = Number(getCookie("time"));
-            renderAuthorStart(quizList[Number(state.replace(/\D/g, ""))], room, authorName, Number(state.replace(/\D/g, "")), totalQuestion, Number(state.replace(/\D/g, "")));
+            renderAuthorStart(quizList[Number(state.replace(/\D/g, ""))], room, authorName, Number(state.replace(/\D/g, "")), totalQuestion, Number(state.replace(/\D/g, "")), testMusic);
         } 
         else if (state === "authorResultTest") {
-            renderAuthorResultTest(username, authorName, totalQuestion);
+            renderAuthorResultTest(username, authorName, totalQuestion, testMusic);
         } 
         else if (state === "resultTest") {
-            renderResultTest(username, totalQuestion, quizList, anwersList, testId);
+            renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic);
         } else if (reconnect){
             clearCookie(["reconnect"])
 
@@ -92,19 +108,19 @@
                 author_name: authorName
             });
 
-            renderWaitQuestion("reconnect")
+            renderWaitQuestion("reconnect", testMusic)
         }
         else if (state && state.includes("question")) {
             let time = Number(getCookie("time"))
-            renderQuestion(Number("{{ test.id }}"), quizList[Number(state.replace(/\D/g, ""))], anwersList[Number(state.replace(/\D/g, ""))], room, authorName);
+            renderQuestion(Number("{{ test.id }}"), quizList[Number(state.replace(/\D/g, ""))], anwersList[Number(state.replace(/\D/g, ""))], room, authorName, testShowResult, testMusic);
         } 
         else if (state && state.includes("wait")) {
-            renderWaitQuestion("test");
+            renderWaitQuestion("test", testMusic);
         }
         else {
             if (authorName === username || connected){
                 let userList= getCookie("userList")
-                renderRoomMain(room, authorName, username, quizList, userList);
+                renderRoomMain(room, authorName, username, quizList, userList, testMusic, testShowResult);
                 setCookie("room", room)
     
                 let messages= document.getElementById("messages");
@@ -116,7 +132,7 @@
                     }
                 }
             } else{
-                renderWaitQuestion("start");
+                renderWaitQuestion("start", testMusic);
             }
         }
 
@@ -126,14 +142,11 @@
                 username: username,
                 device_id: getDeviceId()
             });
-
-            console.log("join")
         
             if (username !== authorName && !state) {                            
                 fetch('https://api.ipify.org?format=text')
                     .then(r => r.text())
                     .then(ip => {
-                        console.log("new_user_admin")
                         socket.emit("new_user_admin", {
                             room: room,
                             username: username,
@@ -148,6 +161,16 @@
 
         socket.on("listening_to_messages", function(data) {
             let messages = document.getElementById("messages");
+            
+            const activeChat = document.querySelector('.chat.open');
+            if (!activeChat){
+                newMessageCount++;
+
+                const chat = document.querySelector('.chat-toggle-btn');
+                if (chat){
+                    chat.innerHTML += `<div class="new-task-count">${newMessageCount}</div>`
+                }
+            }
 
             if (messages != "") {
                 messages.innerHTML += `<p class="other-msg">${data}</p>`;  
@@ -212,7 +235,7 @@
             if (username === authorName){  
                 if (state === "authorResultTest"){
                     newState= -1
-                    renderResultTest(username, totalQuestion, quizList, anwersList, testId);
+                    renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic);
                 } else{
                     newState= Number(state.replace(/\D/g, ""))
                 }
@@ -237,10 +260,10 @@
             }else if (newState >= 0){
                 if (Number(data["newTime"]) > 1){
                     setCookie("state", `question${newState}`)
-                    renderQuestion(Number("{{ test.id }}"), quizList[Number(newState)], anwersList[Number(newState)], room, authorName);
+                    renderQuestion(Number("{{ test.id }}"), quizList[Number(newState)], anwersList[Number(newState)], room, authorName, testShowResult, testMusic);
                 } else{
                     setCookie("state", `wait${newState}`)
-                    renderWaitQuestion("test");
+                    renderWaitQuestion("test", testMusic);
                 }
 
                 checkAnswers("reconnect")
@@ -262,7 +285,7 @@
                 setCookie("time", Number(quizList[numberOfQuestion + 1].time))
                 if (numberOfQuestion != totalQuestion - 1) {
                     setCookie("state", `question${numberOfQuestion + 1}`)
-                    renderQuestion(Number("{{ test.id }}"), quizList[numberOfQuestion + 1], anwersList[numberOfQuestion + 1], room, authorName);
+                    renderQuestion(Number("{{ test.id }}"), quizList[numberOfQuestion + 1], anwersList[numberOfQuestion + 1], room, authorName, testShowResult, testMusic);
                 }
                 else {
                     socket.emit("stop_test", {
@@ -271,7 +294,7 @@
                     });
                     
                     setCookie("state", "authorResultTest")
-                    renderAuthorResultTest(username, authorName, totalQuestion);
+                    renderAuthorResultTest(username, authorName, totalQuestion, testMusic);
                 }
             }
         });
@@ -279,7 +302,7 @@
         socket.on("result_test", function(data) {      
             checkAnswers("test");
 
-            renderResultTest(username, totalQuestion, quizList, anwersList, testId)
+            renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic)
 
             userAnswers= getCookie("userAnswers")
             userTimers= getCookie("userTimers")
@@ -306,7 +329,7 @@
                 if (username === data["username"]){
                     setCookie("connected", "1");
                     setCookie("room", room);
-                    renderRoomMain(room, authorName, username, quizList);
+                    renderRoomMain(room, authorName, username, quizList, testMusic, testShowResult);
 
                     let users_list = data["users_list"].slice(1, -1);
                     users_list = users_list.split("||");
@@ -327,8 +350,6 @@
             let waitUserIp = document.querySelectorAll(".user-ip")
             let state = getCookie("state") || false
 
-            console.log("add")
-
             if (blockedUsers){
                 blockedUsers= blockedUsers.split("$%^")
                 
@@ -338,8 +359,6 @@
                     }
                 })
             }
-
-            console.log("wait list +1")
 
             //if (userList){
             //    const exists = userList
@@ -368,12 +387,9 @@
             //    })
             //}
 
-            console.log("data.connected", data.connected, addUser, state)
             if (addUser && !state && !data.connected){
-                console.log("1")
                 createUserBlock(username, authorName, data['username'], data['ip'], "wait");
             } else {
-                console.log("ww")
                 createUserBlock(username, authorName, data['username'], data['ip'], "not");
             }
         });
@@ -447,11 +463,11 @@
                 setCookie("state", `${COOKIE_AUTHOR_START}0`)  
                 setCookie("countUsersAnswer", 0)  
                 setCookie("countCorrectAnswer", 0)  
-                renderAuthorStart(quizList[0], room, authorName, state, totalQuestion, state);
+                renderAuthorStart(quizList[0], room, authorName, state, totalQuestion, state, testMusic);
             }
             else if(connectedStart) {
                 setCookie("state", "question0")  
-                renderQuestion(Number("{{ test.id }}"), quizList[state], anwersList[state], room, authorName);
+                renderQuestion(Number("{{ test.id }}"), quizList[state], anwersList[state], room, authorName, testShowResult, testMusic);
             } else{
                 window.location.href = '/'; 
             }

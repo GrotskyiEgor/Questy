@@ -277,6 +277,10 @@ main {
     z-index: 1100;
 
     transition: background-color 0.3s;
+
+    display: inline-flex;      /* ставим элементы в ряд */
+    align-items: center;       /* выравнивание по центру по вертикали */
+    gap: 0.5em;                /* расстояние между текстом и счетчиком */
 }
 
 .chat-toggle-btn:hover {
@@ -669,7 +673,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3.5vh;
+    font-size: 4vh;
     font-weight: 500;
     text-align: center;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -2024,6 +2028,28 @@ main {
     transform: translateX(2.2vh);
 }
 
+.new-task-count {
+    width: 1.6vw;
+    height: 1.6vw;
+
+    min-width: 20px;
+    min-height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: red;
+    color: white;
+    font-weight: 700;
+    font-size: 2.2vh;
+    border-radius: 50%;
+    border: 0.2vh solid white;
+    display: flex;
+    box-shadow: 0 0 0.4vh rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
 @keyframes toast-fade {
     from {
         opacity: 0;
@@ -2067,8 +2093,16 @@ main {
 
     .wait-side {
         display: flex;
-        width: 96%;
+        width: 96% !important;
         height: 98%;
+    }
+
+    .user-list {
+        height: 55vh;
+    }
+
+    .radio-button-box {
+        flex-direction: column;
     }
 
     .info-bar-text{
@@ -2092,6 +2126,11 @@ main {
     .info-user {
         height: 95%;
         width: 95%;
+    }
+
+    .answers.one-column .answer,
+    .answers.one-column .multiple-answer {
+        font-size: 3vh;
     }
 
     .chat {
@@ -2148,12 +2187,16 @@ main {
         font-size: 4vh;
     }
 
+    .radio-button-box input[type="checkbox"] {
+        width: 10vw;
+    }
+
     .multiple-answer{
-        font-size: 2.5vh;
+        font-size: 3vh;
     }
 
     .active-multiple-answer{
-        font-size: 2.5vh;
+        font-size: 3vh;
     }
 
     .result-line-text {

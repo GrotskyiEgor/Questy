@@ -116,8 +116,8 @@
 }
 
 .new-task-count {
-    width: 1vw;
-    height: 1vw;
+    width: 1.6vw;
+    height: 1.6vw;
 
     min-width: 20px;
     min-height: 20px;
@@ -129,13 +129,12 @@
     background-color: red;
     color: white;
     font-weight: 700;
-    font-size: 1.2vh;
+    font-size: 2.2vh;
     border-radius: 50%;
     border: 0.2vh solid white;
     display: flex;
     box-shadow: 0 0 0.4vh rgba(0,0,0,0.2);
     z-index: 10;
-
 }
 
 .card-info {

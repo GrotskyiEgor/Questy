@@ -52,7 +52,9 @@ def render_test_result():
                     count_correct_answers += 1
         
         if current_user.is_authenticated:
-            USER= User.query.filter_by(id= current_user.id).first()
+            # USER= User.query.filter_by(id= current_user.id).first()
+            # User.query.filter_by(id= current_user.id).first()
+            USER = current_user
             if (USER):
                 USER.tokens = int(USER.tokens) + (count_correct_answers * 500)
 

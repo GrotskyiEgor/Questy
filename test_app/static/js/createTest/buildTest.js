@@ -185,10 +185,15 @@ $("#submit-button").click(function () {
             testData.questions[index].image_name = image.files[0].name
         }
     })
-
+    
+    const csrfToken = $('#csrf_token').val(); 
+    
     $.ajax({
         url: "/build_test",
         type: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken
+        },
         data: formData,
         processData: false,
         contentType: false,

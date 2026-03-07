@@ -1,4 +1,8 @@
-function renderResultTest(username, totalQuestion, quizList, anwersList, testId) {
+function renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic) {
+    setMusicTheme("onlineRoomTheme", testMusic);
+
+    console.log("renderResultTest")
+    
     let answersStr = getCookie("userAnswers");
     let answers_list= answersStr.split("|");
     let userAnswers = [];

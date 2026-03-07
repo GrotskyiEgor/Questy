@@ -4,14 +4,12 @@ function newTask(){
         method: "GET",
         dataType: "json",
         success: function (data) {
-            class_new_task= data["class_online_task"]    
-
+            const class_new_task = data["class_online_task"]    
             for (let element= 0; element < class_new_task.length; element++){
-                const classCard = $(`#${class_new_task[element][0]}`)
+                const classCard = $(`#class-${class_new_task[element][2]}`)
                 const cardHeader = classCard.find(".card-header")
 
-
-                if (class_new_task[element][1]){
+                if (class_new_task[element][1] > 0){
                     cardHeader.find('.new-task-count').remove()
                     cardHeader.append(`<div class="new-task-count">${class_new_task[element][1]}</div>`)
                 }

@@ -125,7 +125,7 @@
                                 {% set bg_color = "linear-gradient(135deg, " ~ class.class_color1 ~ ", " ~ class.class_color2 ~ ")" %}
                             {% endif %}
 
-                            <div class="card with-tasks">
+                            <div class="card with-tasks" id="class-{{ class.id }}">
                                 <div class="card-header" style="background: {{ bg_color }};">
                                     Назва класу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span>
                                 </div>
@@ -244,6 +244,8 @@
         </form>
     </div>   
 
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+    <script src="/class_app/static/js/newTask.js"></script>
     <script src="/class_app/static/js/classSorte.js"></script>
     <script src="/class_app/static/js/classModals.js"></script>   
 {% endblock %}

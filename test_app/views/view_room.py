@@ -98,7 +98,7 @@ def handle_new_state(data):
     new_state = data["new_state"]
     username = data["username"]
     user_sid = get_sid(username)
-    print(new_state)
+
     emit("new_state", {"room": data["room"], "username": username, "new_state": new_state, "new_time": data["new_time"]}, room=user_sid)
 
 
@@ -326,8 +326,8 @@ def handle_new_user(data):
 def handle_new_user_admin(data):
     author_name = data["author_name"]
     connected = data.get("connected", 0)
-    print("alo")
     author_sid = get_sid(author_name)
+
     emit("new_user_admin", {"username": data["username"], "ip": data["ip"], "connected": connected}, to=author_sid)
 
 
@@ -389,11 +389,12 @@ def render_room(test_code):
     list_quiz = []
 
     test = Test.query.filter_by(test_code=test_code).first()
+    # print(test, test.music, test.show_result)
 
     if not test:
         return flask.redirect("/")
 
-    quizzes_list = Quiz.query.filter_by(test_id= test.id).all()
+    quizzes_list = Quiz.query.filter_by(test_id=test.id).all()
 
     for quiz in quizzes_list:
         if quiz.question_type == "input":
@@ -438,5 +439,7 @@ def render_room(test_code):
     return {
         "test": test,
         "list_quiz": list_quiz,
+        "test_music": test.music,
+        "test_show_result": test.show_result,
         "list_answers": list_answers,
     }

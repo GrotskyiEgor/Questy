@@ -23,9 +23,9 @@ function renderScores(data, type){
                 `
             }else if (type === 'accuracy'){
                 testDate= `
-                    <p><strong>Результат: </strong>${ score[0] }</p>
-                    <p><strong>Дата: </strong>${ score[3] }</p>
-                    <p><strong>Час: </strong>${ score[4] }</p> 
+                    <p><strong>Результат: </strong>${ score.accuracy }</p>
+                    <p><strong>Дата: </strong>${ score.date_complete }</p>
+                    <p><strong>Час: </strong>${ score.time_complete }</p> 
                 `
             }
 
@@ -50,11 +50,16 @@ $(() => {
     $('#choice').val('accuracy_by_date')
 
     $(".date").on('click', (event => {
+        const csrfToken = $('#csrf_token').val(); 
+
         $.ajax({
             url: "/profile/sorte",
             type: "PUT",
             contentType: "application/json",
             dataType: "json",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
             data: JSON.stringify({sortyType: "date"}),
             success: function(data){
                 renderScores(data, "date")
@@ -66,11 +71,16 @@ $(() => {
     }))
 
     $(".accuracy").on('click', (event => {
+        const csrfToken = $('#csrf_token').val(); 
+
         $.ajax({
             url: "/profile/sorte",
             type: "PUT",
             contentType: "application/json",
             dataType: "json",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
             data: JSON.stringify({sortyType: "accuracy"}),
             success: function(data){
                 renderScores(data, "accuracy")

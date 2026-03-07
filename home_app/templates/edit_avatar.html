@@ -13,80 +13,30 @@
         <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
         {% for index_cloth in range(5) %}
             <div class="{{name_classes[index_cloth]}}">
-            <p>Текст</p>
-            {% for index in range(3) %}
-                {% if index + 1 == list_clothes[index_cloth] %}
-                    <label>
-                        <input type="radio" name="{{name_classes[index_cloth]}}" checked value="{{index + 1}}">
-                        <img src="{{ url_for('home_app.static', filename='images/media/test.png') }}" alt="">
-                    </label>
-                {% else %}
+                <p>{{name_classes[index_cloth]}}</p>
+                {% for index in range(3) %}
+                    {% if name_classes[index_cloth] == "Something" %}
+                        {% set img_path = url_for('home_app.static', filename='images/media/test.png')%}
+                    {% else %}
+                        {% set img_path = url_for('home_app.static', filename='images/avatar/' ~ (index + 1) ~'.png') %}
+                    {% endif %}
+
                     <label>
                         <input type="radio" name="{{name_classes[index_cloth]}}" value="{{index + 1}}">
-                        <img src="{{ url_for('home_app.static', filename='images/media/test.png') }}" alt="">
+                        <img src="{{ img_path }}" alt="">
                     </label>
-                    {% endif %}
-            {% endfor %}
+                {% endfor %}
             </div> 
         {% endfor %}
     </form>
 
-    <!-- <div class="avatar-editor">
-        <div class="avatar-preview">
-            <img id="layer-skin">
-            <img id="layer-top">
-            <img id="layer-pants">
-            <img id="layer-shoes">
-            <img id="layer-accessories">
-        </div>
+    <a href="/profile" title="Повернутись до класів">
+        <button class="home-button">
+            <i class='bx  bx-home'></i>
+        </button>
+    </a>
 
-        <div class="avatar-columns">
-            <div class="avatar-column" data-type="skin"></div>
-            <div class="avatar-column" data-type="top"></div>
-            <div class="avatar-column" data-type="pants"></div>
-            <div class="avatar-column" data-type="accessories"></div>
-            <div class="avatar-column" data-type="shoes"></div>
-        </div>
-    </div>  
-
-    <script>
-        let avatar = "{{ current_user.avatar }}".split("|");
-
-        const indexMap = {
-            skin: 0,
-            top: 1,
-            pants: 2,
-            accessories: 3,
-            shoes: 4
-        };
-
-        document.querySelectorAll(".avatar-column").forEach(col => {
-        const part = col.dataset.part;
-
-        for (let i = 1; i <= 5; i++) {
-            const img = document.createElement("img");
-            img.src = `/static/avatars/${part}/${i}.png`;
-
-            img.onclick = () => {
-            avatar[indexMap[part]] = i;
-            document.getElementById(part).src = img.src;
-            };
-
-            col.appendChild(img);
-        }
-        });
-
-        document.getElementById("saveAvatar").onclick = () => {
-        fetch("/profile/avatar", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-            avatar: avatar.join("|")
-            })
-        });
-        };
-    </script> -->
-    
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     <script src="{{ url_for('home_app.static', filename='js/avatarChanges.js') }}"></script>
 {% endblock %}
 

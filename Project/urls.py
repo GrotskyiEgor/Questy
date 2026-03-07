@@ -16,7 +16,7 @@ home_app.add_url_rule(rule='/quizzes/', view_func=render_quizzes, methods=['GET'
 home_app.add_url_rule(rule='/delete_test<test_id>', view_func=delete_test, methods=['POST'])
 home_app.add_url_rule(rule='/reset_test<test_id>', view_func=reset_test, methods=['POST'])
 
-home_app.add_url_rule(rule='/home/room<code>', view_func=set_room_test, methods=['POST'])
+home_app.add_url_rule(rule='/home/room/<code>', view_func=set_room_test, methods=['POST'])
 
 # USER APP
 user_app.add_url_rule(rule="/sign_up/", view_func=render_sign_up, methods=['GET', 'POST'])
@@ -64,7 +64,7 @@ class_app.add_url_rule(rule="/create_task<id>", view_func=render_create_task, me
 class_app.add_url_rule(rule="/result_task", view_func=render_result_task, methods= ['GET', 'POST'])
 
 class_app.add_url_rule(rule='/class_information<class_id>', view_func=render_class_information, methods=['GET', 'POST'])
-class_app.add_url_rule(rule='/delete_user', view_func=delete_user, methods=['POST'])
+class_app.add_url_rule(rule='/delete_user', view_func=delete_user, methods=['POST', 'GET'])
 
 class_app.add_url_rule(rule='/delete_class<class_id>', view_func=delete_class, methods=['POST'])
 class_app.add_url_rule(rule='/delete_task<task_id>', view_func=delete_task, methods=['GET'])
