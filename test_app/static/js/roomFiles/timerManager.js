@@ -38,8 +38,6 @@ function startTimer() {
         const cookieTime = Number(getCookie("time"));
         let time = Number(timerText.textContent);
 
-        timerText.textContent= time;
-
         if (isNaN(cookieTime) && username != authorName){
             renderWaitQuestion("test", testMusic);
         }
@@ -50,7 +48,7 @@ function startTimer() {
             setCookie("time", time)
         }
         
-        if (time < 0){
+        if (time <= 0){
             clearInterval(timerInterval);
             timerText.textContent = "";
             timerText.innerHTML = `
@@ -62,8 +60,8 @@ function startTimer() {
                 if (username != authorName){
                     renderWaitQuestion("test", testMusic);
                 } else if (username === authorName){
-                    countUsersAnswer= getCookie("countUsersAnswer");
-                    correctAnswerChart= getCookie("countCorrectAnswer");
+                    countUsersAnswer = getCookie("countUsersAnswer");
+                    correctAnswerChart = getCookie("countCorrectAnswer");
 
                     const answerDiv = document.createElement("div")
                     answerDiv.className = "chart-answer-count"

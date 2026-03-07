@@ -26,8 +26,6 @@ function setRoomChanges(testCode, type, value){
 function renderRoomMain(testCode, authorName, username, quizzes, userListName, testMusic, testShowResult) {
     setMusicTheme("onlineRoomTheme", testMusic);
 
-    console.log("renderRoomMain")
-
     const content = document.getElementById("room-content");
     content.innerHTML = "";
 

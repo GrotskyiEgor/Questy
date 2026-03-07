@@ -62,8 +62,6 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
 function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) {
     setMusicTheme("onlineRoomTheme", testMusic);
 
-    console.log("renderAuthorResultTest")
-
     let userCount = 0;
     let userArray = [];
     let resultData = {};

@@ -73,8 +73,6 @@ function addUserAnswer(username, answer, authorname, quiz) {
 function renderAuthorStart(quiz, room, authorname, number_of_question, totalQuestion, questionNumber, testMusic) {
     setMusicTheme("onlineRoomTheme", testMusic);
 
-    console.log("renderAuthorStart")
-
     const waitContent = document.getElementById("room-content");
     waitContent.innerHTML = ""; 
     waitContent.id = 'container-question'

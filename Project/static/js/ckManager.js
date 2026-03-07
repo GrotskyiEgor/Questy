@@ -20,8 +20,6 @@ function clearCookie(nameList){
 }
 
 function setMusicTheme(playId, testMusic=true){
-    console.log(testMusic, "setMusicTheme")
-
     setAllMute()
     if (!testMusic) return;
 

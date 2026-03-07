@@ -38,18 +38,15 @@
         let username = "{{ username }}"; 
         const room = "{{ test.test_code }}"; 
         const testId = Number("{{ test.id }}");
-        const reconnect= getCookie("reconnect")
-        const authorName= "{{ test.author_name }}";
+        const reconnect = getCookie("reconnect")
+        const authorName = "{{ test.author_name }}";
         const totalQuestion = Number("{{ test.total_questions }}");
         const testMusic = "{{test_music }}" === "True" ? true : false; 
         const testShowResult = "{{ test_show_result }}" === "True" ? true : false; 
 
         const quizList = {{ list_quiz | tojson }};
         const anwersList = {{ list_answers | tojson }};
-
         const theme = document.getElementById("onlineRoomTheme");
-
-        console.log(testMusic, testShowResult)
 
         theme.play().then(() => {
             theme.muted = false;
@@ -231,7 +228,8 @@
         socket.on("reconnect_ping", function(data) {          
             state = getCookie("state");        
             let newState = -2
-            let newTime = Number(getCookie("time"))      
+            let newTime = Number(getCookie("time"))     
+            
             if (username === authorName){  
                 if (state === "authorResultTest"){
                     newState= -1
@@ -251,7 +249,7 @@
         });
 
         socket.on("new_state", function(data) {  
-            let newState= Number(data["new_state"])
+            let newState = Number(data["new_state"])
 
             if (newState === -1){
                 console.log("resultTest end", newState)

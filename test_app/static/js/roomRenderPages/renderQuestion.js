@@ -79,8 +79,6 @@ function renderWaitQuestion(type, testMusic) {
 function renderQuestion(testId, quiz, answers, room, author_name, testshowResult, testMusic) {
     setMusicTheme("onlineQuestionTheme", testMusic);
 
-    console.log("renderQuestion")
-
     const delay = 2250
     let state = getCookie("state")
     let quizTime = Number(getCookie("time"));
@@ -215,7 +213,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                     if (state.includes("question")) return;
 
                     renderWaitQuestion("test", testMusic);               
-                }, !testshowResult ? delay : 50)
+                }, testshowResult ? delay : 50)
             })
         }
     }
@@ -289,7 +287,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 if (state.includes("question")) return;
 
                 renderWaitQuestion("test");               
-            }, delay)
+            }, testshowResult ? delay : 50)
         })
     
     }
@@ -410,7 +408,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 if (state.includes("question")) return;
 
                 renderWaitQuestion("test", testMusic);               
-            }, delay)
+            }, testshowResult ? delay : 50)
         })
     }
 

@@ -624,10 +624,11 @@ header {
     }
 
     .tests h2 {
-        font-size: 3vh;
+        display: none;
+        /* font-size: 3vh;
         text-align: center;
         margin-bottom: 12px;
-        color: #2d6a4f;
+        color: #2d6a4f; */
     }
 
     .tests-scroll {
