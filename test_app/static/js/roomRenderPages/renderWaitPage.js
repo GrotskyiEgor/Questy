@@ -87,7 +87,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
                 <div class="empty-name">Учні ще не приєдналися. Очікуємо...</div>
             </div>
         `;
-    }else {
+    } else {
         userList.innerHTML = `
             <div class="user-block teacher-block">
                 <div class="user-name"><strong>Вчитель:</strong> ${authorName}</div>
@@ -98,10 +98,15 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
     info1.className = "info-user";
 
     const userListText = document.createElement("h3");
-    userListText.className= "user-list-title"
-    userListText.textContent = "Список учасників:";
+    userListText.className= "user-list-title";
+    userListText.textContent = "Список учасників: ";
+
+    const userListCount = document.createElement("span");
+    userListCount.className= "user-list-count";
+    userListCount.textContent = 1;
     
-    info1.appendChild(userListText)
+    userListText.appendChild(userListCount);
+    info1.appendChild(userListText);
     info1.appendChild(userList);
     allUsers.appendChild(info1);
 
@@ -123,7 +128,13 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
   
         const waitUsersText = document.createElement("h3");
         waitUsersText.className= "user-list-title"
-        waitUsersText.textContent = "Зал очікування:";
+        waitUsersText.textContent = "Зал очікування: ";
+
+        const waitUsersCount = document.createElement("span");
+        waitUsersCount.className= "wait-list-count";
+        waitUsersCount.textContent = 0;
+        
+        waitUsersText.appendChild(waitUsersCount);
         info2.appendChild(waitUsersText)
 
         info2.appendChild(waitUsers);
@@ -157,7 +168,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
         leaveButton.type = "button";
         leaveButton.className = "btn-end";
         leaveButton.textContent = "Залишити тест";
-        leaveButton.addEventListener("click", leaveTestBlock);
+        leaveButton.addEventListener("click", () => {leaveTestBlock(testCode, username)});
         waitSideBottom.appendChild(leaveButton);
     }
 
@@ -211,8 +222,12 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName) {
 
     if (userListName){
         let userListBlocks= userListName.split("</>")
+
         userListBlocks.forEach(block => {
-            createUserBlock(username, authorName, block.split("()")[0], 0, "not");
+            console.log("create blocks", username, authorName, block.split("()")[0], 0, "not");
+            console.log(userListName)
+            user_data = block.split("()");
+            createUserBlock(username, authorName, user_data[0], user_data[1], "not");
         })
     }
 

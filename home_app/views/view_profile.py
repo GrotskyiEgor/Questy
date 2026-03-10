@@ -3,50 +3,44 @@ import io
 import datetime
 from flask_login import current_user
 
+from Project.settings import csrf
 from Project.render_page import render_page
 from user_app.models import Score, User
 from test_app.models import Test
 
 
-def bubble_sort(list):
-    accuracy_sort = sorted(list, key=lambda x: x[0], reverse=True)
-    return accuracy_sort
-
-
+@csrf.exempt
 def profile_sorte():
-    data = flask.request.get_json()
+    data = flask.request.get_json(silent=True)
+
+    if not data:
+        return flask.jsonify({"error": "Bad json"}), 400
+    
     sorte_type = data.get('sortyType')
-    scores = Score.query.filter_by(user_id=current_user.id).all()
-
-    date_sort = []
-    accuracy_sort = []
-    list_tests_sort = []
-
-    for score in scores:
-        test= Test.query.filter_by(id=score.test_id).first()
-        if test and test not in list_tests_sort:
-            list_tests_sort.append(test.dict())
 
     if sorte_type == "accuracy":
-        for score in scores:
-            accuracy_sort.append([score.accuracy, score.id, score.test_id, score.date_complete, score.time_complete])
-
-        bubble_sort(list = accuracy_sort)
-
-        return flask.jsonify({
-            "scores": accuracy_sort,
-            "tests": list_tests_sort})
+        scores = Score.query.filter_by(user_id=current_user.id).order_by(Score.accuracy.desc()).all()
     elif sorte_type == "date":
-        for score in scores:
-            date_sort.append(score.dict())
-        
-        return flask.jsonify({
-            "scores": date_sort,
-            "tests": list_tests_sort})
-    else:
-        return flask.jsonify({
-            "scores": [],
-            "tests": []})
+        scores = Score.query.filter_by(user_id=current_user.id).order_by(Score.date_complete.desc()).all()
+    else: 
+        return flask.json({"scores": [], "tests": []}), 400
+    
+    result = []
+    test_sort_list = []
+
+    for score in scores:
+        if score.test_id is None:
+            continue
+
+        test = Test.query.get(score.test_id)
+
+        if test:
+            test_sort_list.append(test.dict())
+            result.append(score.dict())
+
+    return flask.jsonify({
+        "scores": result,
+        "tests": test_sort_list})
 
 @render_page(template_name='profile.html')
 def render_profile():

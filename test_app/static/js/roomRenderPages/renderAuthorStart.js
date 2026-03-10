@@ -4,28 +4,31 @@ function addUserAnswer(username, answer, authorname, quiz) {
     const userAnswers = document.getElementById("user-answers");
     const countAnswerSpan  = document.getElementById("count-answer-span");
     let correctAnswer= quiz.correct_answer.split("%$№").sort();
+    let answerClassStatus = "user-answer-worst";
 
     countAnswerSpan.textContent= `${parseInt(countAnswerSpan.textContent) + 1}`;
 
     if (answer.includes("$$$")){
-        userAnswer= answer.split("$$$").sort()
+        userAnswer = answer.split("$$$").sort()
         if (userAnswer.join(",") == correctAnswer.join(",")){
-            countCorrect= parseInt(getCookie("countCorrectAnswer"))+ 1
+            answerClassStatus = "user-answer-correct";
+            countCorrect= parseInt(getCookie("countCorrectAnswer")) + 1
             setCookie("countCorrectAnswer", countCorrect)
         }
     } else {
         if (answer == correctAnswer){
-            countCorrect= parseInt(getCookie("countCorrectAnswer"))+ 1
+            countCorrect = parseInt(getCookie("countCorrectAnswer")) + 1
+            answerClassStatus = "user-answer-correct";
             setCookie("countCorrectAnswer", countCorrect)
         }
     }
 
     if (quiz.question_type){
-        answer= answer.replace("$$$", " та ")
+        answer = answer.replaceAll("$$$", " та ")
     }
 
     userAnswers.innerHTML += `
-        <div class="user-answer">
+        <div class="${answerClassStatus}">
             <div class="user-name">${username}</div>
             <div class="answer-text">
                 <p>${answer}</p>
@@ -48,6 +51,21 @@ function addUserAnswer(username, answer, authorname, quiz) {
         
         if (lengthArrey === Number(countUsersAnswer)){
             timerStop();
+
+            console.log(lengthArrey, correctAnswerChart)
+            const answerDiv = document.createElement("div")
+            answerDiv.className = "chart-answer-count"
+
+            const worstCount = document.createElement("p")
+            const rightCount = document.createElement("p")
+            rightCount.textContent = `Правильних відповідей: ${correctAnswerChart}`
+            worstCount.textContent = `Неправильних відповідей: ${lengthArrey - Number(correctAnswerChart)}`
+
+            answerDiv.appendChild(rightCount)
+            answerDiv.appendChild(worstCount)
+            const chartDiv = document.querySelector(".chart-div")
+            chartDiv.appendChild(answerDiv)
+
             renderDoughnutChart("donat-chart", lengthArrey, correctAnswerChart);
         }
     })

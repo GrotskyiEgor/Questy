@@ -10,6 +10,9 @@ const resultLine = document.querySelector(".result-line")
 function showResult(type, nextUrl, delay = 2000) {
     const resultLine = document.querySelector(".result-line")
     const resultText = document.querySelector(".result-line-text")
+    const pageLock = document.querySelector(".page-lock")
+
+    pageLock.classList.add("active")
 
     if (type){
         resultText.textContent = "Правильно ";

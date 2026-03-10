@@ -134,6 +134,8 @@ function renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, 
         labels= accuracyAquestionsArray.map(item => item.question)
     }
 
+    console.log(accuracyAquestionsArray, accurancyArray, accurancyNumbers)
+
     const ctx= document.getElementById(canvasId).getContext('2d');
 
     if (charts[canvasId]) {

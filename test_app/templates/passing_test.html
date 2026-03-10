@@ -12,7 +12,7 @@
     <div class="content">
         <div class="question">
             <p>{{  list_quiz[question_number].question_text }}</p>
-            <p>{{list_answers[question_number]}} {{ list_answers[question_number]|length}} {{ list_answers[question_number]|length is odd}}</p>
+            <!-- <p>{{list_answers[question_number]}} {{ list_answers[question_number]|length}} {{ list_answers[question_number]|length is odd}}</p> -->
         </div>
 
         {% if list_quiz[question_number].question_type == "image" %}
@@ -89,11 +89,14 @@
         <div class="result-line">
             <p class="result-line-text"></p>
         </div>
+
+        <div class="page-lock"></div>
     </div>
     
     <script>
         const correct_answer_list = {{ correct_answer_list | default([]) | tojson }};
         const question_number = {{ question_number }}
     </script>
+    
     <script src="{{ url_for('test_app.static', filename = 'js/passingTest.js') }}"></script>
 {% endblock %}

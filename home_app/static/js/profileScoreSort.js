@@ -4,11 +4,16 @@ function renderScores(data, type){
 
     const scores= data.scores
     const tests= data.tests
-
+    
+    console.log(scores)
     scores.forEach(score => {
         let testId = score.test_id !== undefined ? score.test_id : score[2];
         let test = tests.find(t => t.id === testId);
-
+        
+        if (!testId){
+            return
+        }
+        
         if (test){
             let testDate= ''
             if (type === 'date'){

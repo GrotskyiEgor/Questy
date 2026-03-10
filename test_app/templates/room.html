@@ -352,6 +352,29 @@
             }
         });
 
+        socket.on('test_end', function(data) {    
+            leaveTestBlock(room, username)
+        });
+
+        socket.on('user_leave', function(data) {          
+            const UserCount = document.querySelector(".user-list-count")
+
+            let UserList= getCookie("userList") || ""
+            let users= UserList.split("</>").filter(username => username.trim() !== "")
+
+            users= users.filter(userStr => {
+                const [name, userIp]= userStr.split("()")
+                return name !== data['leave_user']
+            })
+
+            const newUserList = users.join("</>")
+            setCookie("userList", newUserList)
+
+            if (UserCount){
+                UserCount.textContent = Number(UserCount.textContent) - 1
+            }
+        });
+
         socket.on('plus_time', function(data) {          
             const timer= document.getElementById("timer")
             if (!timer) return;

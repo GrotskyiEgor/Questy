@@ -1,3 +1,12 @@
+function shufle(array){
+    for (let index = array.length - 1; index > 0; index--){
+        let new_index = Math.floor(Math.random() * (index + 1));
+        [array[index], array[new_index]] = [array[new_index], array[index]];
+    }
+
+    return array
+}
+
 function tokenTimePrecent(userTimer, allTime){
     let timePrecent= (userTimer/ allTime)
     let max_token= 1200
@@ -11,13 +20,18 @@ function tokenTimePrecent(userTimer, allTime){
 function showResult(type) {
     const resultLine = document.querySelector(".result-line")
     const resultText = document.querySelector(".result-line-text")
+    const pageLock = document.querySelector(".page-lock")
+
+    if (pageLock){
+        pageLock.classList.add("active")
+    }
 
     if (type){
         resultText.textContent = "Правильно ";
-        resultText.style.color = "var(--green-main)"
+        resultText.style.color = "var(--green-main)";
     } else {
         resultText.textContent = "Неправильно";
-        resultText.style.color = "var(--red-text)"
+        resultText.style.color = "var(--red-text)";
     }
 
     setTimeout(() => {
@@ -26,6 +40,7 @@ function showResult(type) {
 }
 
 function renderWaitQuestion(type) {
+    console.log("ssss")
     const roomContent = document.getElementById("room-content");
 
     roomContent.innerHTML = ""; 
@@ -75,6 +90,20 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
         roomContent.innerHTML = ""; 
     };
 
+    const pageLock = document.createElement("div")
+    pageLock.className = "page-lock"
+
+    if (pageLock){
+        pageLock.classList.remove("active")
+    }
+
+    window.addEventListener("beforeunload", () => {
+        if (redirectTimer){
+            clearTimeout(redirectTimer)
+        }
+    })
+
+    roomContent.appendChild(pageLock)
     const questionBlock = document.createElement("div");
     questionBlock.className = "question";
 
@@ -96,6 +125,8 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
     else{
         answersDiv.className = `answers ${answerDivColumns}`;
     }
+
+    answers = shufle(answers);
 
     if (quiz.question_type === "choice" || quiz.question_type === "image"){
         answers.forEach(answer => {
@@ -170,6 +201,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                     showResult(quiz.correct_answer === button.id);
 
                     setTimeout(() => {
+                        const state = getCookie("state")
+                        if (state.includes("question")) return;
+
                         renderWaitQuestion("test");               
                     }, delay)
                 }
@@ -248,6 +282,9 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
             showResult(quiz.correct_answer === answerValue);
 
             setTimeout(() => {
+                const state = getCookie("state")
+                if (state.includes("question")) return;
+
                 renderWaitQuestion("test");               
             }, delay)
         })
@@ -362,10 +399,21 @@ function renderQuestion(testId, quiz, answers, room, author_name) {
                 username: username,
                 answer: answerValue
             });
+            
 
-            showResult(quiz.correct_answer === userAnswerValue);
+            const quizCorrectAnswer = quiz.correct_answer.split("%$№").sort();
+            const userAnswerValueArray = userAnswerValue.split("%$№").sort();
+
+
+            const isCorrect = quizCorrectAnswer.length === userAnswerValueArray.length && 
+                            quizCorrectAnswer.every((value, index) => value === userAnswerValueArray[index]);
+            
+            showResult(isCorrect);
 
             setTimeout(() => {
+                const state = getCookie("state")
+                if (state.includes("question")) return;
+
                 renderWaitQuestion("test");               
             }, delay)
         })

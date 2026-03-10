@@ -8,7 +8,7 @@ home_app.add_url_rule(rule="/", view_func=render_home)
 home_app.add_url_rule(rule='/get_active_codes', view_func=get_codes, methods=['GET', 'POST'])
 
 home_app.add_url_rule(rule="/profile/", view_func=render_profile, methods=['GET', 'POST'])
-home_app.add_url_rule(rule="/profile/sorte", view_func=profile_sorte, methods=['GET', 'POST', 'PUT'])
+home_app.add_url_rule(rule="/profile/sorte", view_func=profile_sorte, methods=['PUT'])
 home_app.add_url_rule(rule="/edit_profile<user_id>", view_func=render_edit_profile, methods=['GET', 'POST'])
 home_app.add_url_rule(rule="/edit_avatar<user_id>", view_func=render_edit_avatar, methods=['GET', 'POST'])
 

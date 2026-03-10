@@ -10,6 +10,7 @@ function testStop(){
 
 function authorStartTest() {
     let userList= getCookie("userList")
+    
     if (userList){
         socket.emit("author_start_test", {
             room: room,
@@ -64,6 +65,9 @@ function nextQuestion(){
     else{
         correctAnswer.textContent= `${quizList[numberOfQuestion].correct_answer}`
     }
+
+    const answerCounter = document.querySelector(".chart-answer-count")
+    if (answerCounter) answerCounter.remove()
 
     setCookie("time", Number(quizList[numberOfQuestion].time))
     resetTimer(Number(quizList[numberOfQuestion].time))
