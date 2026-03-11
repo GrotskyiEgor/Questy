@@ -23,10 +23,10 @@ def render_test_app():
 
         if quiz.question_type == "input":
             list_answers.append([quiz.correct_answer])
-            
-        list_answers.append(quiz.answer_options.split("%$№"))
+        else:
+            list_answers.append(quiz.answer_options.split("%$№"))
+
         list_quiz.append(quiz)
-        
     return {
         "test": test,
         "list_quiz": list_quiz,

@@ -13,7 +13,8 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         
         <h1>Редагувати питання</h1>
-        <h2>{{ question_text }}</h2>
+        <!-- <h2>{{ question_text }}</h2> -->
+        <input type="text" name="question_text" placeholder="Введіть нове питання" value="{{ question_text }}" class="question_text">
         {% if quiz.question_type == "choice" %}
             {% for number in range(count_answers) %}
                 

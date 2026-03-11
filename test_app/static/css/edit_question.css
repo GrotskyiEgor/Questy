@@ -69,6 +69,26 @@ h2 {
     outline: none;
 }
 
+.question_text {
+    margin: 0;
+    font-size: 2vh;
+    text-transform: capitalize;
+    border: 0.15vh solid #ccc;
+    border-radius: 1.2vh;
+
+    background-color: #e6f4e9; 
+    padding: 1.8vh 2.4vh;
+    border-left: 0.75vh solid grey;
+    border-radius: 0.9vh;
+    color: var(--text-dark);
+}
+
+.question_text:focus {
+    border-color: rgb(95, 95, 95);
+    /* box-shadow: 0 0 0.9vh var(--green-light); */
+    outline: none;
+}
+
 .incorrect-answer-p{
     margin: 0;
     font-size: 2vh;

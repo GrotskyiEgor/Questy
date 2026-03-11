@@ -24,6 +24,11 @@ def render_edit_question():
 
 
     if flask.request.method == "POST":
+        print(flask.request.form.get("question_text", "").strip())
+        if flask.request.form.get("question_text", "").strip() != quiz.question_text:
+            quiz.question_text = flask.request.form.get("question_text", "").strip()
+            db.session.commit()
+
         updated_answers = []
 
         # Перемещивание ответов
