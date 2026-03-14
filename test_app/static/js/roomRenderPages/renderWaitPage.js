@@ -238,9 +238,11 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
     
     chatToggleBtn.addEventListener("click", ()=> {
         const newMessageCount = chatToggleBtn.querySelector(".new-task-count");
+        
         if (newMessageCount){
             newMessageCount.remove()
         }
+
         chat.classList.toggle("open");
         const waitSide = document.querySelector(".wait-side");
 

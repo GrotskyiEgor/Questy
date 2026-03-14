@@ -89,7 +89,7 @@ input:-webkit-autofill:focus {
 .input-box input:focus,
 .input-box input:valid{
     border-bottom-color: lightblue;
-    background-color: white;
+    /* background-color: white; */
 }
 
 .input-box label{
@@ -189,7 +189,7 @@ form button:hover{
     position: absolute;
     top:  -6.4vh;
     right: -100;
-    width: 70vw;
+    width: 100vw;
     height: 134vh;
     background: rgba(113, 145, 107, 1);
     transform: rotate(10deg) skewY(40deg);
@@ -280,6 +280,11 @@ form button:hover{
 .btn-google img {
     width: 2.7vh;
     height: 2.85vh;
+}
+
+.lock {
+    width: 3vh;
+    height: 3vh;
 }
 
 @media (max-width: 769px) {

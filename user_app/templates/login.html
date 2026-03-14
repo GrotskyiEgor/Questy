@@ -25,7 +25,10 @@
                 <div class="input-box">
                     <input name="password" type="password" required>
                     <label>Пароль</label>
-                    <i class='bx bx-lock'></i>
+                    <!-- <i class='bx bx-lock'></i> -->
+                    <i>
+                        <img src="{{ url_for('user_app.static', filename='images/lock.png') }}" alt="" class="lock">
+                    </i>
                     <p class="forgotPasswordTxt">
                         <a href="/send_email_app/" class="reg-link">Забули пароль?</a>
                     </p>
@@ -52,6 +55,7 @@
             <h2>Ласкаво просимо!</h2>
             <p>Будь ласка, введіть свої дані.</p>
         </div>
-
     </div>
+
+    <script src="{{ url_for('user_app.static', filename='js/lock.js') }}"></script>
 {% endblock %}
