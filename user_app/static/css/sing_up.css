@@ -39,6 +39,11 @@ main {
 
 }
 
+.lock {
+    width: 3vh;
+    height: 3vh;
+}
+
 .form-box h2{
     padding-top: 3.2vh;
     margin-bottom: 1.6vh;

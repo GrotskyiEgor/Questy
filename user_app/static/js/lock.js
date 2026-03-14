@@ -1,12 +1,16 @@
 const passwordInput = document.querySelector('input[name="password"]')
-const lockImg = document.querySelector('.lock')
+const lockImgs = document.querySelectorAll('.lock')
 
-lockImg.addEventListener('click', function() {
-    if (passwordInput.type === "password"){
-        passwordInput.type = "text"
-        lockImg.src = "/user_app/static/images/lock-open.png"
-    } else {
-        passwordInput.type = "password"
-        lockImg.src = "/user_app/static/images/lock.png"
-    }
-})
+lockImgs.forEach(lockImg => { 
+    lockImg.addEventListener('click', function() {
+        const input = this.closest('.input-box').querySelector('input')
+        
+        if (input.type === "password"){
+            input.type = "text"
+            this.src = "/user_app/static/images/lock-open.png"
+        } else {
+            input.type = "password"
+            this.src = "/user_app/static/images/lock.png"
+        }
+    })
+});
