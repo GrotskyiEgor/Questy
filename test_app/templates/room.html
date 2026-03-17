@@ -43,6 +43,7 @@
         const totalQuestion = Number("{{ test.total_questions }}");
         const testMusic = "{{test_music }}" === "True" ? true : false; 
         const testShowResult = "{{ test_show_result }}" === "True" ? true : false; 
+        let answeredOrder = [];
 
         const quizList = {{ list_quiz | tojson }};
         const anwersList = {{ list_answers | tojson }};
@@ -61,10 +62,10 @@
             };
         };
         
-        const socket= io("/", 
+        const socket = io("/", 
             {
                 reconnection: true,
-                reconnection: 7,
+                reconnectionAttempts: 7,
                 reconnectionDelay: 1000
             }
         );
@@ -86,16 +87,23 @@
             timerPaused= false
         } 
 
+        let stateIndex = 0
+
+        if (state) {
+            stateIndex = Number(state.replace(/\D/g, ""))
+            console.log("Take stateIndex", stateIndex)
+        }
+
         if (state && state.includes("authorStart")) {
             state = getCookie("state");
             let time = Number(getCookie("time"));
-            renderAuthorStart(quizList[Number(state.replace(/\D/g, ""))], room, authorName, Number(state.replace(/\D/g, "")), totalQuestion, Number(state.replace(/\D/g, "")), testMusic);
+            renderAuthorStart(quizList[stateIndex], room, authorName, stateIndex, quizList.length, stateIndex, testMusic);
         } 
         else if (state === "authorResultTest") {
-            renderAuthorResultTest(username, authorName, totalQuestion, testMusic);
+            renderAuthorResultTest(username, authorName, quizList.length, testMusic);
         } 
         else if (state === "resultTest") {
-            renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic);
+            renderResultTest(username, quizList.length, quizList, anwersList, testId, testMusic);
         } else if (reconnect){
             clearCookie(["reconnect"])
 
@@ -105,17 +113,19 @@
                 author_name: authorName
             });
 
+            console.log("reconnect")
+            checkAnswers("reconnect")
             renderWaitQuestion("reconnect", testMusic)
         }
         else if (state && state.includes("question")) {
             let time = Number(getCookie("time"))
-            renderQuestion(Number("{{ test.id }}"), quizList[Number(state.replace(/\D/g, ""))], anwersList[Number(state.replace(/\D/g, ""))], room, authorName, testShowResult, testMusic);
+            renderQuestion(Number("{{ test.id }}"), quizList[stateIndex], anwersList[stateIndex], room, authorName, testShowResult, testMusic, stateIndex);
         } 
         else if (state && state.includes("wait")) {
             renderWaitQuestion("test", testMusic);
         }
         else {
-            if (authorName === username || connected){
+            if (authorName === username || connected === "1"){
                 let userList= getCookie("userList")
                 renderRoomMain(room, authorName, username, quizList, userList, testMusic, testShowResult);
                 setCookie("room", room)
@@ -133,13 +143,22 @@
             }
         }
 
-        socket.on("connect", function () {     
+        socket.on("connect", function () {   
+            let taskId
+            if (username === authorName){
+                const params = new URLSearchParams(window.location.search);
+
+                const rawTaskId = params.get("online_test")
+                taskId = Number(rawTaskId)
+            }  
+            
             socket.emit("join", {
                 room: room,
                 username: username,
-                device_id: getDeviceId()
+                device_id: getDeviceId(),
+                task_id: !isNaN(taskId) ? taskId : null
             });
-        
+            
             if (username !== authorName && !state) {                            
                 fetch('https://api.ipify.org?format=text')
                     .then(r => r.text())
@@ -212,8 +231,9 @@
             countUsersAnswer = Number(countUsersAnswer) + 1  
             setCookie("countUsersAnswer", countUsersAnswer)
 
-            state = getCookie("state");    
-            addUserAnswer(data["username"], answer, authorName, quizList[Number(state.replace(/\D/g, ""))]);
+            state = getCookie("state");  
+            stateIndex =  Number(state.replace(/\D/g, ""))
+            addUserAnswer(data["username"], answer, authorName, quizList[stateIndex]);
             
             socket.emit("get_room_size", {
                 room: room,
@@ -235,10 +255,10 @@
             
             if (username === authorName){  
                 if (state === "authorResultTest"){
-                    newState= -1
-                    renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic);
+                    newState = -1
+                    renderResultTest(username, quizList.length, quizList, anwersList, testId, testMusic);
                 } else{
-                    newState= Number(state.replace(/\D/g, ""))
+                    newState = stateIndex
                 }
             }
 
@@ -261,12 +281,13 @@
             }else if (newState >= 0){
                 if (Number(data["newTime"]) > 1){
                     setCookie("state", `question${newState}`)
-                    renderQuestion(Number("{{ test.id }}"), quizList[Number(newState)], anwersList[Number(newState)], room, authorName, testShowResult, testMusic);
+                    renderQuestion(Number("{{ test.id }}"), quizList[Number(newState)], anwersList[Number(newState)], room, authorName, testShowResult, testMusic, newState);
                 } else{
                     setCookie("state", `wait${newState}`)
                     renderWaitQuestion("test", testMusic);
                 }
 
+                console.log("checkAnswers(reconnect)")
                 checkAnswers("reconnect")
             } else{
                 console.log("BAD REQUEST NEW STATE")
@@ -275,35 +296,38 @@
         });
 
         socket.on("next_question", function(data) {  
+            answeredOrder = [];
+            let numberOfQuestion = data.number_of_question
             state = getCookie("state");
             setCookie("timeStop", "false")
             timerPaused= false
             
             checkAnswers("test");
-            plusAnswerTime= 0
+            plusAnswerTime = 0
+
+            console.log("NEW STATE QUESTION IDEX", numberOfQuestion)
             if (state != "authorResultTest") {
-                let numberOfQuestion= Number(state.replace(/\D/g, ""));
-                setCookie("time", Number(quizList[numberOfQuestion + 1].time))
-                if (numberOfQuestion != totalQuestion - 1) {
-                    setCookie("state", `question${numberOfQuestion + 1}`)
-                    renderQuestion(Number("{{ test.id }}"), quizList[numberOfQuestion + 1], anwersList[numberOfQuestion + 1], room, authorName, testShowResult, testMusic);
-                }
-                else {
+                setCookie("time", Number(quizList[numberOfQuestion].time))
+
+                console.log(numberOfQuestion != quizList.length, numberOfQuestion, quizList.length)
+                if (numberOfQuestion != quizList.length) {
+                    setCookie("state", `question${numberOfQuestion}`)
+                    renderQuestion(Number("{{ test.id }}"), quizList[numberOfQuestion], anwersList[numberOfQuestion], room, authorName, testShowResult, testMusic, numberOfQuestion);
+                } else if (numberOfQuestion === quizList.length && username === authorName) {
                     socket.emit("stop_test", {
                         room: room,
                         author_name: authorName
                     });
                     
                     setCookie("state", "authorResultTest")
-                    renderAuthorResultTest(username, authorName, totalQuestion, testMusic);
+                    renderAuthorResultTest(username, authorName, quizList.length, testMusic);
                 }
             }
         });
 
         socket.on("result_test", function(data) {      
             checkAnswers("test");
-
-            renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic)
+            renderResultTest(username, quizList.length, quizList, anwersList, testId, testMusic)
 
             userAnswers= getCookie("userAnswers")
             userTimers= getCookie("userTimers")
@@ -330,7 +354,8 @@
                 if (username === data["username"]){
                     setCookie("connected", "1");
                     setCookie("room", room);
-                    renderRoomMain(room, authorName, username, quizList, testMusic, testShowResult);
+                    let userList = getCookie("userList")
+                    renderRoomMain(room, authorName, username, quizList, userList, testMusic, testShowResult);
 
                     let users_list = data["users_list"].slice(1, -1);
                     users_list = users_list.split("||");
@@ -450,7 +475,7 @@
 
         socket.on('start_test', function(data) {   
             let stateCookies= getCookie("state")
-            let state= stateCookies ? Number(stateCookies.replace(/\D/g, "")) : 0;
+            let state = stateCookies ? Number(stateCookies.replace(/\D/g, "")) : 0;
             let messages = document.getElementById("messages");         
             if (messages){
                 messages.innerHTML += `<p>Start ${data["room"]}</p>`;
@@ -464,11 +489,11 @@
                 setCookie("state", `${COOKIE_AUTHOR_START}0`)  
                 setCookie("countUsersAnswer", 0)  
                 setCookie("countCorrectAnswer", 0)  
-                renderAuthorStart(quizList[0], room, authorName, state, totalQuestion, state, testMusic);
+                renderAuthorStart(quizList[0], room, authorName, state, quizList.length, state, testMusic);
             }
             else if(connectedStart) {
                 setCookie("state", "question0")  
-                renderQuestion(Number("{{ test.id }}"), quizList[state], anwersList[state], room, authorName, testShowResult, testMusic);
+                renderQuestion(Number("{{ test.id }}"), quizList[state], anwersList[state], room, authorName, testShowResult, testMusic, state);
             } else{
                 window.location.href = '/'; 
             }

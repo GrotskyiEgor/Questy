@@ -29,9 +29,6 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
     const content = document.getElementById("room-content");
     content.innerHTML = "";
 
-    // const container = document.createElement("div");
-    // container.className = "room-container";
-    
     const waitSideTop = document.createElement("div");
     waitSideTop.className = "wait-side-top";
 
@@ -288,15 +285,17 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
             if (authorName === username){
                 setRoomChanges(testCode, "music", true)
             }
-            console.log("~1~")
+
+            console.log("~true~")
             testMusic = true
             setMusicTheme("onlineRoomTheme", testMusic)        
-        } else {
+        } else if (!this.checked){
             if (authorName === username){
                 setRoomChanges(testCode, "music", false)
             }
+            
             testMusic = false
-            console.log("~2~")
+            console.log("~false~")
             setAllMute()
         }
     })
@@ -305,7 +304,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
         document.querySelector(".show-result").addEventListener('change', function(event) {
             if (this.checked) {
                 setRoomChanges(testCode, "show", true)
-            } else {
+            } else if (!this.checked){
                 setRoomChanges(testCode, "show", false)
             }
         })

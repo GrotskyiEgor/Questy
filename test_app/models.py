@@ -65,13 +65,13 @@ class Room(db.Model):
     test_code = db.Column(db.String(10), nullable= False)
 
     user_list = db.Column(db.String(300), nullable= False)
-
     author_name= db.Column(db.String(300), nullable= False)
-
     active_test= db.Column(db.Boolean, nullable= True)
-
     all_members = db.Column(db.String(300), nullable = False)
 
-    
+    current_question = db.Column(db.Integer, default=0)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id", name="fk_room_task_id"))
+
+
     def __str__(self):
         return f"{self.user_list} and {self.all_members}"

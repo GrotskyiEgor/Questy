@@ -34,7 +34,7 @@ function startTimer() {
         clearInterval(timerInterval)
     }
 
-    timerInterval= setInterval(() =>{
+    timerInterval = setInterval(() =>{
         const cookieTime = Number(getCookie("time"));
         let time = Number(timerText.textContent);
 
@@ -44,7 +44,7 @@ function startTimer() {
 
         if (!timerPaused){
             time -= 1
-            timerText.textContent= time
+            timerText.textContent = time
             setCookie("time", time)
         }
         

@@ -73,5 +73,3 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnMyClasses) btnMyClasses.addEventListener("click", hideInfo)
     if (btnClasses) btnClasses.addEventListener("click", hideInfo)
 })
-
-// 

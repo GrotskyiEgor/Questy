@@ -6,7 +6,7 @@ from flask_socketio import join_room, emit, disconnect
 
 import Project
 from Project.database import db
-from user_app.models import User, Score, Task
+from user_app.models import User, Score, Task, Classes
 from ..models import Test, Room, Quiz
 from .charts_room import excel_table, room_get_result
 from Project.settings import csrf
@@ -29,19 +29,28 @@ def handle_join(data):
     room = data['room']
     username = data['username']
     device_id = data["device_id"]
+    task_id = data.get("task_id")
     user_sid = flask.request.sid
 
+    ROOM = Room.query.filter_by(test_code=room).first()
+
+    # if ROOM and f"|{username}|" in ROOM.user_list:
+    #     emit("kicked", {"reason": "duplicate username"}, to=user_sid)
+    #     disconnect(sid=user_sid)
+    #     return
+
     if device_id in devices:
-        emit("kicked", {"succses": "succses"}, to=user_sid)
+        emit("kicked", {"reason": "duplicate device"}, to=user_sid)
         disconnect(sid=user_sid)
+        return
 
     users[user_sid] = username
     devices[device_id] = user_sid
     user_devices[username] = device_id
+
     join_room(room)
 
     test = Test.query.filter_by(test_code=room).first()
-    ROOM = Room.query.filter_by(test_code=room).first()
     
     if not ROOM:
         NEW_ROOM = Room(
@@ -60,6 +69,19 @@ def handle_join(data):
             ROOM.user_list += new_user
             if test and ROOM and username != test.author_name and username not in ROOM.all_members:
                 ROOM.all_members += new_user
+
+    print("task_id", task_id)
+    if task_id:
+        try:
+            TASK = Task.query.filter_by(id=int(task_id)).first()
+            print(room, data["task_id"])
+            print("ROOM.task_id TASKTASK", ROOM, TASK)
+
+            if TASK:
+                ROOM.task_id = TASK.id
+                print("ROOM.task_id", ROOM.task_id)
+        except:
+            print("DO NOT HAVE TASK ID")
 
     db.session.commit()
 
@@ -87,7 +109,9 @@ def handle_disconnect():
 
 @Project.settings.socketio.on('reconnect_user')
 def handle_reconnect_user(data):
+    room = data["room"]
     author = data['author_name']
+    username = data['username']
     author_sid = get_sid(author)
 
     emit("reconnect_ping", {"room": data["room"], "username": data["username"]}, room=author_sid)
@@ -95,11 +119,14 @@ def handle_reconnect_user(data):
 
 @Project.settings.socketio.on('new_state')
 def handle_new_state(data):
+    room = data["room"]
     new_state = data["new_state"]
     username = data["username"]
     user_sid = get_sid(username)
 
-    emit("new_state", {"room": data["room"], "username": username, "new_state": new_state, "new_time": data["new_time"]}, room=user_sid)
+    ROOM = Room.query.filter_by(test_code=room).first()
+
+    emit("new_state", {"room": data["room"], "username": username, "new_state": ROOM.current_question, "new_time": data["new_time"]}, room=user_sid)
 
 
 @Project.settings.socketio.on('test_end')
@@ -177,16 +204,21 @@ def handle_user_answers(data):
     room = data["room"]
     user_name = data["username"]
     user_tokens = data["user_tokens"] 
-    task_test_id = data.get("task_test_id")
-    class_id = data.get("class_id")
+    # task_test_id = data.get("task_test_id")
+    # class_id = data.get("class_id")
 
     tokens = 0
     new_token_list = None
     ROOM = Room.query.filter_by(test_code=room).first()
     TEST = Test.query.filter_by(id=ROOM.test_id).first()
     QUIZ_LIST = Quiz.query.filter_by(test_id=ROOM.test_id).all()
+    TASK = None
+    CLASS = None
 
-    
+    if ROOM.task_id:
+        TASK = Task.query.filter_by(id=ROOM.task_id).first()
+        CLASS = Classes.query.filter_by(id=TASK.class_id).first()
+
     user_answers = data["user_answers"].split("|")
     user_answers_list = []
     for answer in user_answers:
@@ -201,12 +233,17 @@ def handle_user_answers(data):
     user_tokens = user_tokens.split("|")
 
     for index in range(len(QUIZ_LIST)):
-        user = user_answers_list[index].split("$$$")
+        if index < len(user_answers_list): 
+            user = user_answers_list[index].split("$$$")
+        else:
+            user = ["not_answer"]
+
         quiz = QUIZ_LIST[index].correct_answer.split("%$№")
         if sorted(user) == sorted(quiz):
             number_of_correct_answers += 1
         else:
-            user_tokens[index] = 0
+            if index < len(user_tokens):
+                user_tokens[index] = 0
 
     for token in user_tokens:
         if new_token_list == None:
@@ -218,6 +255,10 @@ def handle_user_answers(data):
     accuracy = int(accuracy)
     USER = User.query.filter_by(username= user_name).first()
 
+    if USER and CLASS and CLASS not in USER.classes:
+        TASK = None
+        CLASS = None
+
     SCORE = Score(
         user_answer=data["user_answers"],
         user_timers=data["user_timers"],
@@ -226,8 +267,8 @@ def handle_user_answers(data):
         test_id=TEST.id,
         date_complete=datetime.date.today(),
         time_complete=datetime.datetime.now().strftime("%H:%M:%S"),
-        task_test_id=int(task_test_id) if task_test_id else None,
-        class_id=int(class_id) if class_id else None ,
+        task_test_id=int(ROOM.task_id) if ROOM.task_id else None,
+        class_id=int(CLASS.id) if CLASS else None ,
         user_id=USER.id if USER else None,
         user_name=user_name,
         test_code=room
@@ -253,11 +294,18 @@ def handle_user_answers(data):
 
 @Project.settings.socketio.on('user_answer')
 def handle_user_answer(data):
+    room = data["room"]
     author_name = data['author_name']
     username = data['username']
     answer = data['answer']
+    number_of_question = data["number_of_question"]
     
     author_sid = get_sid(author_name)
+
+    ROOM = Room.query.filter_by(test_code=room).first()
+
+    if number_of_question != ROOM.current_question:
+        return
 
     emit("author_receive_answer", {"username": username, "answer": answer}, room=author_sid)
 
@@ -295,8 +343,10 @@ def handle_start_test(data):
     user_list = ROOM.user_list.replace(f"|{ROOM.author_name}|", "")
 
     if user_list:
+        # ROOM.current_question += 1
         ROOM.active_test = True
         db.session.commit()
+        print("ROOM.current_question += 1 satrt", ROOM.current_question)
         
         emit("start_test", {
             "room": room,
@@ -333,12 +383,22 @@ def handle_new_user_admin(data):
 
 @Project.settings.socketio.on('next_question')
 def handle_next_question(data):
-    emit("next_question", f"Next question in {data['room']} author {data['author_name']}", include_self=False, to=data['room'])
+    room = data["room"]
+
+    ROOM = Room.query.filter_by(test_code=room).first()
+    print(ROOM.current_question, "ROOM, ROOM.question")
+
+    if ROOM:
+        ROOM.current_question += 1
+        db.session.commit()
+
+        print(ROOM.current_question, "ROOM, ROOM.current_question")
+        emit("next_question", {"number_of_question": ROOM.current_question}, include_self=False, to=data['room'])
 
 
 @Project.settings.socketio.on('stop_test')
 def handle_stop_test(data):
-    emit("result_test", f"Stop test {data['room']} result_test page author {data['author_name']}", include_self=False, to=data['room'])
+    emit("result_test", f"Stop test in {data['room']} author {data['author_name']}", include_self=False, to=data['room'])
 
 
 @Project.settings.socketio.on('end_test')
@@ -364,7 +424,6 @@ def handle_room_get_result(data):
 @Project.settings.socketio.on('plus_time')
 def handle_plus_time(data):
     emit("plus_time", to=data['room'])
-
 
 @Project.settings.socketio.on('change_time')
 def handle_change_time(data):

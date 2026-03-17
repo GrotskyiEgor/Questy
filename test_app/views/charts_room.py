@@ -57,21 +57,24 @@ def room_get_result(room, author_name):
                 # print(QUIZ_LIST)
                 # print(answers_list)
                 for index, quiz in enumerate(QUIZ_LIST):
-                    if answers_list[index] == "not_answer":
+                    ans = answers_list[index] if index < len(answers_list) else "not_answer"
+
+                    if ans == "not_answer":
                         correct_answers_list.append(2)
                         continue
                     
                     if quiz.question_type  == "multiple_choice":
                         multi_choice_correct = quiz.correct_answer.split("%$№")
-                        multi_choice_answer = answers_list[index].split("$$$")
+                        multi_choice_answer = ans.split("$$$")
                         sorted_multi_choice_correct = sorted(multi_choice_correct)
                         sorted_multi_choice_answer = sorted(multi_choice_answer)
+
                         if sorted_multi_choice_correct == sorted_multi_choice_answer:
                             correct_answers_list.append(1)
                         else:
                             correct_answers_list.append(0)
                     else:
-                        if quiz.correct_answer == answers_list[index]:
+                        if quiz.correct_answer == ans:
                             correct_answers_list.append(1)
                         else:
                             correct_answers_list.append(0)
@@ -100,13 +103,15 @@ def room_get_result(room, author_name):
                 answers_list = answers_str.strip('|').split('||')
 
                 for index, quiz in enumerate(QUIZ_LIST):
-                    if answers_list[index] == "not_answer":
+                    ans = answers_list[index] if index < len(answers_list) else "not_answer"
+
+                    if ans == "not_answer":
                         correct_answers_list.append(2)
                         continue
 
                     if quiz.question_type  == "multiple_choice":
                         multi_choice_correct = quiz.correct_answer.split("%$№")
-                        multi_choice_answer = answers_list[index].split("$$$")
+                        multi_choice_answer = ans.split("$$$")
                         sorted_multi_choice_correct = sorted(multi_choice_correct)
                         sorted_multi_choice_answer = sorted(multi_choice_answer)
                         if sorted_multi_choice_correct == sorted_multi_choice_answer:
@@ -114,7 +119,7 @@ def room_get_result(room, author_name):
                         else:
                             correct_answers_list.append(0)
                     else:
-                        if quiz.correct_answer == answers_list[index]:
+                        if quiz.correct_answer == ans:
                             correct_answers_list.append(1)
                         else:
                             correct_answers_list.append(0)

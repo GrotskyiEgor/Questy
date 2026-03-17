@@ -59,8 +59,8 @@ function renderWaitQuestion(type, testMusic) {
             leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
         } else if (type === "reconnect"){
             setCookie("reconnect", "1")
-            textWaitQuestion= 'Тест завершено, ваш результат не буде зараховано'
-            leaveButton= `<button class='leave-test' onclick="userLeaveTest()">Відключитися від тесту</button>`
+            // textWaitQuestion= 'Тест завершено, ваш результат не буде зараховано'
+            // leaveButton= `<button class='leave-test' onclick="userLeaveTest()">Відключитися від тесту</button>`
         }
         
         roomContent.innerHTML = `
@@ -76,7 +76,7 @@ function renderWaitQuestion(type, testMusic) {
     }
 }
 
-function renderQuestion(testId, quiz, answers, room, author_name, testshowResult, testMusic) {
+function renderQuestion(testId, quiz, answers, room, author_name, testshowResult, testMusic, stateIndex) {
     setMusicTheme("onlineQuestionTheme", testMusic);
 
     const delay = 2250
@@ -115,7 +115,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
     questionBlock.className = "question";
 
     const question = document.createElement("p");
-    question.textContent = `${Number(state.replace(/\D/g, "")) + 1}. ${quiz.question_text}`;
+    question.textContent = `${stateIndex + 1}. ${quiz.question_text}`;
     questionBlock.appendChild(question);
 
     const timer = document.createElement("p");
@@ -178,7 +178,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 let userTokens = getCookie("userTokens")
 
                 curTime = Number(getCookie("time"));
-                allTime = plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time
+                allTime = plusAnswerTime + quizList[stateIndex].time
                 userTimer = allTime- curTime
                 token = tokenTimePrecent(userTimer, allTime)
 
@@ -202,7 +202,8 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                     room: room,
                     author_name: author_name,
                     username: username,
-                    answer: button.id
+                    answer: button.id,
+                    number_of_question: stateIndex
                 });
 
 
@@ -248,7 +249,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
             let answerValue = document.querySelector(".input-with-answer").value.trim();
 
             curTime = Number(getCookie("time"));
-            allTime = plusAnswerTime+ quizList[Number(state.replace(/\D/g, ""))].time;
+            allTime = plusAnswerTime+ quizList[stateIndex].time;
             userTimer = allTime - curTime;
             token = tokenTimePrecent(userTimer, allTime);
 
@@ -277,7 +278,8 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 room: room,
                 author_name: author_name,
                 username: username,
-                answer: answerValue
+                answer: answerValue,
+                number_of_question: stateIndex
             });
 
             showResult(quiz.correct_answer === answerValue, testshowResult, testMusic);
@@ -350,7 +352,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
             let answerValue = ""
             let userAnswerValue = ""
             let arreyUserMultipleChoice = document.querySelectorAll(".active-multiple-answer")
-            allTime  = Number(plusAnswerTime) + Number(quizList[Number(state.replace(/\D/g, ""))].time)
+            allTime  = Number(plusAnswerTime) + Number(quizList[stateIndex].time)
             userTimer = allTime- curTime
             token = tokenTimePrecent(userTimer, allTime)
 
@@ -390,7 +392,8 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 room: room,
                 author_name: author_name,
                 username: username,
-                answer: answerValue
+                answer: answerValue,
+                number_of_question: stateIndex
             });
             
 

@@ -3,12 +3,13 @@ import Project
 
 def main():
     try:
-        # Project.load_env()
+        Project.load_env()
         Project.settings.socketio.run(
             Project.project, 
             host='127.0.0.1', 
             port=8001, 
-            debug=True
+            debug=True,
+            use_reloader=False
         )
     except Exception as error:
         print(f'An error: {error}')
@@ -17,7 +18,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Project/instance
 
+# Project/instance
 # static/images
 # /Project/instance/data.db

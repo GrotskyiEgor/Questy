@@ -75,6 +75,19 @@ function nextQuestion(){
     const newTime = document.getElementById("timer")
     newTime.textContent =`${quizList[numberOfQuestion].time}`
 
+    const barUserBlock = document.querySelector('.all-users-bar')
+
+    if (barUserBlock){
+        const barUserBlockArray = barUserBlock.querySelectorAll('.bar-user-block')
+
+        barUserBlockArray.forEach(userBlock => {
+            const ckeckBox = userBlock.querySelector('.bar-user-checkbox')
+            const userCircle = userBlock.querySelector('.circle')
+            if (ckeckBox) ckeckBox.textContent = '';
+            if (userCircle) userCircle.className = "circle no-answer"
+        });
+    }
+
     timerPaused= false
     plusAnswerTime= 0
     
@@ -106,6 +119,9 @@ function checkAnswers(type){
     } else if (missingCount === 0 && answerList.length === 0){
         missingCount= 1
     }
+
+    console.log("OLD checkAnswers", "type --", type)
+    console.log(answers)
 
     if (type === "test"){
         for (let miss = 0; miss < missingCount; miss++) {
@@ -141,6 +157,9 @@ function checkAnswers(type){
             }
         }
     }
+
+    console.log("NEW checkAnswers", "type --", type)
+    console.log(answers)
 
     setCookie("userAnswers", answers)
     setCookie("userTimers", userTimers)

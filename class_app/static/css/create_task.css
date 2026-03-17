@@ -136,7 +136,7 @@ h1, h3{
 .radio-button-box input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 2.6vw;
+    width: 35px !important;
     height: 2.7vh;
     border-radius: 1.5vh;
     background: #ccc;

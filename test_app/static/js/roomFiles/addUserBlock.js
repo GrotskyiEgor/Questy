@@ -149,19 +149,8 @@ function addUesrBlock(username, button){
 function createUserBlock(username, authorName, blockUsername, ip, type) {   
     let userListDiv;
     let checkingUserBlock;
-    // const waiteUserCount = document.querySelector(".wait-list-count")
-    // const UserCount = document.querySelector(".user-list-count")
     
     if (type === "not"){
-        
-        // if (UserCount){
-        //     UserCount.textContent = Number(UserCount.textContent) + 1
-        // }
-
-        // if (username == authorName){
-        //     waiteUserCount.textContent = Number(waiteUserCount.textContent) - 1
-        // }
-
         userListDiv= document.getElementById("user-list");
         checkingUserBlock= document.getElementById(`user${blockUsername}`);
 
@@ -171,7 +160,6 @@ function createUserBlock(username, authorName, blockUsername, ip, type) {
             emptyUserBlock.remove();
         }
     } else {
-        // waiteUserCount.textContent = Number(waiteUserCount.textContent) + 1
         userListDiv = document.getElementById("wait-users") ;
         checkingUserBlock = document.getElementById(`user${blockUsername}`);
 

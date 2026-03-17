@@ -1,25 +1,143 @@
 let donatChart;
+let reorderTimeout = null;
+
+function safeReorder() {
+    clearTimeout(reorderTimeout);
+    reorderTimeout = setTimeout(() => {
+        reorderUserBar();
+    }, 10);
+}
+
+function reorderUserBar() {
+    const container = document.querySelector('.all-users-bar');
+    const blocks = Array.from(container.children);
+
+    // чистим мусор
+    answeredOrder = answeredOrder.filter(user => 
+        document.getElementById(`answerUser${user}`)
+    );
+
+    const positions = new Map();
+
+    blocks.forEach(el => {
+        el.style.transition = "none";
+        el.style.transform = "";
+        positions.set(el, el.getBoundingClientRect().top);
+    });
+
+    blocks.sort((a, b) => {
+        const userA = a.id.replace("answerUser", "");
+        const userB = b.id.replace("answerUser", "");
+
+        const indexA = answeredOrder.indexOf(userA);
+        const indexB = answeredOrder.indexOf(userB);
+
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+
+        return indexA - indexB;
+    });
+
+    blocks.forEach(el => container.appendChild(el));
+
+    // АНИМАЦИЯ
+    blocks.forEach(el => {
+        const oldTop = positions.get(el);
+        const newTop = el.getBoundingClientRect().top;
+
+        const delta = oldTop - newTop;
+
+        el.style.transform = `translateY(${delta}px)`;
+
+        requestAnimationFrame(() => {
+            el.style.transition = "transform 0.4s ease";
+            el.style.transform = "";
+        });
+    });
+
+    // обновление номеров
+    blocks.forEach((block, index) => {
+        const circleText = block.querySelector('.circle-text');
+        if (circleText) {
+            circleText.childNodes[0].textContent = (index + 1);
+        }
+    });
+
+    console.log("answeredOrder", answeredOrder)
+}
+
+function kickFromTest(kick_user){
+    let UserList= getCookie("userList") || ""
+    let users = UserList.split("</>").filter(username => username.trim() !== "")
+
+    users = users.filter(userStr => {
+        const [name, userIp] = userStr.split("()")
+        return name !== kick_user
+    })
+
+    const newUserList = users.join("</>")
+
+    setCookie("userList", newUserList)
+
+    socket.emit("kick_user", {
+        room: room,
+        user: kick_user
+    });
+
+    let removeUserBlock= document.getElementById(`answerUser${kick_user}`)
+
+    if (removeUserBlock) {
+        removeUserBlock.remove()
+    }
+}
+
+function checkDoughnutChart(){
+    countUsersAnswer = getCookie("countUsersAnswer");
+    correctAnswerChart = getCookie("countCorrectAnswer");
+    
+    if (lengthArrey === Number(countUsersAnswer)){
+        timerStop();
+
+        const answerDiv = document.createElement("div")
+        answerDiv.className = "chart-answer-count"
+
+        const worstCount = document.createElement("p")
+        const rightCount = document.createElement("p")
+        rightCount.textContent = `Правильних відповідей: ${correctAnswerChart}`
+        worstCount.textContent = `Неправильних відповідей: ${lengthArrey - Number(correctAnswerChart)}`
+
+        answerDiv.appendChild(rightCount)
+        answerDiv.appendChild(worstCount)
+        const chartDiv = document.querySelector(".chart-div")
+        chartDiv.appendChild(answerDiv)
+
+        renderDoughnutChart("donat-chart", lengthArrey, correctAnswerChart);
+    }
+}
 
 function addUserAnswer(username, answer, authorname, quiz) {
     const userAnswers = document.getElementById("user-answers");
     const countAnswerSpan  = document.getElementById("count-answer-span");
     let correctAnswer= quiz.correct_answer.split("%$№").sort();
     let answerClassStatus = "user-answer-worst";
+    let correct = false;
 
     countAnswerSpan.textContent= `${parseInt(countAnswerSpan.textContent) + 1}`;
-
     if (answer.includes("$$$")){
         userAnswer = answer.split("$$$").sort()
         if (userAnswer.join(",") == correctAnswer.join(",")){
             answerClassStatus = "user-answer-correct";
-            countCorrect= parseInt(getCookie("countCorrectAnswer")) + 1
-            setCookie("countCorrectAnswer", countCorrect)
+            countCorrect= parseInt(getCookie("countCorrectAnswer")) + 1;
+            correct = true;
+            setCookie("countCorrectAnswer", countCorrect);
         }
     } else {
         if (answer == correctAnswer){
-            countCorrect = parseInt(getCookie("countCorrectAnswer")) + 1
+            countCorrect = parseInt(getCookie("countCorrectAnswer")) + 1;
+            correct = true;
             answerClassStatus = "user-answer-correct";
-            setCookie("countCorrectAnswer", countCorrect)
+            setCookie("countCorrectAnswer", countCorrect);
         }
     }
 
@@ -37,46 +155,98 @@ function addUserAnswer(username, answer, authorname, quiz) {
         </div>
     `
 
+    const userBarBlock = document.getElementById(`answerUser${username}`)
+
+    if (userBarBlock){
+        const userBarText = userBarBlock.querySelector('.bar-user-checkbox')
+        userBarText.textContent = '✓'
+
+        const userCircle = userBarBlock.querySelector(".circle")
+        if (correct){
+            userCircle.classList.remove("no-answer")
+            userCircle.classList.add("correct")
+        } else {
+            userCircle.classList.remove("no-answer")
+            userCircle.classList.add("wrong")
+        }
+    }
+
     socket.emit('get_usernames', {
         room: room,
         author_name: authorname
     });
 
-    socket.once('get_usernames', function(data){
-        let userArrey= data;
-        lengthArrey= userArrey.length;
+    if (!answeredOrder.includes(username)) {
+        answeredOrder.push(username);
+    }
 
-        countUsersAnswer= getCookie("countUsersAnswer");
-        correctAnswerChart= getCookie("countCorrectAnswer");
-        
-        if (lengthArrey === Number(countUsersAnswer)){
-            timerStop();
+    safeReorder();
 
-            const answerDiv = document.createElement("div")
-            answerDiv.className = "chart-answer-count"
+    reorderUserBar();
+    checkDoughnutChart()
+}
 
-            const worstCount = document.createElement("p")
-            const rightCount = document.createElement("p")
-            rightCount.textContent = `Правильних відповідей: ${correctAnswerChart}`
-            worstCount.textContent = `Неправильних відповідей: ${lengthArrey - Number(correctAnswerChart)}`
+function createUsersBar(usesArray){
+    const allUsersArrayBar = document.querySelector('.all-users-bar')
 
-            answerDiv.appendChild(rightCount)
-            answerDiv.appendChild(worstCount)
-            const chartDiv = document.querySelector(".chart-div")
-            chartDiv.appendChild(answerDiv)
+    allUsersArrayBar.innerHTML = ''
 
-            renderDoughnutChart("donat-chart", lengthArrey, correctAnswerChart);
-        }
-    })
+    if (usesArray){
+        usesArray.forEach((username, index) => {           
+            const userBlock = document.createElement('div')
+            userBlock.className = 'bar-user-block'
+            userBlock.id = `answerUser${username}`
+
+            const leftUserBlock = document.createElement('div')
+            leftUserBlock.className = 'bar-left-user-block'
+
+            const userBlockUsername = document.createElement('div')
+            userBlockUsername.className = 'bar-username-block'
+            userBlockUsername.textContent = username.length > 12 ? username.slice(0, 9) + "..." : username;
+
+            const userBlockCheckBox = document.createElement('div')
+            userBlockCheckBox.className = 'bar-user-checkbox'
+
+            const btnKick = document.createElement("button");
+            btnKick.className = "btn-remove-bar";
+            btnKick.type = "button";
+            btnKick.textContent = "Видалити"
+            
+            btnKick.onclick = function () {
+                kickFromTest(username)
+            };
+
+            if (allUsersArrayBar){
+                leftUserBlock.innerHTML += `<span class="circle-text">${index + 1}<span class="circle no-answer"></span></span>`
+                leftUserBlock.appendChild(userBlockUsername);
+                leftUserBlock.appendChild(userBlockCheckBox);
+                userBlock.appendChild(leftUserBlock);
+                userBlock.appendChild(btnKick);
+                allUsersArrayBar.appendChild(userBlock)
+            }
+        });
+    }
 }
 
 function renderAuthorStart(quiz, room, authorname, number_of_question, totalQuestion, questionNumber, testMusic) {
     setMusicTheme("onlineRoomTheme", testMusic);
 
+    const answerCounter = document.querySelector(".chart-answer-count")
+    if (answerCounter) answerCounter.remove()
+
+    const donatChart = document.getElementById("donat-chart")
+    if (donatChart) donatChart.remove()
+
     const waitContent = document.getElementById("room-content");
     waitContent.innerHTML = ""; 
     waitContent.id = 'container-question'
     waitContent.className = 'container-question'
+
+    const questionBlock = document.createElement('div')
+    questionBlock.className = 'question-block-test'
+
+    const allUsersArrayBar = document.createElement('div')
+    allUsersArrayBar.className = 'all-users-bar'
 
     const headerBar = document.createElement('div')
     headerBar.className = 'header-bar'
@@ -137,9 +307,8 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
 
     questionTable.appendChild(headerRow)
     questionTable.appendChild(infoRow)
-    headerBar.appendChild(questionTable)
     
-    waitContent.appendChild(headerBar)
+    questionBlock.appendChild(questionTable)
 
     const userBlock = document.createElement('div')
     userBlock.id = 'user-block'
@@ -171,21 +340,22 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
     userInfo.appendChild(chartDiv)
     userInfo.appendChild(studInfoBox)
 
-
     userBlock.appendChild(userInfo)
 
-    waitContent.appendChild(userBlock)
+    questionBlock.appendChild(userBlock)
+    waitContent.appendChild(questionBlock)
+    waitContent.appendChild(allUsersArrayBar)
 
     socket.emit('get_usernames', {
         room: room,
         author_name: authorname
     });
 
-    let quizTime= Number(getCookie("time"));
+    let quizTime = Number(getCookie("time"));
 
     socket.once('get_usernames', function(data){
         let userArrey = data;
-        let nextButton= '';
+        let nextButton = '';
         lengthArrey = userArrey.length
 
         if (number_of_question === totalQuestion- 1){
@@ -223,6 +393,8 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
             </div>
             `
 
+        checkDoughnutChart()
+        createUsersBar(data)
         startTimer()
     });
 }

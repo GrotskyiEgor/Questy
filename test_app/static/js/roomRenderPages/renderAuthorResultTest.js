@@ -1,6 +1,6 @@
-let charts= {}
-let selectUserName= null
-let selectBlock= true
+let charts = {}
+let selectUserName = null
+let selectBlock = true
 
 function appendResultRow(resultTable, username, answersArray, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion) {
     const resultRow = document.createElement('div');
@@ -88,6 +88,12 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
     });
     
     socket.on("room_get_result_data", function(data) {  
+        const emptyMsgRemove = document.querySelector('.empty-results')
+        if(emptyMsgRemove) emptyMsgRemove.remove();
+
+        const leaveButtonRemove = document.querySelector('.leave-btn')
+        if(leaveButtonRemove) leaveButtonRemove.remove();
+
         resultData = data.room_get_result_data;
         const best_score_data = data.best_score_data;
         const worst_score_data = data.worst_score_data;
@@ -95,14 +101,29 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         const averega_score = data.averega_score;
 
         if (Object.keys(resultData).length === 0){
+            const emptyMsg = document.createElement('div');
+            emptyMsg.className = 'empty-results';
+            emptyMsg.textContent = 'Поки що немає результатів...';
+
+            const leaveButton= document.createElement('button');
+            leaveButton.className= 'leave-btn';
+            leaveButton.textContent = 'Покинути тест';
+            leaveButton.addEventListener("click", () => {
+                authorLeaveTest("test")
+            });
+
+            container.appendChild(emptyMsg);
+            container.appendChild(leaveButton);
+
             setTimeout(() => {
                 socket.emit("room_get_result", {
                     room: room,
                     username: username,
                     author_name: authorName
                 });
-            }, 500)
-            return
+            }, 1000)
+
+            return;
         }
 
         let accuracy= questionAccuracy(resultData, totalQuestion)
@@ -251,7 +272,6 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         resultsInfoBox.appendChild(resultInfoWorstScore);
         resultsInfoBox.appendChild(resultsInfoBoxText);
         resultsInfoBox.appendChild(worstResultQuestion);
-        // baseInfo.appendChild(resultsInfoBox);
 
         resultTable = document.createElement('div');
         resultTable.className = 'results-table';

@@ -18,10 +18,12 @@ $(() => {
         $('#modal-bg-connect').fadeIn(200);
     }
 
-    if (savedTestAnswer){
-        clearCookie(["userAnswers"])
+    function clearTestCookies(){
+        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", 
+            "countUsersAnswer", "temporaryName", "timeStop", "time", 
+            "userList", "countCorrectAnswer", "classId", "taskTestId"])
     }
-
+    
     $('#connect-test-btn').on('click', () => {
         if (savedRoom){
             setCookie("reconnect", "1")
@@ -30,7 +32,7 @@ $(() => {
     })
 
     $('#leave-test-btn').on('click', () => {
-        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "countUsersAnswer", "temporaryName", "timeStop", "time", "userList", "countCorrectAnswer", "classId", "taskTestId"])
+        clearTestCookies()
         $('#modal-bg-connect').fadeOut(200)
     })
 
@@ -63,20 +65,16 @@ $(() => {
         }
     })
 
-    $('.back-btn').on('click', function(){
-        $('#modal-bg').fadeOut(200)
-        $('#modal-bg-connect').fadeOut(200)
-    }) 
-
-    $('#modal-bg').on('click', function(element) {
-        if ($(element.target).is('#modal-bg')){
+    $('#modal-bg, #modal-bg-connect').on('click', function(element) {
+        if ($(element.target).is(this)){
             $(this).fadeOut(200)
+            clearTestCookies()
         }
     })
 
-    $('.reconnect-back-btn').on('click', () => {
-        clearCookie(["room", "state", "userAnswers", "userTimers", "userTokens", "temporaryName", "timeStop", "time", "classId", "taskTestId"])
-        $('#modal-bg-connect').fadeOut(200)
+    $('.reconnect-back-btn, .back-btn, .leave-test-btn').on('click', () => {
+        clearTestCookies()
+        $('#modal-bg-connect, #modal-bg').fadeOut(200)
     }) 
 
     $('.input_code').on('keyup', function(event){

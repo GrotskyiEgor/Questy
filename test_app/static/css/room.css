@@ -160,7 +160,7 @@ main {
 .user-blocks {
     display: flex;
 
-    height: 90vh !important;
+    height: 92vh !important;
     width: 100%;
 
     justify-content: space-between;
@@ -830,11 +830,11 @@ main {
     margin: 1vh;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1vw;
     box-shadow: 0 4px 12px var(--shadow);
-    height: 97vh;
-    width: 98vw;
+    height: 98vh;
+    width: 99vw;
 }
 
 .header-bar{
@@ -1354,7 +1354,7 @@ main {
     background-color: var(--green-light);
 }
 
-.question-block, .result-info {
+.question-block, .result-info, .all-users-bar, .bar-user-block, .question-block-test {
     background-color: white;
     border: 0.2vh solid var(--green-light);
     border-radius: 1.2vh;
@@ -2050,6 +2050,77 @@ main {
     z-index: 10;
 }
 
+.question-block-test {
+    height: 97vh;
+    width: 80vw;
+    padding: 1vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.all-users-bar {
+    width: 18vw;
+    height: 97vh;
+
+    padding: 1vh;
+}
+
+.bar-user-block{
+    width: 100%;
+    height: 5vh;
+
+    padding: 0.5vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5vw;
+}
+
+.bar-left-user-block{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5vw;
+}
+
+.bar-username-block, .circle-text {
+    font-size: 2vh;
+    font-weight: bold;
+}
+
+.circle-text{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5vw;
+}
+
+.all-users-bar {
+    display: flex;
+    flex-direction: column;
+}
+
+.bar-user-block {
+    transition: transform 0.4s ease, opacity 0.3s;
+}
+
+.btn-remove-bar {
+    background-color: var(--red-button);
+    color: white;
+    padding: 0.8vh 1.2vw;
+    border: none;
+    border-radius: 1vh;
+    font-size: 1.5vh;
+    cursor: pointer;
+    transition:  background-color 0.3s;
+}
+
+.btn-remove-bar:hover {
+    background-color: var(--red-button-hover);
+}
+
 @keyframes toast-fade {
     from {
         opacity: 0;
@@ -2187,9 +2258,9 @@ main {
         font-size: 4vh;
     }
 
-    .radio-button-box input[type="checkbox"] {
+    /* .radio-button-box input[type="checkbox"] {
         width: 10vw;
-    }
+    } */
 
     .multiple-answer{
         font-size: 3vh;

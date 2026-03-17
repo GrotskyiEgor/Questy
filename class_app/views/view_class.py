@@ -48,7 +48,6 @@ def class_sorte():
         classes_list= []
         tasks_class_user_list= []
 
-        # user= User.query.filter_by(id= current_user.id).first()
         user= current_user
         for clas in user.classes:
             classes_id.append(clas.id)
