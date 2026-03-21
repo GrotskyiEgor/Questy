@@ -2,66 +2,82 @@ function shufle(array){
     for (let index = array.length - 1; index > 0; index--){
         let new_index = Math.floor(Math.random() * (index + 1));
         [array[index], array[new_index]] = [array[new_index], array[index]];
-    }
+    };
 
-    return array
-}
+    return array;
+};
+
 
 function tokenTimePrecent(userTimer, allTime){
-    let timePrecent= (userTimer/ allTime)
-    let max_token= 1200
-    let token= 0
-    let constant= 2
+    let timePrecent = (userTimer / allTime);
+    let max_token = 1200;
+    let token = 0;
+    let constant = 2;
 
-    token= Math.round(max_token * Math.exp(-timePrecent * constant))
-    return token
-}
+    token= Math.round(max_token * Math.exp(-timePrecent * constant));
+    return token;
+};
 
-function showResult(type, testshowResult, testMusic) {
-    const toastWrapperDiv = document.querySelector(".toast-wrapper")
-    const rightLine = document.querySelector(".answer-toast-right")
-    const worstLine = document.querySelector(".answer-toast-wrong")
-    const pageLock = document.querySelector(".page-lock")
+
+function showResult(type, testshowResult) {
+    const toastWrapperDiv = document.querySelector(".toast-wrapper");
+    const rightLine = document.querySelector(".answer-toast-right");
+    const worstLine = document.querySelector(".answer-toast-wrong");
+    const pageLock = document.querySelector(".page-lock");
 
     if (pageLock){
-        pageLock.classList.add("active")
-    }
+        pageLock.classList.add("active");
+    };
 
     if (type){
         if (testshowResult) {
             rightLine.style.top = "50%"; 
-            if (testMusic) playSound("correctResult");
-        }
+            playSound("correctResult");
+        };
     } else {
         if (testshowResult){
-            worstLine.style.top = "50%"
-            if (testMusic) playSound("wrongResult")
-        }
-    }
+            worstLine.style.top = "50%";
+            playSound("wrongResult");
+        };
+    };
+};
+
+
+function resetAnswer(){
+    document.querySelectorAll(".active-multiple-answer").forEach(btn => {
+        btn.classList.remove("active-multiple-answer")
+        btn.classList.add("multiple-answer");
+    });
+
+    document.querySelectorAll(".passing-answer").forEach(btn => {
+        btn.classList.remove("active");
+    });
 }
 
-function renderWaitQuestion(type, testMusic) {
-    setMusicTheme("onlineRoomTheme", testMusic);
+function renderWaitQuestion(type) {
+    resetAnswer();
+
+    setMusicTheme("onlineRoomTheme");
 
     const roomContent = document.getElementById("room-content");
 
     if (roomContent){
-        roomContent.innerHTML = ""; 
-        roomContent.className = 'room-content'
+        roomContent.replaceChildren();
+        roomContent.className = 'room-content';
     
-        let leaveButton= ""
-        let textWaitQuestion= "Будь ласка, зачекайте, поки інші учасники відповідають..."
+        let leaveButton= "";
+        let textWaitQuestion= "Будь ласка, зачекайте, поки інші учасники відповідають...";
         
         if (type === "wait"){
-            leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
+            leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`;
         } else if (type === "start"){
             textWaitQuestion= "Зачекайте, поки організатор прийме вас до тесту"
-            leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`
+            leaveButton= `<button class='leave-test' onclick="leaveTest()">Відключитися від тесту</button>`;
         } else if (type === "reconnect"){
             setCookie("reconnect", "1")
             // textWaitQuestion= 'Тест завершено, ваш результат не буде зараховано'
             // leaveButton= `<button class='leave-test' onclick="userLeaveTest()">Відключитися від тесту</button>`
-        }
+        };
         
         roomContent.innerHTML = `
             <div class="blur-overlay">
@@ -73,23 +89,23 @@ function renderWaitQuestion(type, testMusic) {
                 </div>
             </div>
         `
-    }
-}
+    };
+};
 
-function renderQuestion(testId, quiz, answers, room, author_name, testshowResult, testMusic, stateIndex) {
-    setMusicTheme("onlineQuestionTheme", testMusic);
+function renderQuestion(testId, quiz, answers, room, author_name, testshowResult, stateIndex) {
+    setMusicTheme("onlineQuestionTheme");
 
-    const delay = 2250
-    let state = getCookie("state")
+    const delay = 2250;
+    let state = getCookie("state");
     let quizTime = Number(getCookie("time"));
-    let userTimer = 0
-    let curTime = 0
-    let token = 0
+    let userTimer = 0;
+    let curTime = 0;
+    let token = 0;
     const roomContent= document.getElementById("room-content");
 
     if (isNaN(quizTime) || quizTime < 0){
-        renderWaitQuestion("test", testMusic)
-    }
+        renderWaitQuestion("test");
+    };
 
     if (roomContent != null) {
         roomContent.className = "question-content";
@@ -97,20 +113,20 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
         roomContent.innerHTML = ""; 
     };
 
-    const pageLock = document.createElement("div")
-    pageLock.className = "page-lock"
+    const pageLock = document.createElement("div");
+    pageLock.className = "page-lock";
 
     if (pageLock){
-        pageLock.classList.remove("active")
-    }
+        pageLock.classList.remove("active");
+    };
 
     window.addEventListener("beforeunload", () => {
         if (redirectTimer){
-            clearTimeout(redirectTimer)
-        }
-    })
+            clearTimeout(redirectTimer);
+        };
+    });
 
-    roomContent.appendChild(pageLock)
+    roomContent.appendChild(pageLock);
     const questionBlock = document.createElement("div");
     questionBlock.className = "question";
 
@@ -119,19 +135,19 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
     questionBlock.appendChild(question);
 
     const timer = document.createElement("p");
-    timer.id = "timer"
+    timer.id = "timer";
     timer.textContent = quizTime;
     questionBlock.appendChild(timer);
  
     const answersDiv = document.createElement("div");
-    let answerDivColumns = answers.length % 2 === 0 ? "two-columns" : "one-column"
+    let answerDivColumns = answers.length % 2 === 0 ? "two-columns" : "one-column";
     
     if (quiz.question_type === "input"){
         answersDiv.className = "answers-input";
     }
     else{
         answersDiv.className = `answers ${answerDivColumns}`;
-    }
+    };
 
     answers = shufle(answers);
 
@@ -161,42 +177,42 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 image.src = `/test_app/static/images/${testId}/${quiz.image_name}`;
                 image.alt= "quiz image";
 
-                imageDiv.appendChild(image)
-                roomContent.appendChild(imageDiv)
-            }
+                imageDiv.appendChild(image);
+                roomContent.appendChild(imageDiv);
+            };
             
             roomContent.appendChild(answersDiv);
         }
 
-        const buttonsArrey = document.querySelectorAll(".passing-answer")
+        const buttonsArrey = document.querySelectorAll(".passing-answer");
 
         for (let count = 0; count < buttonsArrey.length; count++ ) {
             let button= buttonsArrey[count];
             button.addEventListener("click", function (event) {
-                let cookie = getCookie("userAnswers")
-                let userTimers = getCookie("userTimers")
-                let userTokens = getCookie("userTokens")
+                let cookie = getCookie("userAnswers");
+                let userTimers = getCookie("userTimers");
+                let userTokens = getCookie("userTokens");
 
                 curTime = Number(getCookie("time"));
-                allTime = plusAnswerTime + quizList[stateIndex].time
-                userTimer = allTime- curTime
-                token = tokenTimePrecent(userTimer, allTime)
+                allTime = plusAnswerTime + quizList[stateIndex].time;
+                userTimer = allTime- curTime;
+                token = tokenTimePrecent(userTimer, allTime);
 
-                setCookie("state", `wait${state.replace(/\D/g, "")}`)
+                setCookie("state", `wait${state.replace(/\D/g, "")}`);
 
                 if (typeof cookie === "undefined"){
-                    setCookie("userAnswers", `|${button.id}|`)
-                    setCookie("userTimers", userTimer)
-                    setCookie("userTokens", token)
+                    setCookie("userAnswers", `|${button.id}|`);
+                    setCookie("userTimers", userTimer);
+                    setCookie("userTokens", token);
                 }
                 else{
-                    cookie= cookie+ `|${button.id}|`
-                    newUserTimers= userTimers+ `|${userTimer}`
-                    newUserTokens= userTokens+ `|${token}`
-                    setCookie("userAnswers", cookie)
-                    setCookie("userTimers", newUserTimers)
-                    setCookie("userTokens", newUserTokens)
-                }   
+                    cookie= cookie+ `|${button.id}|`;
+                    newUserTimers= userTimers+ `|${userTimer}`;
+                    newUserTokens= userTokens+ `|${token}`;
+                    setCookie("userAnswers", cookie);
+                    setCookie("userTimers", newUserTimers);
+                    setCookie("userTokens", newUserTokens);
+                };
 
                 socket.emit("user_answer", {
                     room: room,
@@ -207,16 +223,16 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 });
 
 
-                showResult(quiz.correct_answer === button.id, testshowResult, testMusic);
+                showResult(quiz.correct_answer === button.id, testshowResult);
 
                 setTimeout(() => {
-                    const state = getCookie("state")
+                    const state = getCookie("state");
                     if (state.includes("question")) return;
 
-                    renderWaitQuestion("test", testMusic);               
-                }, testshowResult ? delay : 50)
-            })
-        }
+                    renderWaitQuestion("test");               
+                }, testshowResult ? delay : 50);
+            });
+        };
     }
     else if (quiz.question_type === "input"){        
         const inputAnswer = document.createElement("input");
@@ -225,27 +241,27 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
         inputAnswer.className = "input-with-answer";
 
         const inputButton = document.createElement("button");
-        inputButton.className= "multiple-choice-answer"
-        inputButton.textContent= "Відповісти на питання"
+        inputButton.className= "multiple-choice-answer";
+        inputButton.textContent= "Відповісти на питання";
 
-        answersDiv.appendChild(inputAnswer)
+        answersDiv.appendChild(inputAnswer);
 
         if (roomContent != null ) {
             roomContent.appendChild(questionBlock);
             roomContent.appendChild(answersDiv);
             roomContent.appendChild(inputButton);
-        }
+        };
 
         inputAnswer.addEventListener("keyup", function(event){
             if (event.key === 'Enter'){
-                inputButton.click()
-            }
+                inputButton.click();
+            };
         });
         
         inputButton.addEventListener("click", function(event) {
             let userAnswer = getCookie("userAnswers");
             let userTimers = getCookie("userTimers");
-            let userTokens = getCookie("userTokens")    ;
+            let userTokens = getCookie("userTokens");
             let answerValue = document.querySelector(".input-with-answer").value.trim();
 
             curTime = Number(getCookie("time"));
@@ -260,7 +276,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
 
             if (typeof answerValue === "undefined"){
                 answerValue= "not_answer";
-            }
+            };
             
             if (typeof userAnswer === "undefined"){
                 setCookie("userAnswers", `|${answerValue}|`);
@@ -272,7 +288,7 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 setCookie("userAnswers", cookie);
                 setCookie("userTokens", newUserTokens);
                 setCookie("userTimers", newUserTimers);
-            }     
+            };
                     
             socket.emit("user_answer", {
                 room: room,
@@ -282,16 +298,15 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 number_of_question: stateIndex
             });
 
-            showResult(quiz.correct_answer === answerValue, testshowResult, testMusic);
+            showResult(quiz.correct_answer === answerValue, testshowResult);
 
             setTimeout(() => {
-                const state = getCookie("state")
+                const state = getCookie("state");
                 if (state.includes("question")) return;
 
                 renderWaitQuestion("test");               
-            }, testshowResult ? delay : 50)
-        })
-    
+            }, testshowResult ? delay : 50);
+        });
     }
     else if (quiz.question_type === "multiple_choice"){
         answers.forEach(answer => {
@@ -307,8 +322,8 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
             checkmark.className = "checkmark";
             checkmark.textContent = "✔";
 
-            answerButton.appendChild(textNode)
-            answerButton.appendChild(checkmark)
+            answerButton.appendChild(textNode);
+            answerButton.appendChild(checkmark);
 
             answerDiv.appendChild(answerButton);
             answersDiv.appendChild(answerDiv);
@@ -324,8 +339,8 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
             roomContent.appendChild(answerButton);
         }
 
-        const multipleChoiceButton = document.querySelector(".multiple-choice-answer")
-        const multipleChoiceButtons = document.querySelectorAll(".multiple-answer")
+        const multipleChoiceButton = document.querySelector(".multiple-choice-answer");
+        const multipleChoiceButtons = document.querySelectorAll(".multiple-answer");
 
         for (let count = 0; count < multipleChoiceButtons .length; count++ ) {
             let button= multipleChoiceButtons [count];
@@ -333,60 +348,62 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
             button.addEventListener(
                 type= "click" ,
                 listener= function (event) {
-                    if (button.className === "multiple-answer"){
-                        button.className= "active-multiple-answer"
-                    }
-                    else{
-                        button.className= "multiple-answer"
-                    }
+                    // if (button.className === "multiple-answer"){
+                    //     button.className= "active-multiple-answer";
+                    // }
+                    // else{
+                    //     button.className= "multiple-answer";
+                    // };
+                    button.classList.toggle("active-multiple-answer")
                 }
-            )
-        }
+            );
+        };
 
         multipleChoiceButton.addEventListener("click", function(event) {
             curTime = Number(getCookie("time")) || 0;
-            let state = getCookie("state")
-            let userAnswer = getCookie("userAnswers")
-            let userTimers = getCookie("userTimers")
-            let userTokens = getCookie("userTokens")                  
-            let answerValue = ""
-            let userAnswerValue = ""
-            let arreyUserMultipleChoice = document.querySelectorAll(".active-multiple-answer")
-            allTime  = Number(plusAnswerTime) + Number(quizList[stateIndex].time)
-            userTimer = allTime- curTime
-            token = tokenTimePrecent(userTimer, allTime)
+            let state = getCookie("state");
+            let userAnswer = getCookie("userAnswers");
+            let userTimers = getCookie("userTimers");
+            let userTokens = getCookie("userTokens");             
+            let answerValue = "";
+            let userAnswerValue = "";
+            let arreyUserMultipleChoice = document.querySelectorAll(".active-multiple-answer");
 
-            newUserTokens = userTokens + `|${token}`
-            newUserTimers = userTimers + `|${userTimer}`
+            allTime  = Number(plusAnswerTime) + Number(quizList[stateIndex].time);
+            userTimer = allTime- curTime;
+            token = tokenTimePrecent(userTimer, allTime);
+
+            newUserTokens = userTokens + `|${token}`;
+            newUserTimers = userTimers + `|${userTimer}`;
 
             for (const button of arreyUserMultipleChoice){
                 if (!answerValue){
-                    answerValue += button.id
-                    userAnswerValue += button.id
+                    answerValue += button.id;
+                    userAnswerValue += button.id;
                 }
                 else{
-                    answerValue += "$$$" + button.id
-                    userAnswerValue += "%$№" + button.id
-                }
-            }
+                    answerValue += "$$$" + button.id;
+                    userAnswerValue += "%$№" + button.id;
+                };
+            };
 
-            setCookie("state", `wait${state.replace(/\D/g, "")}`)
+            setCookie("state", `wait${state.replace(/\D/g, "")}`);
 
             if (typeof answerValue === "undefined"){
-                answerValue= "not_answer"
-            }
+                answerValue= "not_answer";
+            };
             
             if (typeof userAnswer === "undefined"){
-                setCookie("userAnswers", `|${answerValue}|`)
-                setCookie("userTimers", userTimer)
-                setCookie("userTokens", token)
+                setCookie("userAnswers", `|${answerValue}|`);
+                setCookie("userTimers", userTimer);
+                setCookie("userTokens", token);
             }
             else{
                 cookie = userAnswer + `|${answerValue}|`
-                setCookie("userAnswers", cookie)
-                setCookie("userTokens", newUserTokens)
-                setCookie("userTimers", newUserTimers)
-            }       
+                setCookie("userAnswers", cookie);
+                setCookie("userTokens", newUserTokens);
+                setCookie("userTimers", newUserTimers);
+            };      
 
             socket.emit("user_answer", {
                 room: room,
@@ -404,16 +421,16 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
             const isCorrect = quizCorrectAnswer.length === userAnswerValueArray.length && 
                             quizCorrectAnswer.every((value, index) => value === userAnswerValueArray[index]);
             
-            showResult(isCorrect, testshowResult, testMusic);
+            showResult(isCorrect, testshowResult);
 
             setTimeout(() => {
-                const state = getCookie("state")
+                const state = getCookie("state");
                 if (state.includes("question")) return;
 
-                renderWaitQuestion("test", testMusic);               
-            }, testshowResult ? delay : 50)
-        })
-    }
+                renderWaitQuestion("test");               
+            }, testshowResult ? delay : 50);
+        });
+    };
 
     const toastWrapper = document.createElement("div");
     toastWrapper.className = "toast-wrapper";
@@ -433,12 +450,14 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
                 <div class="answer-toast-text">Ти обрав неправильний варіант</div>
             </div>
         </div>
-    `
+    `;
+
     roomContent.appendChild(toastWrapper);
 
     setTimeout(() => {
         roomContent.classList.remove("disable-hover");
     }, 50)
 
-    startTimer()
-}
+    startTimer();
+};
+

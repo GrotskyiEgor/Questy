@@ -1,8 +1,10 @@
 $(() => {
+    const savedRoom = getCookie("room")
+    const savedState = getCookie("state")
+
     let testId= ""
     let currentCodes = [];
-    let savedRoom= getCookie("room")
-    let savedTestAnswer= getCookie("userAnswers")
+    let savedTestAnswer = getCookie("userAnswers")
     
     async function updateCodes() {
         try {
@@ -14,7 +16,7 @@ $(() => {
         }
     }
 
-    if (savedRoom){
+    if (savedRoom || savedState){
         $('#modal-bg-connect').fadeIn(200);
     }
 

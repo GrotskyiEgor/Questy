@@ -39,7 +39,7 @@ function startTimer() {
         let time = Number(timerText.textContent);
 
         if (isNaN(cookieTime) && username != authorName){
-            renderWaitQuestion("test", testMusic);
+            renderWaitQuestion("test");
         }
 
         if (!timerPaused){
@@ -58,7 +58,7 @@ function startTimer() {
                 
             setTimeout(() => {
                 if (username != authorName){
-                    renderWaitQuestion("test", testMusic);
+                    renderWaitQuestion("test");
                 } else if (username === authorName){
                     countUsersAnswer = getCookie("countUsersAnswer");
                     correctAnswerChart = getCookie("countCorrectAnswer");

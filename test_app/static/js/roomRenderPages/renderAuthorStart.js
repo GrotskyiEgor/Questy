@@ -1,12 +1,15 @@
 let donatChart;
 let reorderTimeout = null;
 
+
 function safeReorder() {
     clearTimeout(reorderTimeout);
+
     reorderTimeout = setTimeout(() => {
         reorderUserBar();
     }, 10);
-}
+};
+
 
 function reorderUserBar() {
     const container = document.querySelector('.all-users-bar');
@@ -67,9 +70,10 @@ function reorderUserBar() {
     console.log("answeredOrder", answeredOrder)
 }
 
+
 function kickFromTest(kick_user){
-    let UserList= getCookie("userList") || ""
-    let users = UserList.split("</>").filter(username => username.trim() !== "")
+    let UserList= getCookie("userList") || "";
+    let users = UserList.split("</>").filter(username => username.trim() !== "");
 
     users = users.filter(userStr => {
         const [name, userIp] = userStr.split("()")
@@ -223,128 +227,128 @@ function createUsersBar(usesArray){
                 userBlock.appendChild(leftUserBlock);
                 userBlock.appendChild(btnKick);
                 allUsersArrayBar.appendChild(userBlock)
-            }
+            };
         });
     }
 }
 
-function renderAuthorStart(quiz, room, authorname, number_of_question, totalQuestion, questionNumber, testMusic) {
-    setMusicTheme("onlineRoomTheme", testMusic);
+function renderAuthorStart(quiz, room, authorname, number_of_question, totalQuestion, questionNumber) {
+    setMusicTheme("onlineRoomTheme");
 
-    const answerCounter = document.querySelector(".chart-answer-count")
-    if (answerCounter) answerCounter.remove()
+    const answerCounter = document.querySelector(".chart-answer-count");
+    if (answerCounter) answerCounter.remove();
 
-    const donatChart = document.getElementById("donat-chart")
-    if (donatChart) donatChart.remove()
+    const donatChart = document.getElementById("donat-chart");
+    if (donatChart) donatChart.remove();
 
     const waitContent = document.getElementById("room-content");
     waitContent.innerHTML = ""; 
-    waitContent.id = 'container-question'
-    waitContent.className = 'container-question'
+    waitContent.id = 'container-question';
+    waitContent.className = 'container-question';
 
-    const questionBlock = document.createElement('div')
-    questionBlock.className = 'question-block-test'
+    const questionBlock = document.createElement('div');
+    questionBlock.className = 'question-block-test';
 
-    const allUsersArrayBar = document.createElement('div')
-    allUsersArrayBar.className = 'all-users-bar'
+    const allUsersArrayBar = document.createElement('div');
+    allUsersArrayBar.className = 'all-users-bar';
 
-    const headerBar = document.createElement('div')
-    headerBar.className = 'header-bar'
+    const headerBar = document.createElement('div');
+    headerBar.className = 'header-bar';
 
-    const questionTable= document.createElement('table')
-    questionTable.className= 'question-table'
+    const questionTable= document.createElement('table');
+    questionTable.className= 'question-table';
 
-    const headerRow= document.createElement('tr')
-    const questionHeader= document.createElement('th')
-    questionHeader.id= "question-title"
-    questionHeader.textContent= `Питання: ${questionNumber + 1} з ${totalQuestion}`
-    const answerHeader= document.createElement('th')
-    answerHeader.textContent= "Правильна відповідь:"
+    const headerRow= document.createElement('tr');
+    const questionHeader= document.createElement('th');
+    questionHeader.id= "question-title";
+    questionHeader.textContent= `Питання: ${questionNumber + 1} з ${totalQuestion}`;
+    const answerHeader= document.createElement('th');
+    answerHeader.textContent= "Правильна відповідь:";
 
-    headerRow.appendChild(questionHeader)
-    headerRow.appendChild(answerHeader)
+    headerRow.appendChild(questionHeader);
+    headerRow.appendChild(answerHeader);
 
-    const infoRow= document.createElement('tr')
-    const questionInfo= document.createElement('td')
-    questionInfo.id= 'author-question'
-    questionInfo.className= 'author-question'
-    questionInfo.textContent= quiz.question_text
+    const infoRow= document.createElement('tr');
+    const questionInfo= document.createElement('td');
+    questionInfo.id= 'author-question';
+    questionInfo.className= 'author-question';
+    questionInfo.textContent= quiz.question_text;
 
-    const correctTd = document.createElement('td')
-    correctTd.className = 'correct-line'
+    const correctTd = document.createElement('td');
+    correctTd.className = 'correct-line';
 
-    const correctAnswer= document.createElement('span')
-    correctAnswer.id= 'author-correct-answer'
-    correctAnswer.className= 'author-correct-answer'
-    correctAnswer.style.display= "none"
+    const correctAnswer= document.createElement('span');
+    correctAnswer.id= 'author-correct-answer';
+    correctAnswer.className= 'author-correct-answer';
+    correctAnswer.style.display= "none";
 
     if (quiz.question_type === "multiple_choice"){
-        correctAnswer.textContent= `${quiz.correct_answer.replaceAll("%$№", " та ")}`
+        correctAnswer.textContent= `${quiz.correct_answer.replaceAll("%$№", " та ")}`;
     }
     else{
-        correctAnswer.textContent= `${quiz.correct_answer}`
-    }
+        correctAnswer.textContent= `${quiz.correct_answer}`;
+    };
 
-    const eyeIcon= document.createElement('i')
-    eyeIcon.id = 'eye-icon'
-    eyeIcon.className= 'bx bx-hide toggle-icon'
+    const eyeIcon= document.createElement('i');
+    eyeIcon.id = 'eye-icon';
+    eyeIcon.className= 'bx bx-hide toggle-icon';
 
     eyeIcon.addEventListener('click', () => {
         if (correctAnswer.style.display === 'none'){
-            correctAnswer.style.display = 'table-cell'
-            eyeIcon.classList.replace('bx-hide', 'bx-show')
+            correctAnswer.style.display = 'table-cell';
+            eyeIcon.classList.replace('bx-hide', 'bx-show');
         }
         else{
             correctAnswer.style.display = 'none'
-            eyeIcon.classList.replace('bx-show', 'bx-hide')
-        }
-    })
+            eyeIcon.classList.replace('bx-show', 'bx-hide');
+        };
+    });
 
-    infoRow.appendChild(questionInfo)
-    correctTd.appendChild(correctAnswer)
-    correctTd.appendChild(eyeIcon)
-    infoRow.appendChild(correctTd)
+    infoRow.appendChild(questionInfo);
+    correctTd.appendChild(correctAnswer);
+    correctTd.appendChild(eyeIcon);
+    infoRow.appendChild(correctTd);
 
-    questionTable.appendChild(headerRow)
-    questionTable.appendChild(infoRow)
+    questionTable.appendChild(headerRow);
+    questionTable.appendChild(infoRow);
     
-    questionBlock.appendChild(questionTable)
+    questionBlock.appendChild(questionTable);
 
-    const userBlock = document.createElement('div')
-    userBlock.id = 'user-block'
-    userBlock.className = 'user-blocks'
+    const userBlock = document.createElement('div');
+    userBlock.id = 'user-block';
+    userBlock.className = 'user-blocks';
 
-    const userAnswers = document.createElement('div')
-    userAnswers.id = 'user-answers'
-    userAnswers.className = 'user-answers'
+    const userAnswers = document.createElement('div');
+    userAnswers.id = 'user-answers';
+    userAnswers.className = 'user-answers';
  
-    userBlock.appendChild(userAnswers)
+    userBlock.appendChild(userAnswers);
     
-    const userInfo = document.createElement('div')
-    userInfo.id = 'user-info'
-    userInfo.className = 'user-info'
+    const userInfo = document.createElement('div');
+    userInfo.id = 'user-info';
+    userInfo.className = 'user-info';
 
-    const studInfoBox = document.createElement('div')
-    studInfoBox.id = 'stud-info-box'
-    studInfoBox.className = 'stud-info-box'
+    const studInfoBox = document.createElement('div');
+    studInfoBox.id = 'stud-info-box';
+    studInfoBox.className = 'stud-info-box';
 
-    const chartDiv = document.createElement('div')
-    chartDiv.id = 'chart-div'
-    chartDiv.className = 'chart-div'
+    const chartDiv = document.createElement('div');
+    chartDiv.id = 'chart-div';
+    chartDiv.className = 'chart-div';
 
     const chartCanvas = document.createElement('canvas');
-    chartCanvas.id = 'donat-chart'
-    chartCanvas.className = 'donat-chart'
+    chartCanvas.id = 'donat-chart';
+    chartCanvas.className = 'donat-chart';
 
-    chartDiv.appendChild(chartCanvas)
-    userInfo.appendChild(chartDiv)
-    userInfo.appendChild(studInfoBox)
+    chartDiv.appendChild(chartCanvas);
+    userInfo.appendChild(chartDiv);
+    userInfo.appendChild(studInfoBox);
 
-    userBlock.appendChild(userInfo)
+    userBlock.appendChild(userInfo);
 
-    questionBlock.appendChild(userBlock)
-    waitContent.appendChild(questionBlock)
-    waitContent.appendChild(allUsersArrayBar)
+    questionBlock.appendChild(userBlock);
+    waitContent.appendChild(questionBlock);
+    waitContent.appendChild(allUsersArrayBar);
 
     socket.emit('get_usernames', {
         room: room,
@@ -356,7 +360,7 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
     socket.once('get_usernames', function(data){
         let userArrey = data;
         let nextButton = '';
-        lengthArrey = userArrey.length
+        lengthArrey = userArrey.length;
 
         if (number_of_question === totalQuestion- 1){
             nextButton= `
@@ -371,7 +375,7 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
                     <img src="test_app/static/images/online_test/next.png" class="online-img" alt="next-btn">
                 </button>
                 `
-        }
+        };
 
         studInfoBox.innerHTML = `
             <div class= "test-nav-info"> 
@@ -391,10 +395,10 @@ function renderAuthorStart(quiz, room, authorname, number_of_question, totalQues
                     <img src="test_app/static/images/online_test/pause.png" class="online-img" id="play-img" alt="play-btn">
                 </button>
             </div>
-            `
+            `;
 
-        checkDoughnutChart()
-        createUsersBar(data)
-        startTimer()
+        checkDoughnutChart();
+        createUsersBar(data);
+        startTimer();
     });
 }

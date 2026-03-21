@@ -19,8 +19,9 @@ function clearCookie(nameList){
     });
 }
 
-function setMusicTheme(playId, testMusic=true){
+function setMusicTheme(playId){
     setAllMute()
+    
     if (!testMusic) return;
 
     const musicArray = document.querySelectorAll(".music-theme");

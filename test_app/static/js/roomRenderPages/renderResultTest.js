@@ -1,5 +1,5 @@
-function renderResultTest(username, totalQuestion, quizList, anwersList, testId, testMusic) {
-    setMusicTheme("onlineRoomTheme", testMusic);
+function renderResultTest(username, totalQuestion, quizList, anwersList, testId) {
+    setMusicTheme("onlineRoomTheme");
 
     let answersStr = getCookie("userAnswers");
     let answers_list= answersStr.split("|");

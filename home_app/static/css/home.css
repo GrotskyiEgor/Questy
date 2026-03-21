@@ -560,7 +560,6 @@ header {
 
 @media (max-width: 768px) {
     body {
-        height: auto;
         margin: 0;
         padding: 0;
         background: #f5f8f5;

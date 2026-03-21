@@ -5,7 +5,7 @@ function testStop(){
     });
 
     setCookie("state", "authorResultTest")
-    renderAuthorResultTest(username, authorName, totalQuestion, testMusic);
+    renderAuthorResultTest(username, authorName, totalQuestion);
 }
 
 function authorStartTest() {

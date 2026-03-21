@@ -1,14 +1,15 @@
-let charts = {}
-let selectUserName = null
-let selectBlock = true
+let charts = {};
+let selectUserName = null;
+let selectBlock = true;
+
 
 function appendResultRow(resultTable, username, answersArray, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion) {
     const resultRow = document.createElement('div');
 
     resultRow.className = 'results-row';
-    resultRow.id= `row_${username}`
+    resultRow.id = `row_${username}`;
 
-    resultRow.style.cursor= 'pointer';
+    resultRow.style.cursor = 'pointer';
     const studentName = document.createElement('div');
     studentName.className = 'cell student-name';
     studentName.textContent = `${username}`;
@@ -17,8 +18,8 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
     for (let index= 0; index < answersArray.length; index++) {
         if (answersArray[index] === 1){
             numberCorrectAnswers++;
-        }
-    }
+        };
+    };
 
     let accuracy = (numberCorrectAnswers / totalQuestion) * 100;
 
@@ -45,9 +46,9 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
             case 2:
                 spanBox.className= 'circle no-answer';
                 break; 
-        }
+        };
 
-        answerBox.appendChild(spanBox)
+        answerBox.appendChild(spanBox);
         resultRow.appendChild(answerBox);
     });
 
@@ -55,9 +56,10 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
     resultTable.appendChild(resultRow);
 
     resultRow.addEventListener('click', function(){
-        renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4), false)
-    })
-}
+        renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4), false);
+    });
+};
+
 
 function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) {
     setMusicTheme("onlineRoomTheme", testMusic);
@@ -76,7 +78,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
     
     if (container === null){
         container = document.getElementById("room-content");
-    }
+    };
 
     container.innerHTML= "";
     container.className= 'wrapper-author-results-container';
@@ -88,10 +90,10 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
     });
     
     socket.on("room_get_result_data", function(data) {  
-        const emptyMsgRemove = document.querySelector('.empty-results')
+        const emptyMsgRemove = document.querySelector('.empty-results');
         if(emptyMsgRemove) emptyMsgRemove.remove();
 
-        const leaveButtonRemove = document.querySelector('.leave-btn')
+        const leaveButtonRemove = document.querySelector('.leave-btn');
         if(leaveButtonRemove) leaveButtonRemove.remove();
 
         resultData = data.room_get_result_data;
@@ -105,15 +107,15 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
             emptyMsg.className = 'empty-results';
             emptyMsg.textContent = 'Поки що немає результатів...';
 
-            const leaveButton= document.createElement('button');
-            leaveButton.className= 'leave-btn';
-            leaveButton.textContent = 'Покинути тест';
-            leaveButton.addEventListener("click", () => {
-                authorLeaveTest("test")
-            });
+            // const leaveButton= document.createElement('button');
+            // leaveButton.className= 'leave-btn';
+            // leaveButton.textContent = 'Покинути тест';
+            // leaveButton.addEventListener("click", () => {
+            //     authorLeaveTest("test");
+            // });
 
+            // container.appendChild(leaveButton);
             container.appendChild(emptyMsg);
-            container.appendChild(leaveButton);
 
             setTimeout(() => {
                 socket.emit("room_get_result", {
@@ -126,9 +128,9 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
             return;
         }
 
-        let accuracy= questionAccuracy(resultData, totalQuestion)
-        accuracyAquestionsArray = accuracy.accuracyAquestionsArray
-        accurancyArray = accuracy.accurancyArray
+        let accuracy= questionAccuracy(resultData, totalQuestion);
+        accuracyAquestionsArray = accuracy.accuracyAquestionsArray;
+        accurancyArray = accuracy.accurancyArray;
 
         const header = document.createElement('div');
         header.className = 'results-header-block';
@@ -153,28 +155,29 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         leaveButton.className= 'leave-btn';
         leaveButton.textContent = 'Покинути тест';
         leaveButton.addEventListener("click", () => {
-            authorLeaveTest("test")
+            authorLeaveTest("test");
         });
 
         const allInfoButton= document.createElement('button');
         allInfoButton.className= 'all-info-btn';
-        allInfoButton.textContent = 'Загальна успішність'
+        allInfoButton.textContent = 'Загальна успішність';
         allInfoButton.addEventListener("click", () => {
-            chartBoxLable= document.querySelector('.chart-box-label')
-            chartBoxLable.textContent= 'Загальна успішність'
+            chartBoxLable= document.querySelector('.chart-box-label');
+            chartBoxLable.textContent = 'Загальна успішність';
             
-            selectUserName= null
-            choiceSelector= document.getElementById('choice')
+            selectUserName = null;
+            choiceSelector= document.getElementById('choice');
 
-            selectBlock= false
+            selectBlock = false;
             choiceSelector.innerHTML= `
                 <option value="1">Загальна успішність(%)</option>
                 <option value="2">Кількість правильних/неправильних відповідей</option>
                 <option value="3">Відсоткове співвідношення правильних відповідей</option>
                 <option value="4">Витрачено часу на запитання</option>
                 <option value="5">Зароблено монет за питання</option>
-            `
-            selectBlock= true
+            `;
+            selectBlock= true;
+
             renderAccuracyLineChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
         });
 
@@ -188,11 +191,11 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         // exelButton.addEventListener("click", () => excelTable(username, authorName, resultData, best_score_data));    
         form.appendChild(exelButton);
         
-        leftButtonBox.appendChild(allInfoButton)
+        leftButtonBox.appendChild(allInfoButton);
         rigthButtonBox.appendChild(form);
-        rigthButtonBox.appendChild(leaveButton)
-        buttonBox.appendChild(leftButtonBox)
-        buttonBox.appendChild(rigthButtonBox)
+        rigthButtonBox.appendChild(leaveButton);
+        buttonBox.appendChild(leftButtonBox);
+        buttonBox.appendChild(rigthButtonBox);
         container.appendChild(buttonBox);
 
         const contentBox = document.createElement('div');
@@ -202,7 +205,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         chartBox.className = 'chart-box';
 
         const headerTitle2 = document.createElement('h2');
-        headerTitle2.className= "chart-box-label"
+        headerTitle2.className= "chart-box-label";
         headerTitle2.textContent = "Загальна успішність";
 
         const chartWrapper = document.createElement('div');
@@ -224,7 +227,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
                 <option value="4">Витрачено часу на запитання</option>
                 <option value="5">Зароблено монет за питання</option>
             </select>
-        `
+        `;
 
         chartWrapper.appendChild(chartCanvas);
         chartBox.appendChild(chartWrapper);
@@ -244,21 +247,21 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         headerTitle3.textContent = "Підсумок";  
 
         // посчитать средний результат 
-        const resultsInfoBoxText = document.createElement('p')
-        resultsInfoBoxText.id= "results-info-box-text"
+        const resultsInfoBoxText = document.createElement('p');
+        resultsInfoBoxText.id= "results-info-box-text";
         resultsInfoBoxText.innerHTML= `<p><strong>Середній результат: </strong>${averega_score}%</p>`;
 
         // найти лучший результат
         const resultInfoBestScore = document.createElement('p');
-        resultInfoBestScore.id= "results-info-box-text2"
+        resultInfoBestScore.id= "results-info-box-text2";
         resultInfoBestScore.innerHTML = `<p><strong>Найбільший результат: </strong>${best_score_data.accuracy}%</p>`;
 
         const resultInfoWorstScore = document.createElement('p');
-        resultInfoWorstScore.id= "results-info-box-text2"
+        resultInfoWorstScore.id= "results-info-box-text2";
         resultInfoWorstScore.innerHTML = `<p><strong>Найменший результат: </strong>${worst_score_data.accuracy}%</p>`;
 
         const worstResultQuestion = document.createElement('p');
-        worstResultQuestion.id= "results-info-box-text2"
+        worstResultQuestion.id= "results-info-box-text2";
         worstResultQuestion.innerHTML = `
             <p>
                 <strong>Найскладніше питання (${hardest_question_data.hardest_question_index + 1}): </strong>${hardest_question_data.question_text}<br>
@@ -279,14 +282,14 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         resultTable.style.setProperty(
             'grid-template-columns',
             `10vw repeat(${totalQuestion}, ${77.9 /totalQuestion}vw) 10.075vw`
-        )
+        );
 
         const resultHeader = document.createElement('div');
         resultHeader.className = 'results-header';
 
         const headerUsers = document.createElement('div');
         headerUsers.className = 'label';  
-        headerUsers.textContent= "Учні"
+        headerUsers.textContent= "Учні";
 
         resultHeader.appendChild(headerUsers);
         accuracyAquestionsArray.forEach(questionFor => {
@@ -294,11 +297,11 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
             div.className= "cell";
             div.innerHTML = `${questionFor.question}`;
             resultHeader.appendChild(div);
-        })
+        });
 
         const headerAccyracy = document.createElement('div');
         headerAccyracy.className = 'label';  
-        headerAccyracy.textContent= "Точність"
+        headerAccyracy.textContent= "Точність";
         
         resultHeader.appendChild(headerAccyracy);
         resultTable.appendChild(resultHeader);
@@ -306,7 +309,7 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         for (const username in resultData) {
             const answersArray = resultData[username].correct_answers_list; 
             appendResultRow(resultTable, username, answersArray, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
-        }  
+        };
         
         const legenBox = document.createElement('div');
         legenBox.className = 'legend-box';
@@ -320,16 +323,16 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
                 <span><span class="circle correct"></span> Правильно</span>
                 <span><span class="circle wrong"></span> Неправильно</span>
                 <span><span class="circle no-answer"></span> Немає відповіді</span>
-            `
+            `;
 
-        baseInfo.appendChild(resultsInfoBox)
+        baseInfo.appendChild(resultsInfoBox);
         legenBox.appendChild(legenBoxTitle);
         legenBox.appendChild(legend);
         baseInfo.appendChild(legenBox); 
-        infoBox.appendChild(baseInfo)
+        infoBox.appendChild(baseInfo);
 
-        contentBox.appendChild(infoBox)
-        container.appendChild(contentBox)
+        contentBox.appendChild(infoBox);
+        container.appendChild(contentBox);
 
         const tableTitle = document.createElement('div');
         tableTitle.className = 'results-table-block';
@@ -354,8 +357,8 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
 
         document.getElementById('choice').addEventListener('change', function() {
             if (selectBlock){
-                renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion)
-            }
+                renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
+            };
         });
     });
 
@@ -376,5 +379,5 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
 
         appendResultRow(resultTable, username, result.correct_answers_list, resultData, accuracyAquestionsArray, accurancyArray, totalQuestion);
     });
-}
+};
 

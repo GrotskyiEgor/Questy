@@ -23,8 +23,8 @@ function setRoomChanges(testCode, type, value){
     })
 }
 
-function renderRoomMain(testCode, authorName, username, quizzes, userListName, testMusic, testShowResult) {
-    setMusicTheme("onlineRoomTheme", testMusic);
+function renderRoomMain(testCode, authorName, username, quizzes, userListName, testShowResult) {
+    setMusicTheme("onlineRoomTheme");
 
     const content = document.getElementById("room-content");
     content.innerHTML = "";
@@ -67,11 +67,11 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
     });
 
     let duration = Math.round(durationSeconds / 60)
-    // let durationFix = duration.toFixed(2)
 
-    // Інформація про тест
+    console.log(testMusic, testMusic ? SOUND_ON : SOUND_OFF)
     const testInfo = document.createElement("div");
     testInfo.className = "test-info-box";
+    // <input type="checkbox" name="done-after-due-time" class="music" ${testMusic ? "checked" : ""}>
     testInfo.innerHTML = `
         <div class="">
             <h3>Інформація про тест</h3>
@@ -82,8 +82,8 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
         </div>
         <div class="">
         <div class="radio-button-box">
-            <label for="done-after-due-time">Музика під час тестування</label>               
-            <input type="checkbox" name="done-after-due-time" class="music" ${testMusic ? "checked" : ""}>
+            <label for="done-after-due-time">Музика під час тестування</label>         
+            <img src=${testMusic ? SOUND_ON : SOUND_OFF} class="music-img">      
         </div>
         ${authorName === username ? `
             <div class="radio-button-box">
@@ -94,7 +94,6 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
     `;
     waitSideTop.appendChild(testInfo);
 
-    // Інструкції
     const instructions = document.createElement("div");
     instructions.className = "instructions-box";
     instructions.innerHTML = `
@@ -184,6 +183,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
     // Кнопка "Почати" для автора
     waitSideBottom = document.createElement("div");
     waitSideBottom.className = "test-buttons";
+
     if (authorName === username) {
         const buttonStart = document.createElement("button");
         buttonStart.type = "button";
@@ -207,7 +207,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
         leaveButton.textContent = "Залишити тест";
         leaveButton.addEventListener("click", () => {leaveTestBlock(testCode, username)});
         waitSideBottom.appendChild(leaveButton);
-    }
+    };
 
     // Чат
     const chat = document.createElement("div");
@@ -226,8 +226,8 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
 
     waitSide.appendChild(waitSideTop)
     if (waitSideBottom) {
-        infoBar.appendChild(waitSideBottom)
-    }
+        infoBar.appendChild(waitSideBottom);
+    };
 
     const chatToggleBtn = document.createElement("button");
     chatToggleBtn.className = "chat-toggle-btn";
@@ -238,7 +238,7 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
         
         if (newMessageCount){
             newMessageCount.remove()
-        }
+        };
 
         chat.classList.toggle("open");
         const waitSide = document.querySelector(".wait-side");
@@ -247,8 +247,8 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
             waitSide.style.width = "69vw";
         } else {
             waitSide.style.width = "99vw";
-        }
-    })
+        };
+    });
 
     content.appendChild(chatToggleBtn);
 
@@ -264,49 +264,71 @@ function renderRoomMain(testCode, authorName, username, quizzes, userListName, t
     participantsBox.appendChild(participantsTitle);
 
     if (userListName && userListName != true){
-        console.log(userListName)
-        let userListBlocks = userListName.split("</>")
+        console.log(userListName);
+        let userListBlocks = userListName.split("</>");
 
         userListBlocks.forEach(block => {
             user_data = block.split("()");
             createUserBlock(username, authorName, user_data[0], user_data[1], "not");
-        })
-    }
+        });
+    };
 
     $('#msg').on('keydown', function(event){
         if (event.key === "Enter"){
-            event.preventDefault()
-            $('.send-btn').click()
-        }
-    })
-    
-    document.querySelector(".music").addEventListener('change', function(event) {
-        if (this.checked) {
-            if (authorName === username){
-                setRoomChanges(testCode, "music", true)
-            }
+            event.preventDefault();
+            $('.send-btn').click();
+        };
+    });
 
-            console.log("~true~")
-            testMusic = true
-            setMusicTheme("onlineRoomTheme", testMusic)        
-        } else if (!this.checked){
-            if (authorName === username){
-                setRoomChanges(testCode, "music", false)
-            }
+    const musicImg = document.querySelector(".music-img");
+    
+    if (musicImg){
+        console.log("alo")
+        musicImg.addEventListener('click', function() {
+            testMusic = !testMusic;
+            setCookie("music", testMusic)
+            this.src = testMusic ? SOUND_ON : SOUND_OFF
+    
+            // if (authorName === username){
+            //     setRoomChanges(testCode, "music", testMusic);
+            // };
             
-            testMusic = false
-            console.log("~false~")
-            setAllMute()
-        }
-    })
+            console.log(testMusic)
+            console.log(testMusic ? "~true~" : "~false~")
+    
+            if (testMusic) {
+                setMusicTheme("onlineRoomTheme", true);     
+            } else {
+                setAllMute();
+            };
+    
+            // if (this.checked) {
+            //     if (authorName === username){
+            //         setRoomChanges(testCode, "music", true);
+            //     };
+    
+            //     console.log("~true~");
+            //     testMusic = true;
+            //     setMusicTheme("onlineRoomTheme", testMusic)   ;     
+            // } else if (!this.checked){
+            //     if (authorName === username){
+            //         setRoomChanges(testCode, "music", false);
+            //     };
+                
+            //     testMusic = false;
+            //     console.log("~false~");
+            //     setAllMute();
+            // };
+        });
+    };
 
     if (authorName === username){
         document.querySelector(".show-result").addEventListener('change', function(event) {
             if (this.checked) {
-                setRoomChanges(testCode, "show", true)
+                setRoomChanges(testCode, "show", true);
             } else if (!this.checked){
-                setRoomChanges(testCode, "show", false)
+                setRoomChanges(testCode, "show", false);
             }
-        })
-    }
-}
+        });
+    };
+};

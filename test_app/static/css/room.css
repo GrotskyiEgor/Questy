@@ -2121,6 +2121,30 @@ main {
     background-color: var(--red-button-hover);
 }
 
+.music-img {
+    width: 5vh;
+    height: 5vh;
+}
+
+/* a {
+    color: inherit;
+    text-decoration: none;
+} */
+
+button {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+button, 
+  .passing-answer, 
+  .multiple-answer, 
+  .active-multiple-answer {
+    color: #000;
+    -webkit-text-fill-color: currentColor;
+    -webkit-tap-highlight-color: transparent;
+}
+
 @keyframes toast-fade {
     from {
         opacity: 0;
