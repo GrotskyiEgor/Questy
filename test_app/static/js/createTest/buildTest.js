@@ -1,4 +1,5 @@
 function buildTest(){
+    localStorage.removeItem('test');
     data = {
         "topic": "",
         "description": "",
