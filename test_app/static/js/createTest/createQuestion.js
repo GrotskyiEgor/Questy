@@ -5,6 +5,34 @@ let countQuestion= 0;
 
 const testQuestionDiv = document.querySelector(".container")
 
+document.addEventListener("input", function () {
+    saveTestToLocalStorage();
+});
+
+document.addEventListener("change", function (event) {
+    if (event.target.classList.contains("answer-image")) {
+        const file = event.target.files[0];
+        const questionBlock = event.target.closest(".question-block");
+        const qId = questionBlock.id;
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                let test = JSON.parse(localStorage.getItem("test")) || {};
+
+                if (!test[qId]) test[qId] = {};
+
+                test[qId].image = e.target.result;
+
+                localStorage.setItem("test", JSON.stringify(test));
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+});
+
 createQuestionButtonDiv.addEventListener('click', function(event) {
     const questionType= event.target.id
     countQuestion++;
@@ -88,12 +116,14 @@ createQuestionButtonDiv.addEventListener('click', function(event) {
     questionHTML += "</div>"
 
     testQuestion.insertAdjacentHTML("beforeend", questionHTML)
+    saveTestToLocalStorage();
 });
 
 testQuestionDiv.addEventListener("click", function(event){
     if (event.target.classList.contains("delete-question")) {
     const questionBlock = event.target.closest(".question-block");
     questionBlock.remove();
+    saveTestToLocalStorage();
 
     const allQuestions = document.querySelectorAll(".question-block");
 
@@ -121,6 +151,7 @@ testQuestionDiv.addEventListener("click", function(event){
     const answersBlock = answerInput.parentElement;
 
     answerInput.remove();
+    saveTestToLocalStorage();
 
     const answers = answersBlock.querySelectorAll(".answer-text");
     answers.forEach((input, index) => {
@@ -144,6 +175,7 @@ testQuestionDiv.addEventListener("click", function(event){
                             <button type="button" class="delete-answer">✖</button>`
 
         answersBlock.appendChild(newAnswer)
+        saveTestToLocalStorage();
     }
     if (event.target.classList.contains("add-mutlti-answer")){
         const questionBlock= event.target.closest(".question-block")
@@ -160,5 +192,6 @@ testQuestionDiv.addEventListener("click", function(event){
                             <button type="button" class="delete-answer">✖</button>`
 
         answersBlock.appendChild(newAnswer)
+        saveTestToLocalStorage();
     }
 });
