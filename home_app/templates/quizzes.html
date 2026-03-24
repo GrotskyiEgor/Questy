@@ -27,7 +27,7 @@
 
     <div class="quiz-list">
         {% if list_tests %}
-            <h2>Список доступних вікторин</h2>
+        <h2 class="quiz-list-h2">Список доступних вікторин</h2>
             {% for test in list_tests %}  
                 {% if test.author_name == username %}
                     {% set can_start = start_button[loop.index0] %}     
@@ -83,6 +83,71 @@
                             {% endif %}
                         </div>
                     
+                    </div>
+
+                    <div class="quiz-item-modile-version">
+                        <div class="quiz-main-info">
+
+                            <div class="info
+                                {% if test.title|length < 30 or test.description|length < 30 %}
+                                    short-content
+                                {% endif %}">
+                                
+                                <strong class="test-title">{{ test.title }}</strong>
+                                <p class="test-desc">{{ test.description }}</p>
+    
+                                
+                            </div>
+                            
+                            <div class="info-code">
+                                <div class="actions 
+                                    {% if test.title|length < 30 or test.description|length < 30 %}
+                                        short-content
+                                    {% endif %}"
+                                >
+    
+                                    {% if test.test_code != 0 %}
+                                        <form action="/reset_test{{ test.id }}" method="POST">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button class="btn" id="clear">
+                                                Скинути тест
+                                            </button>
+                                        </form>
+    
+                                        {% if test.test_code != 0 and not can_start %}
+                                            <a href="/room{{ test.test_code }}" class="btn">
+                                                <button class="start" type="button">Почати</button>
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="/test_app?test_id={{ test.id }}">
+                                            <button class="edit">Редагувати</button>
+                                        </a>
+                                        
+                                        {% if test.test_code == 0 %}
+                                            <a href="/create_code{{ test.id }}" class="btn">
+                                                <button class="edit">Код</button>
+                                            </a>
+                                        {% endif %}
+    
+                                        <form action="/delete_test{{ test.id }}" method="POST">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button class="delete">
+                                                Видалити
+                                            </button>
+                                        </form>
+                                    {% endif %}                    
+                                </div>
+                                {% if test.test_code != 0 %}
+                                    <p class="code-p"><strong>Код: </strong><span>{{test.test_code}}</span></p>
+                                {% endif %}
+                            </div>   
+                        </div>
+                        
+                        <div class="info-date">
+                            <p class="test-date"><span id="author" >{{ test.total_questions }}</span> питань</p>
+                            <p class="test-date">{{ test.created_date }}</p>
+                        </div>
                     </div>
                 {% endif %}
             {% endfor %}

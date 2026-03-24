@@ -29,7 +29,7 @@ def render_result_task():
         else:
             undo_user_list.append(user)
 
-    # Собираем все оценки по классу
+    # Собираем все оценки по класу
     scores = Score.query.filter_by(class_id=CLASS.id).all()
 
     # Словарь: user_name -> список (date_complete, accuracy)

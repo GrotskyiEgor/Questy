@@ -17,27 +17,31 @@
             {% else %}
                 <div class="classroom-avatar">{{ username[:2]|upper }}</div>
             {% endif %}
-            <p class="classroom-email">{{ email }}</p>
+            
+            <div class="classroom-info">
+                <p class="classroom-name">{{ username }}</p>
+                <p class="classroom-email">@{{ email }}</p>
+            </div>
 
             <nav class="menu">
-            <ul>
-                <li>
-                    <a href="/class_page">
-                        <div class="page">
-                            <i class='bx  bx-home'></i> 
-                            <p>Головна</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="task_page">
-                        <div class="page">
-                            <i class='bxr  bx-list'></i> 
-                            <p>Список завдань</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+                <ul>
+                    <li>
+                        <a href="/class_page">
+                            <div class="page">
+                                <i class='bx  bx-home'></i> 
+                                <p>Головна</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/task_page">
+                            <div class="page">
+                                <i class='bxr  bx-list'></i> 
+                                <p>Список завдань</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
             </nav>
         </aside>
 

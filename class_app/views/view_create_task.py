@@ -15,7 +15,7 @@ def render_create_task(id):
     test_list = Test.query.filter_by(author_name=current_user.username).all()
     back_course = flask.request.args.get("back_course")
 
-    # Проверка что в этом классе нет задания с этим же тестом 
+    # Проверка что в этом класе нет задания с этим же тестом 
     # filter_test_list= []
     # for test in test_list:
     #     task_in_class = Task.query.filter_by(test_id=test.id, class_id=id).first()
