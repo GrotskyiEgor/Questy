@@ -38,40 +38,9 @@ function saveTestToLocalStorage() {
             }
         });
 
-        
-        let imageData = "";
-
-        if (questionType === "image") {
-            const fileInput = q.querySelector(".answer-image");
-
-            if (fileInput && fileInput.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    imageData = e.target.result;
-
-                    test[qKey] = {
-                        question_type: questionType,
-                        question_text: questionText,
-                        image: imageData, // 🔥 сохраняем
-                        answer_options: answers,
-                        correct_answer: correctAnswer !== null ? correctAnswer : correctAnswers,
-                        time: questionTime
-                    };
-
-                    localStorage.setItem("test", JSON.stringify(test));
-                };
-
-                reader.readAsDataURL(fileInput.files[0]);
-                return; // ⚠️ важно: выходим, потому что асинхронно
-            }
-        }
-
-        // обычные вопросы
         test[qKey] = {
             question_type: questionType,
             question_text: questionText,
-            image: imageData,
             answer_options: answers,
             correct_answer: correctAnswer !== null ? correctAnswer : correctAnswers,
             time: questionTime

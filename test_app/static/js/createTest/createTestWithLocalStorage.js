@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
             answersHTML = `
             <div class="answers" id="image">
                 <label>Зображення:</label>
-                <input type="file" class="answer-image">
+                <input type="file" class="answer-image" accept="image/*">
                 ${imagePreview}
                 <label>Варіанти відповідей:</label>
                 ${answersHTML}
