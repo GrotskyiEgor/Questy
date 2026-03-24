@@ -30,6 +30,14 @@
             <p class="class-btn-subtitle">Перегляньте всі ваші класи або приєднайтесь до нових</p>
         </div>
 
+         <div class="class-btn-wrapper-mobile">
+            {% if is_teacher %}
+                <button class="my-classes">Доступні класи</button>
+                <p class="devider-p">- - - - або - - - -</p>
+            {% endif %}
+            <button class="classes">Мої класи</button>
+        </div>
+
         {% if is_teacher %}
         <hr>
             <div class="class-div">
@@ -47,42 +55,58 @@
 
                             <div class="card with-tasks">
                                 <div class="card-header" style="background: {{ bg_color }};">
-                                    <div class="h-left-info">
+                                    <!-- <div class="h-left-info">
                                         Назва класу: {{ class.title }}<br><span>Автор: {{ class.teacher.username }}</span><span>Код: {{ class.class_code }}</span>
+                                    </div> -->
+
+
+                                    <div class="header-class-info">
+                                        <p class="class-title">{{ class.title }}</p>
+                                        <p class="class-creator">
+                                            <span>Автор курсу:</span> {{ class.teacher.username }}
+                                        </p>
+                                        <p class="class-code">
+                                            <span>Код курсу:</span> {{ class.class_code }}
+                                        </p>
                                     </div>
 
                                     <div class="class-actions">
                                         <button class="more-class-actions">⋮</button>
                                         
                                         <div class="dropdown">
+                                            <a href="/class_information{{ class.id }}" class="dropdown-btn i">
+                                                Інформація про клас
+                                            </a>
+
                                             <form action="/delete_class{{ class.id }}" method="POST">
                                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                                 <button type="submit" class="dropdown-btn d">Видалити клас</button>
                                             </form>
-
-                                            <a href="/class_information{{ class.id }}" class="dropdown-btn i">
-                                                Інформація про клас
-                                            </a>
                                         </div>
                                     </div>
                                 </div>
                                 
 
                                 <div class="card-body">
-                                    <ul>
-                                        {% for task in tasks %} 
-                                            <li>
-                                                {{ task.title }}
-                                                <span class="due-time-p">
-                                                    {% if task.due_time %}
-                                                        - здати до {{ task.due_time.strftime('%d.%m.%Y %H:%M') }}
-                                                    {% else %}
-                                                        без дедлайну
-                                                    {% endif %}
-                                                </span>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
+                                    {% if tasks %}
+                                        <ul class="task-list">
+                                            {% for task in tasks %} 
+                                                <li class="task-item">
+                                                    <span class="task-title">{{ task.title }}</span>
+
+                                                    <span class="task-meta">
+                                                        {% if task.due_time %}
+                                                            - здати до {{ task.due_time.strftime('%d.%m.%Y %H:%M') }}
+                                                        {% else %}
+                                                            без дедлайну
+                                                        {% endif %}
+                                                    </span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="no-tasks">У цьому курсі ще немає жодного завдання.<br>Створіть перше завдання.</p>
+                                    {% endif %}
                                 </div>
 
 
@@ -156,8 +180,6 @@
                         {% endfor %}
                     </div>
                 </div>
-
-
             {% endif %}
         {% endif %}
     </main>

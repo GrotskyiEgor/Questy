@@ -17,26 +17,26 @@
                     <h4>{{ class.lesson }}</h4>
                 </div>
 
-                {% if username == class.teacher.username %}    
-                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}" class="start-btn-a">
+                <!-- {% if username == class.teacher.username %}    
+                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}">
                         <button class="start-btn" style="background: {{ class.class_color1 }};">
                             Створити завдання
                         </button>
                     </a>
-                {% endif %}
+                {% endif %} -->
             {% else %}
                 <div class="course-header" style="background: linear-gradient(135deg, {{ class.class_color1 }}, {{ class.class_color2 }});">
                     <h2>{{ class.title}}</h2>
                     <h4>{{ class.lesson }}</h4>
                 </div>
 
-                {% if username == class.teacher.username %}             
-                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}" class="start-btn-a">
+                <!-- {% if username == class.teacher.username %}             
+                    <a href="/create_task{{ class.id }}?back_course={{ class.id }}">
                         <button class="start-btn" style="background: linear-gradient(135deg, {{ class.class_color1 }}, {{ class.class_color2 }});">
                             Створити завдання
                         </button>
                     </a>
-                {% endif %}
+                {% endif %} -->
             {% endif %}
 
             {% for task in taskes_list %}
@@ -116,9 +116,15 @@
     </div>
 
     <!-- Кнопка додому -->
-    <a href="/class_page" title="Повернутись до класів">
-        <button class="home-button">
-            <i class='bx  bx-home'></i>
+    <a href="/create_task{{ class.id }}?back_course={{ class.id }}">
+        <button class="start-btn fab-btn">
+            +
+        </button>
+    </a>
+
+    <a href="/class_page">
+        <button class="home-button fab-btn">
+            <i class='bx bx-home'></i>
         </button>
     </a>
 

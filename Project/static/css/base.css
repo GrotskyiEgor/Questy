@@ -460,3 +460,29 @@ input[type="radio"]:focus {
         gap: 12px;
     }
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        display: none;
+    }
+
+    .hide-btn {
+        display: none;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: auto;
+    }
+
+    main.content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 16px;
+        box-sizing: border-box;
+    }
+}

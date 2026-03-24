@@ -1,34 +1,38 @@
 /* Контент */
 .classroom-content {
-  flex: 1;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    width: 100%;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* align-items: center; */
+    gap: 5px;
 }
 
+/* HEADER */
 .course-header {
-  /* background: linear-gradient(135deg, #66bb9f, #4393a0); */
-  color: #fff;
-  border-radius: 12px;
-  padding: 30px;
-  font-size: 1.5rem;
-  font-weight: 600;
+    background: linear-gradient(135deg, #e8f5e9, #dcedc8);
+    min-height: 30vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+
+    border-radius: 12px;
+    padding: 20px;
+
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-.course-header h2{
-    margin: 30px 0;
-}
-
-/*  */
+/* TASK LIST */
 .course-tasks {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin-top: 15px;
-    max-height: calc(100vh - 200px);
-    /* overflow-y: auto; */
-    padding-right: 10px;
+    gap: 16px;
+    margin-top: 10px;
 }
 
 .course-tasks::-webkit-scrollbar {
@@ -36,219 +40,189 @@
 }
 
 .course-tasks::-webkit-scrollbar-thumb {
-    background-color: #a5d6a7;
+    background-color: #c8e6c9;
     border-radius: 4px;
 }
 
-.course-tasks::-webkit-scrollbar-thumb:hover {
-    background-color: #81c784;
-}
-
-/* Завдання */
 .task {
-    background: #fafafa;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(244, 244, 244, 0.05);
-    border: 1px solid #e0e0e0;
-    padding: 22px 25px;
-    transition: all 0.25s ease;
+    background: linear-gradient(135deg, #ffffff, #f6fbf7);
+    border-radius: 18px;
+
+    border: 1px solid #dcefe0;
+    box-shadow: 0 6px 18px rgba(46, 125, 50, 0.08);
+
+    padding: 0;
+    overflow: hidden;
+
     display: flex;
     flex-direction: column;
-    gap: 15px;
+
+    transition: all 0.25s ease;
+    position: relative;
 }
 
+.task::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 7px;
+    height: 100%;
+    background: linear-gradient(180deg, #a5d6a7, #81c784);
+}
 
-/* Вернхній ряд */
+.task:hover {
+    box-shadow: 0 12px 25px rgba(46, 125, 50, 0.15);
+}
+
 .task-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    padding: 16px 18px 10px 18px;
 }
 
 .task-header h3 {
     margin: 0;
-    font-size: 1.25rem;
-    color: #2e7d32;
+    font-size: 1.15rem;
+    color: #3f6f4a;
     font-weight: 600;
 }
 
-.task-header a button, .task-header button{
-    background: #43a047;
-    color: #fff;
+.task-header a button {
+    background: #c8e6c9;
+    color: #2f5d3a;
+
     border: none;
-    border-radius: 8px;
-    padding: 9px 16px;
-    font-size: 0.95rem;
+    border-radius: 10px;
+    padding: 7px 12px;
+
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.25s ease;
+
+    transition: 0.2s;
 }
 
-.task-header a button:hover, .task-header button:hover {
-    background: #388e3c;
-    transform: translateY(-2px);
-    box-shadow: 0 3px 8px rgba(56, 142, 60, 0.3);
+.task-header a button:hover {
+    background: #a5d6a7;
 }
 
-/* блок завдання */
 .task-main {
-    background: #e8f5e9;
-    border: 1px solid #c8e6c9;
-    border-radius: 12px;
-    padding: 18px 20px;
+    margin: 0 18px 14px 18px;
+
+    background: #f3faf5;
+    border: 1px solid #e1f2e4;
+
+    border-radius: 14px;
+    padding: 14px;
+
     display: flex;
     justify-content: space-between;
-    align-items: start;
-    gap: 20px;
+    gap: 16px;
 }
 
 .task-main p {
     margin: 0;
-    color: #2e7d32;
-    font-size: 0.98rem;
-    line-height: 1.5;
-    flex: 1;
+    color: #4f7f5c;
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
 
 .task-deadline {
+    min-width: 140px;
     text-align: right;
-    color: #1b5e20;
-    font-size: 0.9rem;
-    font-weight: 500;
+
+    font-size: 0.85rem;
+    color: #5f8f6f;
 }
 
-.task-deadline p {
-    margin: 3px 0;
-}
-
-/*  */
 .task-actions {
-    margin-top: 5px;
+    padding: 0 18px 16px 18px;
+
     display: flex;
-    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.task-actions a button {
-    background: #f5f5f5;
-    color: #2e7d32;
-    border: 1px solid #c8e6c9;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 0.9rem;
+.task-actions button {
+    background: #f1f8f4;
+    color: #3f6f4a;
+
+    border: 1px solid #dcefe0;
+    border-radius: 10px;
+
+    padding: 7px 12px;
+    font-size: 0.85rem;
+
     cursor: pointer;
-    transition: all 0.25s ease;
-    margin-right: 8px;
+    transition: 0.2s;
 }
 
-.task-actions a button:hover {
+.task-actions button:hover {
     background: #e8f5e9;
 }
 
-.task-actions form button{
-    background: #f5f5f5;
-    color: #2e7d32;
-    border: 1px solid #c8e6c9;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    margin-right: 8px;
-}
-
-.task-actions form button:hover {
-    background: #e8f5e9;
-}
-
-/* Додому кнопка */
-.home-button {
+.fab-btn {
     position: fixed;
-    bottom: 3vh;
     right: 2vw;
-    padding: 2vh 2vh;
-    /* width: 65px;
-    height: 65px; */
+    z-index: 999;
+    width: 56px;
+    height: 56px;
+
     border-radius: 50%;
-    background: linear-gradient(135deg, #43a047, #2e7d32);
-    color: white;
     border: none;
-    font-size: 4vh;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 1vh rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-}
 
-.start-btn-a {
-    width: fit-content;
-}
-
-.start-btn{
-    background: #979595;
-    border: none;
-    color: #fff;
-    font-size: 2.5vh;
-    font-weight: 600;
-    padding: 1.5vh 1.5vw;
-    border-radius: 8px;
+    font-size: 28px;
     cursor: pointer;
-    transition: 0.3s ease;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    transition: all 0.25s ease;
 }
 
-.start-btn:hover {
-    transition: 0.5s ease;
-    filter: brightness(92%);
-    /* background: linear-gradient(135deg, #5ba88e, #387c87); */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+.start-btn {
+    bottom: 13vh; 
+    background: linear-gradient(135deg, #a5d6a7, #81c784);
+    color: #1f3d28;
+}
+.home-button {
+    bottom: 3vh;
+    background: #c8e6c9;
+    color: #1f3d28;
 }
 
-.home-button:hover {
-    transform: scale(1.1);
-    background: linear-gradient(135deg, #66bb6a, #43a047);
-    box-shadow: 0 10px 24px rgba(56, 142, 60, 0.45);
+.fab-btn:hover {
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
 }
 
-.home-button:active {
-    transform: scale(0.95);
-}
-
-@media (prefers-color-scheme: dark) {
-    .task {
-        background: #2f3b52;
-        border: 1px solid #333;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+@media (max-width: 768px) {
+    .navbar {
+        display: none;
     }
 
-    .task-main {
-        background: rgba(46, 125, 50, 0.15);
-        border-color: rgba(129, 199, 132, 0.3);
+    .hide-btn {
+        display: none;
     }
 
-    .task-header h3 {
-        color: #a5d6a7;
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: auto;
     }
 
-    .task-main p {
-        color: #c8e6c9;
+    main.content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 16px;
+        box-sizing: border-box;
     }
 
-    .task-deadline {
-        color: #a5d6a7;
-    }
-
-    .task-header a button {
-        background: #2e7d32;
-    }
-
-    .task-header a button:hover {
-        background: #43a047;
-    }
-
-    .classroom-content{
-        padding: 5px;
-        gap: 8px;
+    .classroom-content {
+        padding: 0 20px;
     }
 }
