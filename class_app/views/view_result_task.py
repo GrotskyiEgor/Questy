@@ -23,7 +23,7 @@ def render_result_task():
     # Разделение на сделавших и не сделавших
     for user in CLASS.users:
         # print(TASK.test_id, CLASS.id, user.id)
-        score = Score.query.filter_by(test_id=TASK.test_id, class_id=CLASS.id, user_id=user.id).first()
+        score = Score.query.filter_by(test_id=TASK.test_id, class_id=CLASS.id, user_id=user.id, task_test_id=TASK.id).first()
         # print(score)
         if score:
             do_user_list.append(user)

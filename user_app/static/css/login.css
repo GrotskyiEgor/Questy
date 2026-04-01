@@ -285,6 +285,13 @@ form button:hover{
 .lock {
     width: 3vh;
     height: 3vh;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lock:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
 }
 
 @media (max-width: 769px) {

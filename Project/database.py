@@ -21,4 +21,3 @@ migrate = flask_migrate.Migrate(
     db=db,
     directory=os.path.abspath(os.path.join(__file__, "..", "migrations"))
     )
-

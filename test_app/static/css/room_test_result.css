@@ -177,7 +177,7 @@
     width: 80%;
 }
 
-.results-info-box {
+.results-info-box, .legend-box {
   background: #ffffff;
   backdrop-filter: blur(1vh);
   -webkit-backdrop-filter: blur(1vh);

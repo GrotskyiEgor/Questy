@@ -53,7 +53,7 @@ def handle_join(data):
     test = Test.query.filter_by(test_code=room).first()
     
     if not ROOM:
-        NEW_ROOM = Room(
+        ROOM = Room(
             test_id=test.id,
             test_code= room,
             user_list=f'|{username}|',
@@ -61,7 +61,7 @@ def handle_join(data):
             active_test=False,
             all_members=""
         )
-        db.session.add(NEW_ROOM)
+        db.session.add(ROOM)
 
     else:
         new_user = f'|{username}|'
@@ -219,6 +219,13 @@ def handle_user_answers(data):
         TASK = Task.query.filter_by(id=ROOM.task_id).first()
         CLASS = Classes.query.filter_by(id=TASK.class_id).first()
 
+    print("==========")
+    print("ROOM.task_id:", ROOM.task_id)
+    print("TASK:", TASK)
+    if TASK:
+        print("TASK.class_id:", TASK.class_id)
+    print("CLASS:", CLASS)
+
     user_answers = data["user_answers"].split("|")
     user_answers_list = []
     for answer in user_answers:
@@ -253,11 +260,17 @@ def handle_user_answers(data):
 
     accuracy = number_of_correct_answers / len(QUIZ_LIST) * 100
     accuracy = int(accuracy)
-    USER = User.query.filter_by(username= user_name).first()
+    USER = User.query.filter_by(username=user_name).first()
 
-    if USER and CLASS and CLASS not in USER.classes:
-        TASK = None
-        CLASS = None
+    print("============")
+    print("USER.classes:", USER.classes)
+    print("CLASS:", CLASS)
+    print("Is in class:", CLASS in USER.classes if CLASS else None)
+    # if USER and CLASS and CLASS not in USER.classes:
+    #     TASK = None
+    #     CLASS = None
+    valid_class = USER and CLASS and CLASS in USER.classes
+    print(valid_class)
 
     SCORE = Score(
         user_answer=data["user_answers"],

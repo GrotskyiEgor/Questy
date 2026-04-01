@@ -4,7 +4,7 @@ from flask_login import UserMixin
 from Project.database import db
 
 
-class_user= db.Table(
+class_user = db.Table(
     "class_user",
     db.Column("class_id", db.Integer, db.ForeignKey("classes.id")),
     db.Column("user_id", db.Integer, db.ForeignKey("user.id"))
@@ -93,13 +93,13 @@ class Score(db.Model):
     user_timers = db.Column(db.String)
     user_tokens = db.Column(db.String)
     accuracy = db.Column(db.Integer, nullable=False)
-    test_id = db.Column(db.Integer, db.ForeignKey('test.id', ondelete="SET NULL"))
+    test_id = db.Column(db.Integer, db.ForeignKey('test.id', ondelete="SET NULL"), nullable=True)
 
     date_complete = db.Column(db.String, nullable=False)
     time_complete = db.Column(db.String, nullable=False)
 
-    task_test_id = db.Column(db.Integer, db.ForeignKey("task.id", ondelete="SET NULL"))
-    class_id = db.Column(db.Integer, db.ForeignKey("classes.id", ondelete="SET NULL"))
+    task_test_id = db.Column(db.Integer, db.ForeignKey("task.id", ondelete="SET NULL"), nullable=True)
+    class_id = db.Column(db.Integer, db.ForeignKey("classes.id", ondelete="SET NULL"), nullable=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
     user_name = db.Column(db.String, nullable=False)
