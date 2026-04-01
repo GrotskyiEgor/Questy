@@ -1,4 +1,13 @@
 $(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const isKicked = urlParams.get("kick") === 'true';
+
+    if (isKicked){
+        $('#modal-bg-connect-kick').fadeIn(200);
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+    }
+
     const savedRoom = getCookie("room")
     const savedState = getCookie("state")
 

@@ -410,6 +410,10 @@
     background: linear-gradient(135deg, #eb3d30, #d8302d);
 }
 
+.results-row.selected .cell, .results-row.selected .accuracy  {
+    background-color: rgb(179, 179, 179); 
+}
+
 @media (max-width: 769px) {
     .result-info, .user-chart-wrapper {
         width: 90vw;
@@ -424,6 +428,8 @@
     }
 
     .user-select-field {
+        font-size: 2.2vh;
+        height: fit-content;
         width: 90%;
     }
 

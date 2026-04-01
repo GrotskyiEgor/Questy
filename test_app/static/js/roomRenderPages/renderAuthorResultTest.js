@@ -56,6 +56,9 @@ function appendResultRow(resultTable, username, answersArray, resultData, accura
     resultTable.appendChild(resultRow);
 
     resultRow.addEventListener('click', function(){
+        document.querySelectorAll('.results-row.selected').forEach(row => row.classList.remove('selected'));
+        this.classList.add('selected');
+
         renderAnalyticsChart('authorAccuracyChart', resultData, accuracyAquestionsArray, accurancyArray, totalQuestion, this.id.slice(4), false);
     });
 };
@@ -162,6 +165,8 @@ function renderAuthorResultTest(username, authorName, totalQuestion, testMusic) 
         allInfoButton.className= 'all-info-btn';
         allInfoButton.textContent = 'Загальна успішність';
         allInfoButton.addEventListener("click", () => {
+            document.querySelectorAll('.results-row.selected').forEach(row => row.classList.remove('selected'));
+            
             chartBoxLable= document.querySelector('.chart-box-label');
             chartBoxLable.textContent = 'Загальна успішність';
             

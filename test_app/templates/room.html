@@ -231,7 +231,7 @@
 
         socket.on('kicked', function(data) {
             clearCookie(["room", "state", "userAnswers", "connected", "countUsersAnswer", "temporaryName", "timeStop", "time"])
-            window.location.href = '/'; 
+            window.location.href = '/?kick=true'; 
         });    
         
         socket.on("author_receive_answer", function(data) {     

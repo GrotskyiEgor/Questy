@@ -1,3 +1,30 @@
+function openImageFullscreen(src) {
+    const pageLock = document.querySelector(".page-lock");
+    if (pageLock) pageLock.classList.add("active");
+
+    const overlay = document.createElement("div");
+    overlay.className = "image-fullscreen-overlay";
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = "image-fullscreen";
+
+    overlay.appendChild(img);
+
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener("click", () => {
+        closeImageFullscreen(overlay);
+    });
+}
+
+function closeImageFullscreen(overlay) {
+    const pageLock = document.querySelector(".page-lock");
+    if (pageLock) pageLock.classList.remove("active");
+
+    overlay.remove();
+}
+
 function shufle(array){
     for (let index = array.length - 1; index > 0; index--){
         let new_index = Math.floor(Math.random() * (index + 1));
@@ -179,6 +206,10 @@ function renderQuestion(testId, quiz, answers, room, author_name, testshowResult
 
                 imageDiv.appendChild(image);
                 roomContent.appendChild(imageDiv);
+
+                image.addEventListener("click", () => {
+                    openImageFullscreen(image.src);
+                });
             };
             
             roomContent.appendChild(answersDiv);
