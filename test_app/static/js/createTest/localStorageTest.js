@@ -1,7 +1,8 @@
 function saveTestToLocalStorage() {
     const test = {
         title: document.getElementById("test-title").value,
-        description: document.getElementById("test-description").value
+        description: document.getElementById("test-description").value,
+        image: document.getElementById("test-image").value
     };
 
     const questions = document.querySelectorAll(".question-block");

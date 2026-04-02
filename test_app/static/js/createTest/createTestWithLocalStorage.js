@@ -1,3 +1,13 @@
+function showNotification() {
+    const notification = document.getElementById("notification");
+    notification.classList.add("show");
+}
+
+function closeNotification() {
+    const notification = document.getElementById("notification");
+    notification.classList.remove("show");
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const savedTest = JSON.parse(localStorage.getItem("test"));
 
@@ -6,6 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // 👉 восстанавливаем title / description
     document.getElementById("test-title").value = savedTest.title || "";
     document.getElementById("test-description").value = savedTest.description || "";
+    if (savedTest.image) {
+        window.onload = () => {
+            setTimeout(showNotification, 2000);
+        };
+    }
+
 
     const testQuestion = document.querySelector(".test-question");
 
@@ -24,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
             q.answer_options.forEach((ans, i) => {
                 answersHTML += `
                 <div class="answer-input">
-                    <input type="text" class="answer-text" value="${ans}">
+                    <input type="text" class="answer-text" placeholder="Відповідь ${i + 1}" value="${ans}">
                     <input type="radio" class="question-radio" name="correct-answer-q${questionIndex}" ${q.correct_answer === ans ? "checked" : ""}>
                     <span>Правильна</span>
                     <button type="button" class="delete-answer">✖</button>
@@ -40,12 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (q.question_type === "multiple_choice") {
-            q.answer_options.forEach((ans) => {
+            q.answer_options.forEach((ans, i) => {
                 const checked = q.correct_answer.includes(ans) ? "checked" : "";
 
                 answersHTML += `
                 <div class="answer-input">
-                    <input type="text" class="answer-text" value="${ans}">
+                    <input type="text" class="answer-text" placeholder="Відповідь ${i + 1}" value="${ans}">
                     <input type="checkbox" class="checkbox" name="correct-answer-q${questionIndex}" ${checked}>
                     <span>Правильна</span>
                     <button type="button" class="delete-answer">✖</button>
@@ -65,18 +81,21 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="answers" id="input">
                 <label>Варіанти відповідей:</label>
                 <div class="answer-input">
-                    <input type="text" class="answer-text" value="${q.answer_options[0] || ""}">
+                    <input type="text" class="answer-text" placeholder="Відповідь" value="${q.answer_options[0] || ""}">
                 </div>
             </div>`;
         }
 
         if (q.question_type === "image") {
+            window.onload = () => {
+                setTimeout(showNotification, 2000);
+            };
             let imagePreview = q.image ? `<img src="${q.image}" style="max-width:100px;">` : "";
 
-            q.answer_options.forEach((ans) => {
+            q.answer_options.forEach((ans, i) => {
                 answersHTML += `
                 <div class="answer-input">
-                    <input type="text" class="answer-text" value="${ans}">
+                    <input type="text" class="answer-text" placeholder="Відповідь ${i + 1}" value="${ans}">
                     <input type="radio" class="question-radio" name="correct-answer-q${questionIndex}" ${q.correct_answer === ans ? "checked" : ""}>
                     <span>Правильна</span>
                     <button type="button" class="delete-answer">✖</button>
@@ -102,10 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <label>Формулювання питання:</label>
-            <input type="text" class="question-text" value="${q.question_text}">
+            <input type="text" class="question-text" name="question-text" value="${q.question_text}">
 
-            <label>Час:</label>
-            <input type="text" class="question-time" value="${q.time}">
+            <label>Час на виконання в секундах:</label>
+            <input type="text" class="question-time" name="question-time" value="${q.time}">
 
             ${answersHTML}
         </div>

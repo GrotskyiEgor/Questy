@@ -96,7 +96,7 @@ createQuestionButtonDiv.addEventListener('click', function(event) {
             <label>Формулювання питання:</label>
             <input type="text" class="question-text" name="question-text">
 
-            <label>Час на виконання в секундах</label>
+            <label>Час на виконання в секундах:</label>
             <input type="text" class="question-time" name="question-time">
         `
 

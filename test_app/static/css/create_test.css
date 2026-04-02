@@ -264,3 +264,41 @@ input[type="file" i] {
 .delete-answer:hover {
     background-color: #c62828;
 }
+
+
+
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #360b0b;
+    color: #fff;
+    padding: 15px 40px 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.5s ease;
+    z-index: 9999;
+    max-width: 300px;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Кнопка закрытия */
+.close-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+}
+
+.close-btn:hover {
+    color: #ccc;
+}

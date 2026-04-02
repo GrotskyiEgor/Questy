@@ -40,6 +40,11 @@
     </button>
 
     <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+
+    <div id="notification" class="notification">
+    <span class="close-btn" onclick="closeNotification()">×</span>
+    Зображення не можуть зберігатися. Будь ласка, введіть їх заново.
+    </div>
     <script src="{{ url_for('test_app.static', filename= 'js/createTest/localStorageTest.js') }}"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/createTest/createQuestion.js') }}"></script>
     <script src="{{ url_for('test_app.static', filename= 'js/createTest/createTestWithLocalStorage.js') }}"></script>
