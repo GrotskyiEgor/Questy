@@ -50,14 +50,23 @@ def create_test():
         if test_image_file:
             test_image_file.save(os.path.join(os.path.abspath(os.path.join(__file__, "..", "..", "..", "home_app", "static", "images", f"{test.id}.png"))))
 
+        index_of_image = 0
         for index, quizzes in enumerate(data["questions"]):
-            file_key = f"question-image-{index}"
-            quiz_image_file = images.get(file_key)
             quiz_image_filename = None
-            
-            if quiz_image_file:
+            if quizzes["question_type"] == "image":
+                quiz_image_file = images.get(f"question-image-{index_of_image}")
                 quiz_image_filename = quiz_image_file.filename
                 quiz_image_file.save(os.path.abspath(os.path.join(IMAGES_DIR, f"{quiz_image_filename}")))
+                index_of_image += 1
+
+            # file_key = f"question-image-{index}"
+            # print(index)
+            # quiz_image_file = images.get(file_key)
+            # quiz_image_filename = None
+            
+            # if quiz_image_file:
+            #     quiz_image_filename = quiz_image_file.filename
+            #     quiz_image_file.save(os.path.abspath(os.path.join(IMAGES_DIR, f"{quiz_image_filename}")))
 
             answers_list = quizzes["options"].copy()
             random.shuffle(answers_list)
