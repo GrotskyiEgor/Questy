@@ -135,7 +135,9 @@ def handle_clear_test_code(data):
     ROOM = Room.query.filter_by(test_code= room).first()
 
     if ROOM:
-        db.session.delete(ROOM)
+        # db.session.delete(ROOM)
+        ROOM.actiev_test = 2
+        db.session.commit()
 
     TEST = Test.query.filter_by(test_code= room).first()
     if TEST:
@@ -150,7 +152,9 @@ def handle_clear_test_code(data):
     ROOM = Room.query.filter_by(test_code= room).first()
 
     if ROOM:
-        db.session.delete(ROOM)
+        # db.session.delete(ROOM)
+        ROOM.actiev_test = 2
+        db.session.commit()
 
     TEST = Test.query.filter_by(test_code= room).first()
     if TEST:

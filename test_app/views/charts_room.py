@@ -11,12 +11,40 @@ from openpyxl.drawing.colors import ColorChoice
 from user_app.models import User, Score
 from ..models import Room, Quiz
 
+def clean_data(data):
+    cleaned = {}
+    for user, values in data.items():
+        if not values:
+            continue
+
+        cleaned[user] = {
+            "correct_answers_list": values.get("correct_answers_list") or [],
+            "timers_list": values.get("timers_list") or [],
+            "token_list": values.get("token_list") or []
+        }
+    return cleaned
 
 def room_get_result(room, author_name):
     room_get_result_data = {}
+
+    print(room, author_name)
     
     ROOM = Room.query.filter_by(test_code= room).first()
+    print("ROOM найден:", ROOM)
+
+    if ROOM:
+        QUIZ_LIST = Quiz.query.filter_by(test_id=ROOM.test_id).all()
+        print("Количество вопросов в QUIZ_LIST:", len(QUIZ_LIST))
+    else:
+        print("Room с таким кодом теста не найден")
+
+    if not ROOM: 
+        return {}, {}, {}, {}, 0
+     
     QUIZ_LIST = Quiz.query.filter_by(test_id= ROOM.test_id).all()
+
+    if not QUIZ_LIST:
+        return {}, {}, {}, {}, 0
      
     users_list = ROOM.all_members.strip('|').split('||')
     USER_LIST = []
@@ -45,8 +73,8 @@ def room_get_result(room, author_name):
 
             for score in SCORE_LIST:
                 if score.user_id == user.id:
-                    timers_list = score.user_timers.split("|")
-                    token_list = score.user_tokens.split("|")
+                    timers_list = score.user_timers.split("|") if score.user_timers else []
+                    token_list = score.user_tokens.split("|") if score.user_tokens else []
                     answers_str = score.user_answer
             
             if answers_str:
@@ -95,8 +123,8 @@ def room_get_result(room, author_name):
 
             for score in SCORE_LIST:        
                 if score.user_name == user:
-                    timers_list = score.user_timers.split("|")
-                    token_list = score.user_tokens.split("|")
+                    timers_list = score.user_timers.split("|") if score.user_timers else []
+                    token_list = score.user_tokens.split("|") if score.user_tokens else []
                     answers_str = score.user_answer
             
             if answers_str:
@@ -188,6 +216,18 @@ def room_get_result(room, author_name):
         "total_time": int(total_time_for_hardest_question),
         "hardest_question_index": hardest_question_index
     }
+
+    print("USER_LIST (зарегистрированные пользователи):", [u.username for u in USER_LIST])
+    print("UNREG_USER_LIST (незарегистрированные пользователи):", UNREG_USER_LIST)
+    print("SCORE_LIST:", SCORE_LIST)
+
+    for username, data in room_get_result_data.items():
+        print(f"Результаты пользователя {username}: {data}")
+
+    if QUIZ_LIST:
+        print("Самый сложный вопрос:", hardest_question.question_text, "индекс:", hardest_question_data.get("hardest_question_index"))
+    else:
+        print("Нет вопросов для анализа hardest_question")
 
     return room_get_result_data, best_score_data, worst_score_data, hardest_question_data, averega_score
 

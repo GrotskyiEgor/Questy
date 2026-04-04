@@ -16,13 +16,13 @@ def render_create_task(id):
     back_course = flask.request.args.get("back_course")
 
     # Проверка что в этом класе нет задания с этим же тестом 
-    # filter_test_list= []
-    # for test in test_list:
-    #     task_in_class = Task.query.filter_by(test_id=test.id, class_id=id).first()
-    #     if not task_in_class:
-    #         filter_test_list.append(test)
+    filter_test_list= []
+    for test in test_list:
+        task_in_class = Task.query.filter_by(test_id=test.id, class_id=id).first()
+        if not task_in_class:
+            filter_test_list.append(test)
 
-    # test_list = filter_test_list
+    test_list = filter_test_list
 
     if flask.request.method == "POST":   
         try:

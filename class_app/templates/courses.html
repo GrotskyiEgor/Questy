@@ -86,7 +86,6 @@
                                             <button>Скинути тест</button>
                                         </form>
                                         {% if test.test_code != 0 and not can_start %}
-                                            <p>{{ task.id }} {{ class.id }}</p>
                                             <a href="/room{{ test.test_code }}?task_id={{ task.id }}&back_to_class={{ class.id }}">
                                                 <button class="start" type="button">Почати</button>
                                             </a>

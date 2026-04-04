@@ -54,14 +54,14 @@ test_app.add_url_rule(rule="/temporary_name<code>", view_func=render_temporary_n
 test_app.add_url_rule(rule="/build_test", view_func=create_test, methods=['GET', 'POST'])
 
 # CLASS APP
-class_app.add_url_rule(rule='/class_page', view_func= render_class_page, methods= ['GET', 'POST'])
-class_app.add_url_rule(rule="/class_page/sorte", view_func= class_sorte, methods= ['GET', 'POST', 'PUT'])
+class_app.add_url_rule(rule='/class_page', view_func=render_class_page, methods=['GET', 'POST'])
+class_app.add_url_rule(rule="/class_page/sorte", view_func=class_sorte, methods=['GET', 'POST', 'PUT'])
 
-class_app.add_url_rule(rule="/class_courses<id>", view_func= render_class_courses, methods= ['GET', 'POST'])
+class_app.add_url_rule(rule="/class_courses<id>", view_func=render_class_courses, methods=['GET', 'POST'])
 
-class_app.add_url_rule(rule='/task_page', view_func=render_task_page, methods= ['GET', 'POST'])
-class_app.add_url_rule(rule="/create_task<id>", view_func=render_create_task, methods= ['GET', 'POST'])
-class_app.add_url_rule(rule="/result_task", view_func=render_result_task, methods= ['GET', 'POST'])
+class_app.add_url_rule(rule='/task_page', view_func=render_task_page, methods=['GET', 'POST'])
+class_app.add_url_rule(rule="/create_task<id>", view_func=render_create_task, methods=['GET', 'POST'])
+class_app.add_url_rule(rule="/result_task", view_func=render_result_task, methods=['GET', 'POST'])
 
 class_app.add_url_rule(rule='/class_information<class_id>', view_func=render_class_information, methods=['GET', 'POST'])
 class_app.add_url_rule(rule='/delete_user', view_func=delete_user, methods=['POST', 'GET'])

@@ -168,7 +168,7 @@ main {
 .edit-btn:hover {
     background-color: var(--green-light);
 }
-.question-block, .result-info {
+.question-block, .result-info, .question-block-chart {
     background-color: white;
     border: 1px solid var(--green-light);
     border-radius: 10px;
@@ -178,6 +178,13 @@ main {
 
     width: 800px;
 }
+
+.question-block-chart{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .question-header {
     display: flex;
     justify-content: space-between;
@@ -305,3 +312,67 @@ img {
     height: auto;
 }
 
+.chart-user-box { 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  align-self: center;
+  background: #fff;
+  border-radius: 1.5vh;
+  padding: 2vh 0.5vw;
+  border: 0.2vh solid var(--green-light);
+  box-shadow: 0 0.4vh 1vw rgba(0, 0, 0, 0.15);
+  width: fit-content;
+  height: 14vh;
+}
+
+.chart-user-box h2 {
+  margin-top: 0;
+  color: #205b24;
+  font-size: 4.5vh;
+}
+
+.chart-user-box input {
+    width: 80%;
+}
+
+.results-info-box, .legend-box {
+  background: #ffffff;
+  backdrop-filter: blur(1vh);
+  -webkit-backdrop-filter: blur(1vh);
+  border-radius: 1.5vh;
+  padding: 2vh 1vw;
+  color: #1d4120;
+  font-weight: 500;
+  border: 0.2vh solid var(--green-light);
+  box-shadow: 0 0.4vh 1vw rgba(0, 0, 0, 0.15);
+  width: 31vw;
+  height: fit-content;
+}
+
+.user-select-field {
+    align-self: center;
+    padding: 1.5vh 2.5vw;
+    font-size: 2.2vh;
+    border-radius: 1.5vh;
+    border: 0.1vh solid var(--green-light);
+    box-shadow: 0 0.4vh 1vw rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    color: var(--text-main);
+    outline: none;
+}
+
+.authorAccuracyChart{
+    height: auto;
+    width: 95%;
+}
+
+#authorAccuracyChart{
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+}

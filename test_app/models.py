@@ -66,7 +66,7 @@ class Room(db.Model):
 
     user_list = db.Column(db.String(300), nullable= False)
     author_name= db.Column(db.String(300), nullable= False)
-    active_test= db.Column(db.Boolean, nullable= True)
+    active_test= db.Column(db.Integer, nullable=0)
     all_members = db.Column(db.String(300), nullable = False)
 
     current_question = db.Column(db.Integer, default=0)

@@ -60,6 +60,24 @@
             </div>
         {% endif %}
 
+        {% if show_graphs %} 
+            <div class="question-block-chart">
+                <div class="chart-user-box">
+                    <h2 class="chart-box-label">Аналітика тесту</h2>
+    
+                    <select id="choice" class="user-select-field">
+                        <option value="1">Успішність</option>
+                        <option value="4">Час на питання</option>
+                        <option value="5">Токени</option>
+                    </select>
+                </div>
+    
+                <div class="authorAccuracyChart">
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </div>   
+        {% endif %}
+
         {% for question in list_quiz %}
             {% if question.question_type == "choice" or question.question_type == "image" %}
                 {% set answers = list_answers[loop.index0] %}
@@ -142,4 +160,37 @@
             </div>
         {% endfor %}
     </div>
+
+    <script src="{{ url_for('test_app.static', filename= 'js/roomFiles/chartManager.js') }}"></script>
+
+    <script>
+        const resultData = {{ result_data | default({}) |tojson }}
+        let totalQuestion
+        let selectUserName = null;
+        let accuracyAquestionsArray = []
+        let accurancyArray = []
+        let charts = {}
+        
+        console.log(resultData)
+
+        if (Object.keys(resultData).length) {
+            totalQuestion = Object.values(resultData)[0].correct_answers_list.length;
+
+            const result = questionAccuracy(resultData, totalQuestion);
+            accuracyAquestionsArray = result.accuracyAquestionsArray;
+            accurancyArray = result.accurancyArray;
+
+            renderAccuracyLineChart("accuracyChart", resultData, accuracyAquestionsArray, accurancyArray);
+        }
+
+        document.getElementById('choice').addEventListener('change', function() {
+            renderAnalyticsChart(
+                "accuracyChart",
+                resultData,
+                accuracyAquestionsArray,
+                accurancyArray,
+                totalQuestion
+            );
+        });
+    </script>
 {% endblock %}

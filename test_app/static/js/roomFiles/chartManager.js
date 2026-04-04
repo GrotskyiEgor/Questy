@@ -18,6 +18,8 @@ function renderAnalyticsChart(canvasId, resultData, accuracyAquestionsArray, acc
         renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, userName)
     }
 
+    console.log("ало ало ало")
+
     switch (Number(selectElement.value)){
         case 1:
             renderAccuracyLineChart(canvasId, resultData, accuracyAquestionsArray, accurancyArray, selectUserName)

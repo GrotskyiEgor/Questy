@@ -66,7 +66,7 @@ def render_profile():
     if current_user.is_authenticated:
         
         scores = Score.query.filter_by(user_id=current_user.id).all()
-        tests_count = len(Test.query.filter_by(author_name= current_user.username).all())
+        tests_count = len(Test.query.filter_by(author_name=current_user.username).all())
         scores_count = len(scores)
 
         for score in scores:
