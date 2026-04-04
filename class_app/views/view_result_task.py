@@ -97,7 +97,6 @@ def render_result_task():
             avg = int(sum(question_scores) / len(question_scores) * 100) if question_scores else 0
             average_accuracy_per_question.append(avg)
 
-    # ---------------- Генерация Excel при POST ----------------
     if flask.request.method == "POST" and room_data:
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         file_path = os.path.join(base_dir, f"results{test_code}.xlsx")

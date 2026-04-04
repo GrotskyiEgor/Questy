@@ -55,6 +55,7 @@ test_app.add_url_rule(rule="/build_test", view_func=create_test, methods=['GET',
 
 # CLASS APP
 class_app.add_url_rule(rule='/class_page', view_func=render_class_page, methods=['GET', 'POST'])
+class_app.add_url_rule(rule="/class_result", view_func=render_class_results, methods=['GET', 'POST'])
 class_app.add_url_rule(rule="/class_page/sorte", view_func=class_sorte, methods=['GET', 'POST', 'PUT'])
 
 class_app.add_url_rule(rule="/class_courses<id>", view_func=render_class_courses, methods=['GET', 'POST'])

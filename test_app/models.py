@@ -70,7 +70,7 @@ class Room(db.Model):
     all_members = db.Column(db.String(300), nullable = False)
 
     current_question = db.Column(db.Integer, default=0)
-    task_id = db.Column(db.Integer, db.ForeignKey("task.id", name="fk_room_task_id"))
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id", ondelete="SET NULL", name="fk_room_task_id"))
 
 
     def __str__(self):

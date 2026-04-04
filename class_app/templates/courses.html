@@ -15,6 +15,10 @@
                 <div class="course-header"  style="background: {{ class.class_color1 }};">
                     <h2>{{ class.title}}</h2>
                     <h4>{{ class.lesson }}</h4>
+
+                    <a href="/class_result?class_id={{ class.id }}">
+                        <button>Результати класу</button>
+                    </a>
                 </div>
 
                 <!-- {% if username == class.teacher.username %}    
@@ -28,6 +32,10 @@
                 <div class="course-header" style="background: linear-gradient(135deg, {{ class.class_color1 }}, {{ class.class_color2 }});">
                     <h2>{{ class.title}}</h2>
                     <h4>{{ class.lesson }}</h4>
+
+                    <a href="/class_result?class_id={{ class.id }}">
+                        <button>Результати класу</button>
+                    </a>
                 </div>
 
                 <!-- {% if username == class.teacher.username %}             

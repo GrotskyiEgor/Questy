@@ -1,0 +1,142 @@
+{% extends "class.html" %}
+
+{% block class_title %}
+    Create Test
+{% endblock %}
+
+{% block class_links %}
+    <link rel="stylesheet" href="{{ url_for('class_app.static', filename='css/result_task.css') }}">
+{% endblock %}
+
+{% block class_content %}
+    <div class="chart-box">
+        <div class="chart-user-box">
+            <h2 class="chart-box-label">Аналітика класу</h2>
+
+            <select id="choice" class="user-select-field">
+                <option value="1">Середня точність по завданням</option>
+                <option value="2">Точність користувачів</option>
+                <option value="3">Прогрес класу по часу</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Графики -->
+    <div class="chart-container">
+        <div class="chart-graph">
+            <canvas id="classAvgAccuracyGraph"></canvas>
+        </div>
+
+        <div class="chart-graph">
+            <canvas id="userAccuracyGraph" style="display:none;"></canvas>
+        </div>
+
+        <div class="chart-graph">
+            <canvas id="timelineProgressGraph" style="display:none;"></canvas>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <h2 class="h2-chart">Користувачі класу</h2>
+        <div class="content">
+            {% if user_list %}
+                {% for user in user_list %}
+                    <div class="course-tasks">
+                        <div class="task">
+                            <div class="user-badge">
+                                {{ user.username }} — {{ class.lesson }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Користувачів ще немає</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('test_app.static', filename='js/roomFiles/chartManager.js') }}"></script>
+    <script>
+        const tasks = {{ tasks | tojson | safe }};
+        const avg_accuracy_per_task = {{ avg_accuracy_per_task | tojson | safe }};
+        const users = {{ user_list | map(attribute='username') | list | tojson | safe }};
+        const user_accuracy = {{ user_accuracy | tojson | safe }};
+        const timeline_labels = {{ timeline_labels | tojson | safe }};
+        const timeline_accuracy = {{ timeline_accuracy | tojson | safe }};
+
+        // точність по завданням
+        const ctxAvg = document.getElementById('classAvgAccuracyGraph').getContext('2d');
+        const avgChart = new Chart(ctxAvg, {
+            type: 'line',
+            data: {
+                labels: tasks,
+                datasets: [{
+                    label: 'Середня точність (%)',
+                    data: avg_accuracy_per_task,
+                    fill: false,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.3)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: 'Середня точність по завданням' } },
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+
+        // точність користувачів
+        const ctxUser = document.getElementById('userAccuracyGraph').getContext('2d');
+        const userChart = new Chart(ctxUser, {
+            type: 'bar',
+            data: {
+                labels: users,
+                datasets: [{
+                    label: 'Точність користувачів (%)',
+                    data: user_accuracy,
+                    backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: 'Точність кожного користувача' } },
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+
+        // прогрес класу по часу
+        const ctxTimeline = document.getElementById('timelineProgressGraph').getContext('2d');
+        const timelineChart = new Chart(ctxTimeline, {
+            type: 'line',
+            data: {
+                labels: timeline_labels,
+                datasets: [{
+                    label: 'Середня точність по часу (%)',
+                    data: timeline_accuracy,
+                    fill: false,
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.3)',
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: 'Прогрес класу по часу' } },
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+
+        document.getElementById('choice').addEventListener('change', (e) => {
+            const val = e.target.value;
+            document.getElementById('classAvgAccuracyGraph').style.display = val === '1' ? 'block' : 'none';
+            document.getElementById('userAccuracyGraph').style.display = val === '2' ? 'block' : 'none';
+            document.getElementById('timelineProgressGraph').style.display = val === '3' ? 'block' : 'none';
+        });
+    </script>
+{% endblock %}
